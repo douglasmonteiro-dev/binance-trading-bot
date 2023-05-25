@@ -3,7 +3,7 @@ version: '3.7'
 services:
   binance-bot:
     container_name: binance-bot
-    image: chrisleekr/binance-trading-bot:latest
+    image: douglasmonteiro-dev/binance-trading-bot:latest
     networks:
       - internal
     env_file:
@@ -24,7 +24,7 @@ services:
 
   tradingview:
     container_name: tradingview
-    image: chrisleekr/binance-trading-bot:tradingview
+    image: douglasmonteiro-dev/binance-trading-bot:tradingview
     networks:
       - internal
     restart: unless-stopped

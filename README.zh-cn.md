@@ -1,18 +1,18 @@
 # Binance Trading Bot
 
-[![GitHub version](https://img.shields.io/github/package-json/v/chrisleekr/binance-trading-bot)](https://github.com/chrisleekr/binance-trading-bot/releases)
-[![Build](https://github.com/chrisleekr/binance-trading-bot/workflows/main/badge.svg)](https://github.com/chrisleekr/binance-trading-bot/actions?query=workflow%3Amain)
-[![CodeCov](https://codecov.io/gh/chrisleekr/binance-trading-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/chrisleekr/binance-trading-bot)
-[![Docker pull](https://img.shields.io/docker/pulls/chrisleekr/binance-trading-bot)](https://hub.docker.com/r/chrisleekr/binance-trading-bot)
-[![GitHub contributors](https://img.shields.io/github/contributors/chrisleekr/binance-trading-bot)](https://github.com/chrisleekr/binance-trading-bot/graphs/contributors)
-[![MIT License](https://img.shields.io/github/license/chrisleekr/binance-trading-bot)](https://github.com/chrisleekr/binance-trading-bot/blob/master/LICENSE)
+[![GitHub version](https://img.shields.io/github/package-json/v/douglasmonteiro-dev/binance-trading-bot)](https://github.com/douglasmonteiro-dev/binance-trading-bot/releases)
+[![Build](https://github.com/douglasmonteiro-dev/binance-trading-bot/workflows/main/badge.svg)](https://github.com/douglasmonteiro-dev/binance-trading-bot/actions?query=workflow%3Amain)
+[![CodeCov](https://codecov.io/gh/douglasmonteiro-dev/binance-trading-bot/branch/master/graph/badge.svg)](https://codecov.io/gh/douglasmonteiro-dev/binance-trading-bot)
+[![Docker pull](https://img.shields.io/docker/pulls/douglasmonteiro-dev/binance-trading-bot)](https://hub.docker.com/r/douglasmonteiro-dev/binance-trading-bot)
+[![GitHub contributors](https://img.shields.io/github/contributors/douglasmonteiro-dev/binance-trading-bot)](https://github.com/douglasmonteiro-dev/binance-trading-bot/graphs/contributors)
+[![MIT License](https://img.shields.io/github/license/douglasmonteiro-dev/binance-trading-bot)](https://github.com/douglasmonteiro-dev/binance-trading-bot/blob/master/LICENSE)
 
 > 币安跟踪委托单高买低卖策略交易机器人
 
 ---
 
-[![en](https://img.shields.io/badge/lang-English-blue.svg)](https://github.com/chrisleekr/binance-trading-bot/blob/master/README.md)
-[![ko](https://img.shields.io/badge/lang-한국어-brightgreen.svg)](https://github.com/chrisleekr/binance-trading-bot/blob/master/README.ko.md)
+[![en](https://img.shields.io/badge/lang-English-blue.svg)](https://github.com/douglasmonteiro-dev/binance-trading-bot/blob/master/README.md)
+[![ko](https://img.shields.io/badge/lang-한국어-brightgreen.svg)](https://github.com/douglasmonteiro-dev/binance-trading-bot/blob/master/README.ko.md)
 
 这只是一个测试项目，代码正在测试中。
 
@@ -134,7 +134,7 @@ Then the bot will execute 2nd purchase for the coin. The last buy price will be 
 
 The detailed document for buy configuration available here.
 
-[https://github.com/chrisleekr/binance-trading-bot/wiki/Buy-Scenario](https://github.com/chrisleekr/binance-trading-bot/wiki/Buy-Scenario)
+[https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Buy-Scenario](https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Buy-Scenario)
 
 ### 卖出信号
 
@@ -235,9 +235,9 @@ The final profit would be
 
 The detailed document for buy configuration available here.
 
-[https://github.com/chrisleekr/binance-trading-bot/wiki/Sell-Scenario](https://github.com/chrisleekr/binance-trading-bot/wiki/Sell-Scenario)
+[https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Sell-Scenario](https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Sell-Scenario)
 
-### [功能](https://github.com/chrisleekr/binance-trading-bot/wiki/Features)
+### [功能](https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Features)
 
 - 手动交易
 - 小资产转BNB
@@ -315,7 +315,7 @@ The detailed document for buy configuration available here.
    - When launching the application, it will notify public URL to the Slack.
    - If you have any issue with the bot, you can check the log to find out what
      happened with the bot. Please take a look
-     [Troubleshooting](https://github.com/chrisleekr/binance-trading-bot/wiki/Troubleshooting)
+     [Troubleshooting](https://github.com/douglasmonteiro-dev/binance-trading-bot/wiki/Troubleshooting)
 
 ### Install via Stackfile
 
@@ -349,7 +349,7 @@ The detailed document for buy configuration available here.
 
 ## Donations
 
-如果你觉得这个项目对你有帮助，欢迎你给开发者一个小小的[捐赠](https://github.com/chrisleekr/binance-trading-bot/blob/master/DONATIONS.md)
+如果你觉得这个项目对你有帮助，欢迎你给开发者一个小小的[捐赠](https://github.com/douglasmonteiro-dev/binance-trading-bot/blob/master/DONATIONS.md)
 
 ## 免责声明
 
