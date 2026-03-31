@@ -295,6 +295,31 @@ describe('webserver/handlers/grid-trade-archive-get', () => {
         expectedProject: {
           quoteAsset: 1
         }
+      },
+      {
+        desc: 'quoteAsset type with invalid page/limit',
+        requestBody: {
+          authToken: 'valid-auth-token',
+          type: 'quoteAsset',
+          quoteAsset: 'USDT',
+          page: 'invalid',
+          limit: 999
+        },
+        expectedMatch: {
+          quoteAsset: 'USDT'
+        },
+        expectFindAllParams: {
+          sort: { archivedAt: -1 },
+          skip: 0,
+          limit: 100
+        },
+        expectedGroup: {
+          _id: '$quoteAsset',
+          quoteAsset: { $first: '$quoteAsset' }
+        },
+        expectedProject: {
+          quoteAsset: 1
+        }
       }
     ].forEach(t => {
       describe(`found rows - ${t.desc}`, () => {

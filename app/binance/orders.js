@@ -55,7 +55,7 @@ const syncOpenOrders = async (logger, symbols) => {
         )
       );
     });
-  }, 30 * 1310);
+  }, 40 * 1000);
 };
 
 /**

@@ -57,4 +57,43 @@ describe('server', () => {
   it('triggers runFrontend', () => {
     expect(mockRunFrontend).toHaveBeenCalled();
   });
+
+  it('logs an error when a service fails to start', async () => {
+    jest.resetModules();
+
+    const serviceError = new Error('service down');
+    const loggerErrorMock = jest.fn();
+
+    const loggerMock = { error: loggerErrorMock };
+    loggerMock.child = jest.fn().mockReturnValue(loggerMock);
+
+    const failingRunBinance = jest.fn().mockRejectedValue(serviceError);
+    const successfulRunCronjob = jest.fn().mockResolvedValue(true);
+    const successfulRunFrontend = jest.fn().mockResolvedValue(true);
+
+    jest.doMock('../helpers', () => ({
+      logger: loggerMock,
+      mongo: { connect: jest.fn().mockResolvedValue(true) }
+    }));
+
+    jest.doMock('../server-binance', () => ({ runBinance: failingRunBinance }));
+    jest.doMock('../server-cronjob', () => ({
+      runCronjob: successfulRunCronjob
+    }));
+    jest.doMock('../server-frontend', () => ({
+      runFrontend: successfulRunFrontend
+    }));
+    jest.doMock('../error-handler', () => ({
+      runErrorHandler: jest.fn().mockResolvedValue(true)
+    }));
+
+    require('../server');
+
+    await new Promise(resolve => { setImmediate(resolve); });
+
+    expect(loggerErrorMock).toHaveBeenCalledWith(
+      { err: serviceError, serviceName: 'binance' },
+      'binance failed to start'
+    );
+  });
 });

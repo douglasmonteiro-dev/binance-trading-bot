@@ -2,7 +2,7 @@
 describe('webserver/handlers/backup-get', () => {
   let loggerMock;
 
-  let shellMock;
+  let mockExecFile;
 
   let rsDownload;
   let rsSend;
@@ -18,11 +18,10 @@ describe('webserver/handlers/backup-get', () => {
   beforeEach(async () => {
     jest.clearAllMocks().resetModules();
 
-    const shell = require('shelljs');
-    jest.mock('shelljs');
-
-    shellMock = shell;
-    shellMock.exec = jest.fn().mockImplementation((_cmd, fn) => fn());
+    mockExecFile = jest.fn().mockImplementation((_script, _args, fn) => fn());
+    jest.mock('child_process', () => ({
+      execFile: mockExecFile
+    }));
 
     rsSend = jest.fn().mockResolvedValue(true);
     rsDownload = jest.fn().mockResolvedValue(true);
@@ -87,9 +86,9 @@ describe('webserver/handlers/backup-get', () => {
           header: () => 'some token'
         };
 
-        shellMock.exec = jest
-          .fn()
-          .mockImplementation((_cmd, fn) => fn(1, '', 'something happened'));
+        mockExecFile.mockImplementation((_script, _args, fn) =>
+          fn(new Error('something happened'), '', 'something happened')
+        );
 
         const { handleBackupGet } = require('../backup-get');
 
@@ -103,11 +102,15 @@ describe('webserver/handlers/backup-get', () => {
         );
       });
 
-      it('triggers shell.exec', () => {
-        expect(shellMock.exec).toHaveBeenCalledWith(
-          expect.stringContaining(
-            `${process.cwd()}/scripts/backup.sh binance-mongo 27017 binance-bot`
-          ),
+      it('triggers execFile', () => {
+        expect(mockExecFile).toHaveBeenCalledWith(
+          `${process.cwd()}/scripts/backup.sh`,
+          [
+            'binance-mongo',
+            '27017',
+            'binance-bot',
+            expect.stringContaining('/tmp/')
+          ],
           expect.any(Function)
         );
       });
@@ -142,9 +145,9 @@ describe('webserver/handlers/backup-get', () => {
           header: () => 'some token'
         };
 
-        shellMock.exec = jest
-          .fn()
-          .mockImplementation((_cmd, fn) => fn(0, 'all good', ''));
+        mockExecFile.mockImplementation((_script, _args, fn) =>
+          fn(null, 'all good', '')
+        );
 
         const { handleBackupGet } = require('../backup-get');
 

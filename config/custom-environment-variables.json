@@ -111,6 +111,10 @@
         "__format": "boolean"
       },
       "cronTime": "BINANCE_JOBS_ALIVE_CRONTIME",
+      "timeout": {
+        "__name": "BINANCE_JOBS_ALIVE_TIMEOUT",
+        "__format": "number"
+      },
       "priceSymbol": "BINANCE_JOBS_ALIVE_PRICE_SYMBOL",
       "balanceSymbols": "BINANCE_JOBS_ALIVE_BALANCE_SYMBOLS"
     },
@@ -323,14 +327,22 @@
         "__name": "BINANCE_JOBS_TRAILING_TRADE_ENABLED",
         "__format": "boolean"
       },
-      "cronTime": "BINANCE_JOBS_TRAILING_TRADE_INDICATOR_CRON_TIME"
+      "cronTime": "BINANCE_JOBS_TRAILING_TRADE_INDICATOR_CRON_TIME",
+      "timeout": {
+        "__name": "BINANCE_JOBS_TRAILING_TRADE_INDICATOR_TIMEOUT",
+        "__format": "number"
+      }
     },
     "tradingView": {
       "enabled": {
         "__name": "BINANCE_JOBS_TRADING_VIEW_ENABLED",
         "__format": "boolean"
       },
-      "cronTime": "BINANCE_JOBS_TRADING_VIEW_INDICATOR_CRON_TIME"
+      "cronTime": "BINANCE_JOBS_TRADING_VIEW_INDICATOR_CRON_TIME",
+      "timeout": {
+        "__name": "BINANCE_JOBS_TRADING_VIEW_TIMEOUT",
+        "__format": "number"
+      }
     }
   }
 }

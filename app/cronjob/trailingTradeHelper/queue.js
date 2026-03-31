@@ -1,7 +1,9 @@
 const _ = require('lodash');
+const { EventEmitter } = require('events');
 
 const startedJobs = {};
 const finishedJobs = {};
+const jobEvents = {};
 
 /**
  * Prepare the job in queue
@@ -17,6 +19,8 @@ const prepareJob = async (funcLogger, symbol, _jobPayload) => {
   if (startedJobs[symbol] === undefined) {
     startedJobs[symbol] = 0;
     finishedJobs[symbol] = 0;
+    jobEvents[symbol] = new EventEmitter();
+    jobEvents[symbol].setMaxListeners(200);
 
     logger.info({ symbol }, `Queue ${symbol} initialized`);
   }
@@ -28,8 +32,8 @@ const prepareJob = async (funcLogger, symbol, _jobPayload) => {
     // Wait until previous job is completed
     logger.info({ symbol }, `Queue ${symbol} job #${pos} waiting`);
     while (pos > finishedJobs[symbol]) {
-      // eslint-disable-next-line no-await-in-loop, no-promise-executor-return
-      await new Promise(r => setTimeout(r, 10));
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise(resolve => { jobEvents[symbol].once('complete', resolve); });
     }
   }
 
@@ -93,6 +97,8 @@ const completeJob = async (funcLogger, symbol, _jobPayload) => {
   const logger = funcLogger.child({ helper: 'queue', func: 'completeJob' });
 
   const pos = (finishedJobs[symbol] += 1) - 1;
+
+  jobEvents[symbol].emit('complete');
 
   if (startedJobs[symbol] === finishedJobs[symbol]) {
     // Last job in the queue finished

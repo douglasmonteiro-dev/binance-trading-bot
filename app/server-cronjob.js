@@ -66,11 +66,11 @@ const runCronjob = async serverLogger => {
 
           const moduleLogger = logger.child({ job: jobName, uuid: uuidv4() });
 
-          // Make sure the job running within 20 seconds.
-          // If longer than 20 seconds, something went wrong.
+          // Make sure the job running within the configured timeout.
+          // If longer than the timeout, something went wrong.
           await fulfillWithTimeLimit(
             moduleLogger,
-            20000,
+            Number(config.get(`jobs.${jobName}.timeout`)) || 20000,
             executeJob(moduleLogger),
             null
           );

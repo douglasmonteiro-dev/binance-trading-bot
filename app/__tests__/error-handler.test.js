@@ -122,6 +122,42 @@ describe('error-handler', () => {
         expect(mockSlack.sendMessage).not.toHaveBeenCalled();
       });
     });
+
+    describe('silenced error repeated 10 times', () => {
+      beforeEach(async () => {
+        config.get = jest.fn(key => {
+          if (key === 'featureToggle.notifyDebug') {
+            return false;
+          }
+          return null;
+        });
+
+        const { errorHandlerWrapper } = require('../error-handler');
+
+        for (let i = 0; i < 10; i += 1) {
+          // eslint-disable-next-line no-await-in-loop
+          await errorHandlerWrapper(mockLogger, 'WhateverJob', () => {
+            throw new (class CustomError extends Error {
+              constructor() {
+                super();
+                this.code = 'ECONNRESET';
+                this.message = 'ECONNRESET';
+              }
+            })();
+          });
+        }
+      });
+
+      it('triggers logger.warn on 10th silenced error', () => {
+        expect(mockLogger.warn).toHaveBeenCalledWith(
+          {
+            err: expect.any(Error),
+            count: 10
+          },
+          'Silenced error occurring repeatedly (ECONNRESET)'
+        );
+      });
+    });
   });
 
   describe('runErrorHandler', () => {
@@ -233,6 +269,33 @@ describe('error-handler', () => {
           const { runErrorHandler } = require('../error-handler');
           runErrorHandler(mockLogger);
         }).not.toThrow();
+      });
+
+      it('triggers warning on 10th repeated redlock uncaughtException', () => {
+        process.on = jest.fn().mockImplementation((event, error) => {
+          if (event === 'uncaughtException') {
+            for (let i = 0; i < 10; i += 1) {
+              error({
+                message: `redlock:lock-XRPBUSD`,
+                code: 500
+              });
+            }
+          }
+        });
+
+        const { runErrorHandler } = require('../error-handler');
+        runErrorHandler(mockLogger);
+
+        expect(mockLogger.warn).toHaveBeenCalledWith(
+          {
+            err: {
+              message: 'redlock:lock-XRPBUSD',
+              code: 500
+            },
+            count: 10
+          },
+          'Silenced redlock uncaughtException occurring repeatedly'
+        );
       });
     });
   });

@@ -6,6 +6,7 @@ describe('webserver/handlers/auth', () => {
   let cacheMock;
   let PubSubMock;
   let loggerMock;
+  let slackMock;
 
   let mockRequestIpGetClientIp;
 
@@ -94,12 +95,15 @@ describe('webserver/handlers/auth', () => {
     ].forEach(t => {
       describe(`password: ${t.password}`, () => {
         beforeEach(async () => {
-          const { logger, PubSub, cache } = require('../../../../helpers');
+          const { logger, PubSub, cache, slack } = require('../../../../helpers');
 
           loggerMock = logger;
 
           PubSubMock = PubSub;
           PubSubMock.publish = jest.fn().mockResolvedValue(true);
+
+          slackMock = slack;
+          slackMock.sendMessage = jest.fn().mockResolvedValue(true);
 
           cacheMock = cache;
           cacheMock.get = jest.fn().mockResolvedValue('uuid');
@@ -143,18 +147,38 @@ describe('webserver/handlers/auth', () => {
             }
           });
         });
+
+        it('does not include entered password in slack message', () => {
+          const sentMessage = slackMock.sendMessage.mock.calls[0][0];
+
+          expect(sentMessage).not.toContain('Entered password');
+        });
+
+        it('does not log entered password', () => {
+          expect(loggerMock.info).toHaveBeenCalledWith(
+            {
+              inputProvided: !!t.password,
+              success: false,
+              clientIp: '127.0.0.1'
+            },
+            'handle authentication'
+          );
+        });
       });
     });
   });
 
   describe('when verification succeed', () => {
     beforeEach(async () => {
-      const { logger, PubSub, cache } = require('../../../../helpers');
+      const { logger, PubSub, cache, slack } = require('../../../../helpers');
 
       loggerMock = logger;
 
       PubSubMock = PubSub;
       PubSubMock.publish = jest.fn().mockResolvedValue(true);
+
+      slackMock = slack;
+      slackMock.sendMessage = jest.fn().mockResolvedValue(true);
 
       cacheMock = cache;
       cacheMock.get = jest.fn().mockResolvedValue('uuid');
@@ -192,6 +216,67 @@ describe('webserver/handlers/auth', () => {
           authToken: 'authToken'
         }
       });
+    });
+
+    it('logs whether password was provided', () => {
+      expect(loggerMock.info).toHaveBeenCalledWith(
+        {
+          inputProvided: true,
+          success: true,
+          clientIp: '127.0.0.1'
+        },
+        'handle authentication'
+      );
+    });
+  });
+
+  describe('password hash caching', () => {
+    it('hashes configured password once for multiple requests', async () => {
+      const mockHashSync = jest.fn().mockReturnValue('hashed-password');
+      const mockCompareSync = jest
+        .fn()
+        .mockImplementation((requestedPassword, hashedPassword) => {
+          return requestedPassword === '123456' && hashedPassword === 'hashed-password';
+        });
+
+      jest.mock('bcryptjs', () => ({
+        hashSync: mockHashSync,
+        compareSync: mockCompareSync
+      }));
+
+      const { logger, PubSub, cache, slack } = require('../../../../helpers');
+
+      loggerMock = logger;
+      PubSubMock = PubSub;
+      PubSubMock.publish = jest.fn().mockResolvedValue(true);
+      cacheMock = cache;
+      cacheMock.get = jest.fn().mockResolvedValue('uuid');
+      slackMock = slack;
+      slackMock.sendMessage = jest.fn().mockResolvedValue(true);
+
+      postReq = {
+        body: {
+          password: '123456'
+        }
+      };
+
+      const { handleAuth } = require('../auth');
+      await handleAuth(loggerMock, appMock, {
+        loginLimiter: mockLoginLimiter
+      });
+
+      postReq = {
+        body: {
+          password: '123456'
+        }
+      };
+
+      await handleAuth(loggerMock, appMock, {
+        loginLimiter: mockLoginLimiter
+      });
+
+      expect(mockHashSync).toHaveBeenCalledTimes(1);
+      expect(mockCompareSync).toHaveBeenCalledTimes(2);
     });
   });
 });

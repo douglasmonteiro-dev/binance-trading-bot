@@ -2,6 +2,8 @@ const config = require('config');
 const { slack } = require('./helpers');
 const { getAPILimit } = require('./cronjob/trailingTradeHelper/common');
 
+const silencedErrorCounts = {};
+
 const runErrorHandler = logger => {
   // This will catch the unhandled rejected Promise
   process.on('unhandledRejection', err => {
@@ -15,7 +17,15 @@ const runErrorHandler = logger => {
   process.on('uncaughtException', async err => {
     // Ignore the error with redlock
     if (err.message.includes('redlock')) {
-      // Simply ignore
+      silencedErrorCounts.redlock = (silencedErrorCounts.redlock || 0) + 1;
+      if (silencedErrorCounts.redlock % 10 === 0) {
+        logger.warn(
+          { err, count: silencedErrorCounts.redlock },
+          'Silenced redlock uncaughtException occurring repeatedly'
+        );
+      }
+
+      // Silently ignore this transient lock error.
       return;
     }
 
@@ -56,6 +66,13 @@ const handleError = (logger, job, err) => {
     err.code === 'ECONNREFUSED'
   ) {
     // Let's silent for internal server error or assumed temporary errors
+    silencedErrorCounts[err.code] = (silencedErrorCounts[err.code] || 0) + 1;
+    if (silencedErrorCounts[err.code] % 10 === 0) {
+      logger.warn(
+        { err, count: silencedErrorCounts[err.code] },
+        `Silenced error occurring repeatedly (${err.code})`
+      );
+    }
   } else {
     slack.sendMessage(
       `Execution failed:\n` +

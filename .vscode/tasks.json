@@ -1,0 +1,89 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "sanity-node",
+			"type": "shell",
+			"command": "node -e \"console.log('ok-node-task')\"",
+			"isBackground": false
+		},
+		{
+			"label": "jest-impacted",
+			"type": "shell",
+			"command": "npx jest --runInBand app/frontend/webserver/handlers/__tests__/auth.test.js app/frontend/webserver/__tests__/configure.test.js app/frontend/webserver/handlers/__tests__/backup-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-logs-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-archive-get.test.js app/__tests__/error-handler.test.js app/__tests__/server-cronjob.test.js app/cronjob/trailingTradeHelper/__tests__/common.test.js app/cronjob/trailingTrade/step/__tests__/place-buy-order.test.js app/cronjob/trailingTrade/step/__tests__/place-sell-order.test.js app/cronjob/trailingTradeHelper/__tests__/queue.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "jest-impacted-rerun",
+			"type": "shell",
+			"command": "npx jest --runInBand app/frontend/webserver/handlers/__tests__/auth.test.js app/frontend/webserver/__tests__/configure.test.js app/frontend/webserver/handlers/__tests__/backup-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-logs-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-archive-get.test.js app/__tests__/error-handler.test.js app/__tests__/server-cronjob.test.js app/cronjob/trailingTradeHelper/__tests__/common.test.js app/cronjob/trailingTrade/step/__tests__/place-buy-order.test.js app/cronjob/trailingTrade/step/__tests__/place-sell-order.test.js app/cronjob/trailingTradeHelper/__tests__/queue.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "jest-impacted-rerun2",
+			"type": "shell",
+			"command": "npx jest --runInBand app/frontend/webserver/handlers/__tests__/auth.test.js app/frontend/webserver/__tests__/configure.test.js app/frontend/webserver/handlers/__tests__/backup-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-logs-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-archive-get.test.js app/__tests__/error-handler.test.js app/__tests__/server-cronjob.test.js app/cronjob/trailingTradeHelper/__tests__/common.test.js app/cronjob/trailingTrade/step/__tests__/place-buy-order.test.js app/cronjob/trailingTrade/step/__tests__/place-sell-order.test.js app/cronjob/trailingTradeHelper/__tests__/queue.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "jest-server-cronjob-only",
+			"type": "shell",
+			"command": "npx jest --runInBand app/__tests__/server-cronjob.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "jest-impacted-final",
+			"type": "shell",
+			"command": "npx jest --runInBand app/frontend/webserver/handlers/__tests__/auth.test.js app/frontend/webserver/__tests__/configure.test.js app/frontend/webserver/handlers/__tests__/backup-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-logs-get.test.js app/frontend/webserver/handlers/__tests__/grid-trade-archive-get.test.js app/__tests__/error-handler.test.js app/__tests__/server-cronjob.test.js app/cronjob/trailingTradeHelper/__tests__/common.test.js app/cronjob/trailingTrade/step/__tests__/place-buy-order.test.js app/cronjob/trailingTrade/step/__tests__/place-sell-order.test.js app/cronjob/trailingTradeHelper/__tests__/queue.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "npm-test-full",
+			"type": "shell",
+			"command": "npm test",
+			"isBackground": false
+		},
+		{
+			"label": "jest-failing-suites-rerun",
+			"type": "shell",
+			"command": "npx jest --runInBand app/frontend/local-tunnel/__tests__/configure.test.js app/cronjob/__tests__/trailingTrade.test.js app/binance/__tests__/orders.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "npm-test-full-rerun",
+			"type": "shell",
+			"command": "npm test",
+			"isBackground": false
+		},
+		{
+			"label": "fix-websocket-jwt-asserts",
+			"type": "shell",
+			"command": "perl -pi -e \"s/algorithm: 'HS256'/algorithms: ['HS256']/g\" app/frontend/websocket/__tests__/configure.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "npm-test-full-final",
+			"type": "shell",
+			"command": "npm test",
+			"isBackground": false
+		},
+		{
+			"label": "jest-error-handler-only",
+			"type": "shell",
+			"command": "npx jest --runInBand app/__tests__/error-handler.test.js",
+			"isBackground": false
+		},
+		{
+			"label": "npm-test-full-passcheck",
+			"type": "shell",
+			"command": "npm test",
+			"isBackground": false
+		},
+		{
+			"label": "inspect-redis-network",
+			"type": "shell",
+			"command": "docker ps -a --filter name=binance-redis --format '{{.Names}} {{.Status}} {{.Networks}}' && docker inspect binance-redis --format '{{json .NetworkSettings.Networks}}'",
+			"isBackground": false
+		}
+	]
+}

@@ -10,13 +10,15 @@ const {
 } = require('../../../cronjob/trailingTradeHelper/configuration');
 const { cache, PubSub, slack } = require('../../../helpers');
 
+let cachedPasswordHash = null;
+
 const verifyPassword = (configuredPassword, requestedPassword) => {
   let result = false;
   try {
-    result = bcrypt.compareSync(
-      requestedPassword,
-      bcrypt.hashSync(configuredPassword)
-    );
+    if (cachedPasswordHash === null) {
+      cachedPasswordHash = bcrypt.hashSync(configuredPassword, 10);
+    }
+    result = bcrypt.compareSync(requestedPassword, cachedPasswordHash);
     // eslint-disable-next-line no-empty
   } catch (_e) {}
   return result;
@@ -60,7 +62,7 @@ const handleAuth = async (funcLogger, app, { loginLimiter }) => {
 
     logger.info(
       {
-        input: requestedPassword,
+        inputProvided: !!(requestedPassword),
         success: checkPasswordSuccess,
         clientIp
       },
@@ -79,7 +81,6 @@ const handleAuth = async (funcLogger, app, { loginLimiter }) => {
         `${config.get(
           'appName'
         )} Webserver:\n❌ The bot failed to authenticate.\n` +
-          `- Entered password: ${requestedPassword}\n` +
           `- IP: ${clientIp}`,
         { symbol: 'global' }
       );

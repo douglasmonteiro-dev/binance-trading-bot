@@ -13,8 +13,8 @@ const handleGridTradeLogsGet = async (funcLogger, app) => {
     const { authToken, symbol, page: rawPage, limit: rawLimit } = req.body;
 
     // Verify authentication
-    const page = rawPage || 1;
-    const limit = rawLimit || 5;
+    const page = Math.max(1, parseInt(rawPage, 10) || 1);
+    const limit = Math.min(100, Math.max(1, parseInt(rawLimit, 10) || 5));
 
     logger.info({ page, limit }, 'Grid Trade Logs');
 

@@ -35,7 +35,7 @@ const runFrontend = async serverLogger => {
 
   const app = express();
   app.use(compression());
-  app.use(cors());
+  app.use(cors({ origin: process.env.CORS_ALLOWED_ORIGIN || '*' }));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(

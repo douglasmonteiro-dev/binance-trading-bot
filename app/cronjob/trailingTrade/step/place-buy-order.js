@@ -30,6 +30,8 @@ const setMessage = (logger, rawData, processMessage) => {
   return data;
 };
 
+const roundToEightDecimals = value => Math.round(value * 1e8) / 1e8;
+
 /**
  * Place a buy order if has enough balance
  *
@@ -208,7 +210,7 @@ const execute = async (logger, rawData) => {
   }
   logger.info({ orderQuantity }, 'Order quantity after commission');
 
-  const orderAmount = orderQuantity * limitPrice;
+  const orderAmount = roundToEightDecimals(orderQuantity * limitPrice);
 
   if (orderAmount < parseFloat(minNotional)) {
     const processMessage =

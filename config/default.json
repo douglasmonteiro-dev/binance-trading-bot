@@ -58,7 +58,8 @@
   "jobs": {
     "alive": {
       "enabled": true,
-      "cronTime": "0 0 9 * * *"
+      "cronTime": "0 0 9 * * *",
+      "timeout": 10000
     },
     "trailingTrade": {
       "enabled": true,
@@ -166,11 +167,13 @@
     },
     "trailingTradeIndicator": {
       "enabled": true,
-      "cronTime": "* * * * * *"
+      "cronTime": "* * * * * *",
+      "timeout": 20000
     },
     "tradingView": {
       "enabled": true,
-      "cronTime": "* * * * * *"
+      "cronTime": "* * * * * *",
+      "timeout": 20000
     }
   }
 }

@@ -51,6 +51,8 @@ describe('server-cronjob', () => {
               return true;
             case 'jobs.alive.cronTime':
               return '* * * * * *';
+            case 'jobs.alive.timeout':
+              return 10000;
             case 'tz':
               return 'Australia/Melbourne';
             default:
@@ -112,6 +114,8 @@ describe('server-cronjob', () => {
               return true;
             case 'jobs.trailingTradeIndicator.cronTime':
               return '* * * * * *';
+            case 'jobs.trailingTradeIndicator.timeout':
+              return 20000;
             case 'tz':
               return 'Australia/Melbourne';
             default:
@@ -195,7 +199,7 @@ describe('server-cronjob', () => {
   describe('job is timeout', () => {
     beforeEach(async () => {
       jest.clearAllMocks().resetModules();
-      jest.useFakeTimers();
+      jest.useFakeTimers({ legacyFakeTimers: true });
       jest.mock('config');
 
       cache.hset = jest.fn().mockResolvedValue(true);
@@ -232,6 +236,8 @@ describe('server-cronjob', () => {
             return true;
           case 'jobs.trailingTradeIndicator.cronTime':
             return '* * * * * *';
+          case 'jobs.trailingTradeIndicator.timeout':
+            return 20000;
           case 'tz':
             return 'Australia/Melbourne';
           default:

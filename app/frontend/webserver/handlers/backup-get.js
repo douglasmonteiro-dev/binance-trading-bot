@@ -1,4 +1,4 @@
-const shell = require('shelljs');
+const { execFile } = require('child_process');
 const config = require('config');
 const moment = require('moment');
 const {
@@ -34,14 +34,20 @@ const handleBackupGet = async (funcLogger, app) => {
     const filepath = `/tmp/${filename}`;
 
     const result = await new Promise(resolve => {
-      shell.exec(
-        `${process.cwd()}/scripts/backup.sh ${config.get(
-          'mongo.host'
-        )} ${config.get('mongo.port')} ${config.get(
-          'mongo.database'
-        )} ${filepath}`,
-        (code, stdout, stderr) => {
-          resolve({ code, stdout, stderr });
+      execFile(
+        `${process.cwd()}/scripts/backup.sh`,
+        [
+          config.get('mongo.host'),
+          String(config.get('mongo.port')),
+          config.get('mongo.database'),
+          filepath
+        ],
+        (error, stdout, stderr) => {
+          if (error) {
+            resolve({ code: 1, stdout, stderr });
+            return;
+          }
+          resolve({ code: 0, stdout, stderr });
         }
       );
     });

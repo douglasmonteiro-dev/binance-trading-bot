@@ -3,6 +3,10 @@
 # For the production environment: `docker-compose -f docker-compose.server.yml -f docker-compose.arm64.yml up -d`
 
 services:
+  binance-redis:
+    ports:
+      - 6380:6379
+
   binance-mongo:
     container_name: binance-mongo
     image: arm64v8/mongo:3.4 # The minimum version I can find was 3.4. Note that the app is using Mongo 3.2.20.

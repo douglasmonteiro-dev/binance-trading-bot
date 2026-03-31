@@ -134,6 +134,27 @@ describe('webserver/handlers/grid-trade-logs-get', () => {
           _id: '$symbol',
           symbol: { $first: '$symbol' }
         }
+      },
+      {
+        desc: 'symbol with invalid page/limit',
+        requestBody: {
+          authToken: 'valid-auth-token',
+          symbol: 'BTCUSDT',
+          page: 'invalid',
+          limit: 1000
+        },
+        expectedMatch: {
+          symbol: 'BTCUSDT'
+        },
+        expectFindAllParams: {
+          sort: { loggedAt: -1 },
+          skip: 0,
+          limit: 100
+        },
+        expectedGroup: {
+          _id: '$symbol',
+          symbol: { $first: '$symbol' }
+        }
       }
     ].forEach(t => {
       describe(`found rows - ${t.desc}`, () => {

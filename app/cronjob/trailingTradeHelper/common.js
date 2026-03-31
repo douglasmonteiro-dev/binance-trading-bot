@@ -620,7 +620,7 @@ const verifyAuthenticated = async (funcLogger, authToken) => {
   logger.info({ authToken, jwtSecret }, 'Verifying authentication');
   let data = null;
   try {
-    data = jwt.verify(authToken, jwtSecret, { algorithm: 'HS256' });
+    data = jwt.verify(authToken, jwtSecret, { algorithms: ['HS256'] });
   } catch (err) {
     logger.info({ err }, 'Failed authentication');
     return false;

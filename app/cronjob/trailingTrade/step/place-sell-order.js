@@ -27,6 +27,8 @@ const setMessage = (logger, rawData, processMessage) => {
   return data;
 };
 
+const roundToEightDecimals = value => Math.round(value * 1e8) / 1e8;
+
 /**
  * Place a sell order if has enough balance
  *
@@ -107,7 +109,11 @@ const execute = async (logger, rawData) => {
     'Calculated order quantity with quantity percentage.'
   );
 
-  if (orderQuantityWithPercentage * limitPrice > parseFloat(minNotional)) {
+  const orderQuantityWithPercentageNotional = roundToEightDecimals(
+    orderQuantityWithPercentage * limitPrice
+  );
+
+  if (orderQuantityWithPercentageNotional > parseFloat(minNotional)) {
     // Then calculate order quantity
     orderQuantity = orderQuantityWithPercentage;
     logger.info(
@@ -128,7 +134,9 @@ const execute = async (logger, rawData) => {
     orderQuantity = parseFloat(maxQty);
   }
 
-  if (orderQuantity * limitPrice < parseFloat(minNotional)) {
+  const orderQuantityNotional = roundToEightDecimals(orderQuantity * limitPrice);
+
+  if (orderQuantityNotional < parseFloat(minNotional)) {
     return setMessage(
       logger,
       data,
