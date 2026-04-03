@@ -298,11 +298,12 @@ class CoinWrapperTradingView extends React.Component {
           overlay={
             <Popover id='trading-view-alert-overlay-right'>
               <Popover.Content>
-                The data is older than {tradingViewUseOnlyWithin} minute(s).
-                This data will not be used until it is updated.
+                {t('coin.tradingView.dataOlderThan', {
+                  minutes: tradingViewUseOnlyWithin
+                })}
                 <br />
                 <br />
-                Last updated: {updatedAt.fromNow()}
+                {t('coin.action.lastUpdated')} {updatedAt.fromNow()}
               </Popover.Content>
             </Popover>
           }>
@@ -359,13 +360,13 @@ class CoinWrapperTradingView extends React.Component {
             <div className='coin-info-column-rows coin-info-column-price'>
               <div className='coin-info-column-row'>
                 <div className='coin-info-column w-row-3 text-center text-danger'>
-                  Sell
+                  {t('coin.tradingView.sell')}
                 </div>
                 <div className='coin-info-column w-row-3 text-center text-muted'>
-                  Neutral
+                  {t('coin.tradingView.neutral')}
                 </div>
                 <div className='coin-info-column w-row-3 text-center text-success'>
-                  Buy
+                  {t('coin.tradingView.buy')}
                 </div>
               </div>
               <div className='coin-info-column-row'>
@@ -384,7 +385,7 @@ class CoinWrapperTradingView extends React.Component {
               <span
                 className='coin-info-value font-italic fs-9'
                 title={tradingView.result.time}>
-                Updated{' '}
+                {t('coin.tradingView.updated')}{' '}
                 {moment
                   .utc(tradingView.result.time, 'YYYY-MM-DDTHH:mm:ss.SSSSSS')
                   .fromNow()}
@@ -393,17 +394,20 @@ class CoinWrapperTradingView extends React.Component {
 
             <div className='coin-info-sub-wrapper'>
               <div className='coin-info-sub-label'>
-                Oscillators (
+                {t('coin.tradingView.oscillators')} (
                 <span className='text-danger mx-1'>
-                  Sell: {tradingView.result.oscillators.SELL}
+                  {t('coin.tradingView.sell')}:{' '}
+                  {tradingView.result.oscillators.SELL}
                 </span>
                 /
                 <span className='text-muted mx-1'>
-                  Neutral: {tradingView.result.oscillators.NEUTRAL}
+                  {t('coin.tradingView.neutral')}:{' '}
+                  {tradingView.result.oscillators.NEUTRAL}
                 </span>
                 /
                 <span className='text-success mx-1'>
-                  Buy: {tradingView.result.oscillators.BUY}
+                  {t('coin.tradingView.buy')}:{' '}
+                  {tradingView.result.oscillators.BUY}
                 </span>
                 )
               </div>
@@ -411,17 +415,20 @@ class CoinWrapperTradingView extends React.Component {
             </div>
             <div className='coin-info-sub-wrapper'>
               <div className='coin-info-sub-label'>
-                Moving Averages (
+                {t('coin.tradingView.movingAverages')} (
                 <span className='text-danger mx-1'>
-                  Sell: {tradingView.result.moving_averages.SELL}
+                  {t('coin.tradingView.sell')}:{' '}
+                  {tradingView.result.moving_averages.SELL}
                 </span>
                 /
                 <span className='text-muted mx-1'>
-                  Neutral: {tradingView.result.moving_averages.NEUTRAL}
+                  {t('coin.tradingView.neutral')}:{' '}
+                  {tradingView.result.moving_averages.NEUTRAL}
                 </span>
                 /
                 <span className='text-success mx-1'>
-                  Buy: {tradingView.result.moving_averages.BUY}
+                  {t('coin.tradingView.buy')}:{' '}
+                  {tradingView.result.moving_averages.BUY}
                 </span>
                 )
               </div>

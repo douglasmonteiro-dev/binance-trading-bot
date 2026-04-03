@@ -106,13 +106,13 @@ class SettingIconActionRestoreConfirmModal extends React.Component {
         <Modal.Header className='pt-1 pb-1'>
           <Modal.Title>
             <span className='text-primary'>
-              <i className='fas fa-cloud-upload-alt'></i>&nbsp; Restore database
+              <i className='fas fa-cloud-upload-alt'></i>&nbsp;{' '}
+              {t('settings.restoreTitle')}
             </span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Warning: You are about to restore database. Restoring database will be
-          wipe current data. So please be careful.
+          {t('settings.restoreWarning')}
           <br />
           <br />
           Please drag and drop the backup file or click to select backup file.
@@ -134,10 +134,7 @@ class SettingIconActionRestoreConfirmModal extends React.Component {
                       {selectedFiles && selectedFiles[0].name}
                     </div>
                   ) : (
-                    <p>
-                      Drag 'n' drop the backup archive file here
-                      <br /> or click to select the backup archive file
-                    </p>
+                    <p>{t('settings.restoreDragDrop')}</p>
                   )}
                 </div>
               </section>
@@ -192,7 +189,7 @@ class SettingIconActionRestoreConfirmModal extends React.Component {
             variant='secondary'
             size='sm'
             onClick={() => this.props.handleModalClose('restore-confirm')}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant='success'
@@ -205,12 +202,12 @@ class SettingIconActionRestoreConfirmModal extends React.Component {
                 role='status'
                 className='mr-2'
                 style={{ width: '1rem', height: '1rem' }}>
-                <span className='sr-only'>Loading...</span>
+                <span className='sr-only'>{t('common.loading')}</span>
               </Spinner>
             ) : (
               ''
             )}
-            Upload &amp; Restore
+            {t('settings.restoreUpload')}
           </Button>
         </Modal.Footer>
       </Modal>

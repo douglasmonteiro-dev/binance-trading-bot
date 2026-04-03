@@ -231,7 +231,7 @@ class ProfitLossWrapper extends React.Component {
                       parseFloat(stat.lastProfit).toFixed(5) +
                       ' ' +
                       stat.quoteAsset
-                    : 'No closed trades yet'}
+                    : t('closedTrades.noTrades')}
                 </div>
               </div>{' '}
               <div className='profit-loss-value'>
@@ -277,7 +277,7 @@ class ProfitLossWrapper extends React.Component {
                 <div className='d-flex flex-row justify-content-between'>
                   <div className='flex-column-left'>
                     <div className='btn-profit-loss text-uppercase text-left font-weight-bold btn-link'>
-                      <span>Open Trades</span>{' '}
+                      <span>{t('closedTrades.openTrades')}</span>{' '}
                       <OverlayTrigger
                         trigger='click'
                         key='profit-loss-overlay'
@@ -285,12 +285,7 @@ class ProfitLossWrapper extends React.Component {
                         overlay={
                           <Popover id='profit-loss-overlay-right'>
                             <Popover.Content>
-                              This section displays the estimated profit/loss
-                              for the list of assets that are currently open to
-                              selling with the last buy price recorded. The
-                              calculation is simply adding profit/loss values
-                              for each quote asset. Note that it does not
-                              represent the historical profit/loss.
+                              {t('closedTrades.openTradesTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -325,7 +320,7 @@ class ProfitLossWrapper extends React.Component {
                           animation='border'
                           role='status'
                           style={{ width: '3rem', height: '3rem' }}>
-                          <span className='sr-only'>Loading...</span>
+                          <span className='sr-only'>{t('common.loading')}</span>
                         </Spinner>
                       </div>
                     ) : (
@@ -347,7 +342,7 @@ class ProfitLossWrapper extends React.Component {
                 <div className='d-flex flex-row justify-content-between'>
                   <div className='flex-column-left'>
                     <div className='btn-profit-loss text-uppercase font-weight-bold'>
-                      Closed Trades{' '}
+                      {t('closedTrades.title')}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key='profit-loss-overlay'
@@ -355,9 +350,7 @@ class ProfitLossWrapper extends React.Component {
                         overlay={
                           <Popover id='profit-loss-overlay-right'>
                             <Popover.Content>
-                              This section displays the total profit of each
-                              asset as well as the number of closed trades and
-                              the last trade profit.
+                              {t('closedTrades.closedTradesTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -376,8 +369,8 @@ class ProfitLossWrapper extends React.Component {
                         selectedPeriod === 'd' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setSelectedPeriod('d')}
-                      title='Day'>
-                      D
+                      title={t('closedTrades.day')}>
+                      {t('closedTrades.dayShort')}
                     </button>
                     <button
                       type='button'
@@ -385,8 +378,8 @@ class ProfitLossWrapper extends React.Component {
                         selectedPeriod === 'w' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setSelectedPeriod('w')}
-                      title='Week'>
-                      W
+                      title={t('closedTrades.week')}>
+                      {t('closedTrades.weekShort')}
                     </button>
                     <button
                       type='button'
@@ -394,8 +387,8 @@ class ProfitLossWrapper extends React.Component {
                         selectedPeriod === 'm' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setSelectedPeriod('m')}
-                      title='Month'>
-                      M
+                      title={t('closedTrades.month')}>
+                      {t('closedTrades.monthShort')}
                     </button>
                     <button
                       type='button'
@@ -403,8 +396,8 @@ class ProfitLossWrapper extends React.Component {
                         selectedPeriod === 'a' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setSelectedPeriod('a')}
-                      title='All'>
-                      All
+                      title={t('closedTrades.all')}>
+                      {t('closedTrades.all')}
                     </button>
                   </div>
                 </div>
@@ -418,7 +411,7 @@ class ProfitLossWrapper extends React.Component {
                           animation='border'
                           role='status'
                           style={{ width: '3rem', height: '3rem' }}>
-                          <span className='sr-only'>Loading...</span>
+                          <span className='sr-only'>{t('common.loading')}</span>
                         </Spinner>
                       </div>
                     ) : (

@@ -14,6 +14,80 @@ const {
   getCacheTrailingTradeQuoteEstimates
 } = require('../../../cronjob/trailingTradeHelper/common');
 
+const countActionByPrefix = (symbols, prefix) =>
+  symbols.filter(symbol => _.startsWith(_.get(symbol, 'action', ''), prefix))
+    .length;
+
+const countSymbolsWithOpenOrders = (symbols, side) =>
+  symbols.filter(symbol => _.get(symbol, [side, 'openOrders'], []).length > 0)
+    .length;
+
+const countNearStopLoss = symbols =>
+  symbols.filter(symbol => {
+    const stopLossDifference = _.get(symbol, 'sell.stopLossDifference', null);
+
+    return _.isNumber(stopLossDifference)
+      ? stopLossDifference >= 0 && stopLossDifference <= 1
+      : false;
+  }).length;
+
+const countStopLossTriggered = symbols =>
+  symbols.filter(symbol => {
+    const stopLossDifference = _.get(symbol, 'sell.stopLossDifference', null);
+
+    return (
+      _.get(symbol, 'action') === 'sell-stop-loss' ||
+      (_.isNumber(stopLossDifference) && stopLossDifference < 0)
+    );
+  }).length;
+
+const buildConsultation = (symbols, common, globalConfiguration) => {
+  const orderLimitEnabled = _.get(
+    globalConfiguration,
+    ['botOptions', 'orderLimit', 'enabled'],
+    false
+  );
+  const maxOpenTrades = _.get(
+    globalConfiguration,
+    ['botOptions', 'orderLimit', 'maxOpenTrades'],
+    0
+  );
+  const maxBuyOpenOrders = _.get(
+    globalConfiguration,
+    ['botOptions', 'orderLimit', 'maxBuyOpenOrders'],
+    0
+  );
+  const usedWeight1m = parseFloat(
+    _.get(common, 'apiInfo.spot.usedWeight1m', 0)
+  );
+
+  return {
+    generatedAt: new Date().toISOString(),
+    market: {
+      buySignals: countActionByPrefix(symbols, 'buy'),
+      sellSignals: countActionByPrefix(symbols, 'sell'),
+      openBuyOrders: countSymbolsWithOpenOrders(symbols, 'buy'),
+      openSellOrders: countSymbolsWithOpenOrders(symbols, 'sell')
+    },
+    risk: {
+      nearStopLoss: countNearStopLoss(symbols),
+      stopLossTriggered: countStopLossTriggered(symbols),
+      disabledSymbols: symbols.filter(
+        symbol => _.get(symbol, 'isActionDisabled.isDisabled') === true
+      ).length,
+      maxOpenTradesReached:
+        orderLimitEnabled &&
+        _.get(common, 'orderStats.numberOfOpenTrades', 0) >= maxOpenTrades,
+      maxBuyOpenOrdersReached:
+        orderLimitEnabled &&
+        _.get(common, 'orderStats.numberOfBuyOpenOrders', 0) >=
+          maxBuyOpenOrders,
+      apiWeightHigh: usedWeight1m >= 1000,
+      streamsNearLimit: _.get(common, 'streamsCount', 0) >= 900
+    }
+  };
+};
+
 const handleLatest = async (logger, ws, payload) => {
   const globalConfiguration = await getConfiguration(logger);
 
@@ -162,6 +236,12 @@ const handleLatest = async (logger, ws, payload) => {
     cachedMonitoringSymbolsCount,
     totalPages
   };
+
+  common.consultation = buildConsultation(
+    stats.symbols,
+    common,
+    globalConfiguration
+  );
 
   logger.info(
     {

@@ -29,7 +29,7 @@ class CoinWrapperTradingViews extends React.Component {
     return (
       <div className='coin-info-sub-wrapper'>
         <div className='coin-info-column coin-info-column-title'>
-          <div className='coin-info-label'>TradingView</div>
+          <div className='coin-info-label'>{t('coin.tradingView.title')}</div>
           <div className='coin-info-value'>
             <a
               href={
@@ -37,14 +37,14 @@ class CoinWrapperTradingViews extends React.Component {
               }
               rel='noopener noreferrer'
               target='_blank'>
-              Technical Analysis
+              {t('coin.tradingView.technicalAnalysis')}
             </a>{' '}
             &nbsp; | &nbsp;
             <a
               href={'https://www.tradingview.com/chart/?symbol=' + symbol}
               rel='noopener noreferrer'
               target='_blank'>
-              Chart
+              {t('coin.tradingView.chart')}
             </a>
           </div>
         </div>

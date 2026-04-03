@@ -89,7 +89,9 @@ describe('server', () => {
 
     require('../server');
 
-    await new Promise(resolve => { setImmediate(resolve); });
+    await new Promise(resolve => {
+      setImmediate(resolve);
+    });
 
     expect(loggerErrorMock).toHaveBeenCalledWith(
       { err: serviceError, serviceName: 'binance' },

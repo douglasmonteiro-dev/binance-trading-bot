@@ -26,15 +26,16 @@ class SymbolSettingActionResetGridTrade extends React.Component {
         size='md'>
         <Modal.Header className='pt-1 pb-1'>
           <Modal.Title>
-            <span className='text-danger'>⚠ Reset Grid Trade</span>
+            <span className='text-danger'>
+              {t('symbolSettings.resetGridTradeTitle')}
+            </span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          You are about to reset the existing grid trades. If the grid trade is
-          already executed, the execution history will be removed.
+          {t('symbolSettings.resetGridTradeBody')}
           <br />
           <br />
-          Do you want to reset the grid trade history for the selected symbol?
+          {t('symbolSettings.resetGridTradeConfirm')}
         </Modal.Body>
 
         <Modal.Footer>
@@ -42,19 +43,19 @@ class SymbolSettingActionResetGridTrade extends React.Component {
             variant='secondary'
             size='sm'
             onClick={() => this.props.handleModalClose('resetGridTrade')}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant='info'
             size='sm'
             onClick={() => this.resetGridTrade('archive')}>
-            Archive and delete
+            {t('symbolSettings.archiveAndDelete')}
           </Button>
           <Button
             variant='danger'
             size='sm'
             onClick={() => this.resetGridTrade('delete')}>
-            Delete without archive
+            {t('symbolSettings.deleteWithoutArchive')}
           </Button>
         </Modal.Footer>
       </Modal>

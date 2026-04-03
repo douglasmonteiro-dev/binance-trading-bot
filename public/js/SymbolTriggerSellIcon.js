@@ -53,26 +53,22 @@ class SymbolTriggerSellIcon extends React.Component {
           type='button'
           className='btn btn-sm btn-trigger-grid-trade mr-1 btn-manual-sell'
           onClick={this.handleModalShow}>
-          <i className='fas fa-bolt'></i> Trigger
+          <i className='fas fa-bolt'></i> {t('symbolTriggerSell.trigger')}
         </button>
 
         <Modal show={this.state.showModal} onHide={this.handleModalClose}>
           <Modal.Header className='pt-1 pb-1'>
-            <Modal.Title>Trigger Sell Action - {symbol}</Modal.Title>
+            <Modal.Title>
+              {t('symbolTriggerSell.title')} - {symbol}
+            </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Are you sure to trigger a sell action for this symbol?
-            <br />
-            <br />
-            The bot will place a STOP-LOSS-LIMIT order for the currently active
-            grid trade.
-          </Modal.Body>
+          <Modal.Body>{t('symbolTriggerSell.confirmation')}</Modal.Body>
           <Modal.Footer>
             <Button
               variant='secondary'
               size='sm'
               onClick={this.handleModalClose}>
-              Close
+              {t('common.close')}
             </Button>
             <Button
               type='button'
@@ -80,7 +76,7 @@ class SymbolTriggerSellIcon extends React.Component {
               size='sm'
               className='btn-manual-sell'
               onClick={this.handleDelete}>
-              Trigger Sell
+              {t('symbolTriggerSell.trigger')}
             </Button>
           </Modal.Footer>
         </Modal>

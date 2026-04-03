@@ -1093,7 +1093,9 @@ describe('place-sell-stop-loss-order.js', () => {
               baseAssetBalance: { free: 200 },
               sell: {
                 currentPrice: 200,
-                openOrders: []
+                openOrders: [],
+                lastBuyPrice: 250,
+                stopLossTriggerPrice: 210
               },
               canDisable: true
             };
@@ -1159,13 +1161,20 @@ describe('place-sell-stop-loss-order.js', () => {
                     executedOrder: null
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'BTCUPUSDT',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 100,
+                  currentPrice: 200,
+                  executedAt: expect.any(Object),
+                  lastBuyPrice: 250,
+                  lossPercentage: (200 / 250 - 1) * 100,
+                  triggerPrice: 210
+                })
               }
             );
           });
@@ -1194,6 +1203,8 @@ describe('place-sell-stop-loss-order.js', () => {
                       type: 'MARKET'
                     }
                   ],
+                  lastBuyPrice: 250,
+                  stopLossTriggerPrice: 210,
                   processMessage: 'Placed new market order for selling.',
                   updatedAt: expect.any(Object)
                 }
@@ -1364,13 +1375,17 @@ describe('place-sell-stop-loss-order.js', () => {
                     }
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'ALPHABTC',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 19,
+                  currentPrice: 0.00003771,
+                  executedAt: expect.any(Object)
+                })
               }
             );
           });
@@ -1569,13 +1584,17 @@ describe('place-sell-stop-loss-order.js', () => {
                     }
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'BTCBRL',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 9000,
+                  currentPrice: 268748,
+                  executedAt: expect.any(Object)
+                })
               }
             );
           });
@@ -1766,13 +1785,17 @@ describe('place-sell-stop-loss-order.js', () => {
                     }
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'BTCUPUSDT',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 0.09,
+                  currentPrice: 200,
+                  executedAt: expect.any(Object)
+                })
               }
             );
           });
@@ -1961,13 +1984,17 @@ describe('place-sell-stop-loss-order.js', () => {
                     }
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'ALPHABTC',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 11,
+                  currentPrice: 0.00003771,
+                  executedAt: expect.any(Object)
+                })
               }
             );
           });
@@ -2156,13 +2183,17 @@ describe('place-sell-stop-loss-order.js', () => {
                     }
                   }
                 ],
-                stopLoss: {
+                stopLoss: expect.objectContaining({
                   symbol: 'BTCBRL',
                   orderId: 2701762317,
                   orderListId: -1,
                   clientOrderId: '6eGYHaJbmJrIS40eoq8ziM',
-                  transactTime: 1626946722520
-                }
+                  transactTime: 1626946722520,
+                  triggeredBy: 'stop-loss',
+                  quantity: 0.0999,
+                  currentPrice: 200,
+                  executedAt: expect.any(Object)
+                })
               }
             );
           });

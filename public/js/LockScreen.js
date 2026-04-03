@@ -69,7 +69,7 @@ class LockScreen extends React.Component {
   }
 
   handlePasswordAutofill(e) {
-    this.handleFormSubmit(e)
+    this.handleFormSubmit(e);
   }
 
   render() {
@@ -82,14 +82,21 @@ class LockScreen extends React.Component {
             <img
               src='./img/binance.png'
               className='binance-img'
-              alt='Binance logo'
+              alt={t('lock.logoAlt')}
             />{' '}
-            Binance Trading Bot
+            {t('lock.title')}
           </h1>
+          <div className='alert alert-secondary text-left small'>
+            <div className='font-weight-bold mb-1'>
+              {t('lock.beforeUnlock.title')}
+            </div>
+            <div>{t('lock.beforeUnlock.tip1')}</div>
+            <div>{t('lock.beforeUnlock.tip2')}</div>
+          </div>
           {loading ? (
             <div className='text-center w-100'>
               <Spinner animation='border' role='status'>
-                <span className='sr-only'>Loading...</span>
+                <span className='sr-only'>{t('lock.loading')}</span>
               </Spinner>
             </div>
           ) : (
@@ -103,7 +110,7 @@ class LockScreen extends React.Component {
 
                 <Form.Control
                   type='password'
-                  placeholder='Enter your password'
+                  placeholder={t('lock.enterPassword')}
                   required
                   onChange={this.handlePasswordChange}
                   onBlur={this.handlePasswordAutofill}

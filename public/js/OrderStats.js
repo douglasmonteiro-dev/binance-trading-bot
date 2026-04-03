@@ -18,7 +18,9 @@ class OrderStats extends React.Component {
               orderStats.numberOfBuyOpenOrders ? '' : 'btn-span-disabled'
             }`}
             onClick={() => this.props.setSearchKeyword('open orders')}>
-            <span className='order-stat-label'>Open Buy Orders</span>
+            <span className='order-stat-label'>
+              {t('orderStats.openBuyOrders')}
+            </span>
             <span className='order-stat-value text-info'>
               {orderStats.numberOfBuyOpenOrders}
             </span>
@@ -31,7 +33,9 @@ class OrderStats extends React.Component {
               orderStats.numberOfOpenTrades ? '' : 'btn-span-disabled'
             }`}
             onClick={() => this.props.setSearchKeyword('open trades')}>
-            <span className='order-stat-label'>Open Trades</span>
+            <span className='order-stat-label'>
+              {t('orderStats.openTrades')}
+            </span>
             <span className='order-stat-value text-info'>
               {orderStats.numberOfOpenTrades}
             </span>
@@ -39,7 +43,9 @@ class OrderStats extends React.Component {
         </div>
         {searchKeyword ? (
           <div className='order-stat-wrapper'>
-            <span className='order-stat-label'>Filtering</span>
+            <span className='order-stat-label'>
+              {t('orderStats.filtering')}
+            </span>
             <span className='order-stat-value text-info text-capitalize'>
               {searchKeyword}
 
@@ -56,7 +62,9 @@ class OrderStats extends React.Component {
         )}
         {selectedSortOption.hideInactive && !searchKeyword ? (
           <div className='order-stat-wrapper'>
-            <span className='order-stat-label'>Some coins are hidden</span>
+            <span className='order-stat-label'>
+              {t('orderStats.someCoinsHidden')}
+            </span>
           </div>
         ) : (
           ''

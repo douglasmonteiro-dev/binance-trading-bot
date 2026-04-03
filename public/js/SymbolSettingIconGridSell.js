@@ -199,7 +199,7 @@ class SymbolSettingIconGridSell extends React.Component {
         <React.Fragment key={'grid-row-sell-' + i}>
           <tr>
             <td className='align-middle font-weight-bold' width='90%'>
-              Grid Trade #{i + 1}
+              {t('settings.gridTrade', { index: i + 1 })}
             </td>
             <td className='align-middle text-center'>
               {i !== 0 && grid.executed !== true ? (
@@ -222,8 +222,8 @@ class SymbolSettingIconGridSell extends React.Component {
                     controlId={'field-grid-sell-' + i + '-trigger-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Trigger percentage{' '}
-                      <strong>based on the last buy price</strong>{' '}
+                      {t('settings.sellTriggerPercentage')}{' '}
+                      <strong>{t('settings.basedOnLastBuyPrice')}</strong>{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -238,11 +238,7 @@ class SymbolSettingIconGridSell extends React.Component {
                               '-trigger-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the trigger percentage for minimum profit.
-                              i.e. if set <code>1.06</code>, minimum profit will
-                              be <code>6%</code>. So if the last sell price is{' '}
-                              <code>$100</code>, then the bot will sell the coin
-                              when the current price reaches <code>$106</code>.
+                              {t('settings.sellTriggerPopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -256,7 +252,7 @@ class SymbolSettingIconGridSell extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter trigger percentage'
+                      placeholder={t('settings.placeholderTriggerPercentage')}
                       required
                       min='1'
                       step='0.0001'
@@ -276,7 +272,7 @@ class SymbolSettingIconGridSell extends React.Component {
                     controlId={'field-grid-sell-' + i + '-stop-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Stop price percentage{' '}
+                      {t('settings.stopPricePercentage')}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -293,10 +289,7 @@ class SymbolSettingIconGridSell extends React.Component {
                               '-stop-price-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the percentage to calculate stop price. i.e.
-                              if set <code>0.99</code> and current price{' '}
-                              <code>$106</code>, stop price will be{' '}
-                              <code>$104.94</code> for stop limit order.
+                              {t('settings.sellStopPricePopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -310,7 +303,7 @@ class SymbolSettingIconGridSell extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter stop price percentage'
+                      placeholder={t('settings.placeholderStopPricePercentage')}
                       required
                       min='0'
                       step='0.0001'
@@ -329,7 +322,7 @@ class SymbolSettingIconGridSell extends React.Component {
                     controlId={'field-grid-sell-' + i + '-limit-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Limit price percentage{' '}
+                      {t('settings.limitPricePercentage')}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -344,10 +337,7 @@ class SymbolSettingIconGridSell extends React.Component {
                               '-limit-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the percentage to calculate limit price. i.e.
-                              if set <code>0.98</code> and current price{' '}
-                              <code>$106</code>, limit price will be{' '}
-                              <code>$103.88</code> for stop limit order.
+                              {t('settings.sellLimitPricePopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -361,7 +351,9 @@ class SymbolSettingIconGridSell extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter limit price percentage'
+                      placeholder={t(
+                        'settings.placeholderLimitPricePercentage'
+                      )}
                       required
                       min='0'
                       step='0.0001'
@@ -381,7 +373,7 @@ class SymbolSettingIconGridSell extends React.Component {
                     controlId={'field-grid-sell-' + i + '-quantity-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Sell quantity percentage{' '}
+                      {t('settings.sellQuantityPercentage', { quoteAsset: '' })}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -398,12 +390,7 @@ class SymbolSettingIconGridSell extends React.Component {
                               '-quantity-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the quantity percentage for selling. i.e. if
-                              set <code>0.5</code>
-                              and own <code>50</code> coins, then it will only
-                              sell <code>25</code> of owned coins. If set{' '}
-                              <code>1</code>, then it will sell{' '}
-                              <code>100%</code> of owned coins.
+                              {t('settings.sellQuantityPopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -417,7 +404,9 @@ class SymbolSettingIconGridSell extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder={'Enter quantity percentage'}
+                      placeholder={t(
+                        'settings.placeholderQuantityPercentageSimple'
+                      )}
                       required
                       min='0.0001'
                       max='1'
@@ -457,7 +446,7 @@ class SymbolSettingIconGridSell extends React.Component {
               disabled={!canAddNewGridTrade}
               className='btn btn-sm btn-add-new-grid-trade-sell'
               onClick={this.onAddGridTrade}>
-              Add new grid trade
+              {t('settings.addGridTrade')}
             </button>
           </div>
         </div>

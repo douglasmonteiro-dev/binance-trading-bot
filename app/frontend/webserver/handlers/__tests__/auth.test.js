@@ -95,7 +95,12 @@ describe('webserver/handlers/auth', () => {
     ].forEach(t => {
       describe(`password: ${t.password}`, () => {
         beforeEach(async () => {
-          const { logger, PubSub, cache, slack } = require('../../../../helpers');
+          const {
+            logger,
+            PubSub,
+            cache,
+            slack
+          } = require('../../../../helpers');
 
           loggerMock = logger;
 
@@ -235,9 +240,11 @@ describe('webserver/handlers/auth', () => {
       const mockHashSync = jest.fn().mockReturnValue('hashed-password');
       const mockCompareSync = jest
         .fn()
-        .mockImplementation((requestedPassword, hashedPassword) => {
-          return requestedPassword === '123456' && hashedPassword === 'hashed-password';
-        });
+        .mockImplementation(
+          (requestedPassword, hashedPassword) =>
+            requestedPassword === '123456' &&
+            hashedPassword === 'hashed-password'
+        );
 
       jest.mock('bcryptjs', () => ({
         hashSync: mockHashSync,

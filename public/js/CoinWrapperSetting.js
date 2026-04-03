@@ -67,16 +67,20 @@ class CoinWrapperSetting extends React.Component {
           key={'coin-wrapper-setting-buy-grid-row-' + symbol + '-' + i}>
           <div className='coin-info-column-grid'>
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Grid Trade #{i + 1}</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.gridTrade', { index: i + 1 })}
+              </span>
             </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `buy.gridTrade[${i}].triggerPercentage`
               )}`}>
               <span className='coin-info-label'>
-                Trigger percentage{' '}
+                {t('coin.setting.triggerPercentage')}{' '}
                 <strong>
-                  {i === 0 ? `(lowest price)` : `(last buy price)`}
+                  {i === 0
+                    ? t('coin.setting.lowestPrice')
+                    : t('coin.setting.lastBuyPrice')}
                 </strong>
                 :
               </span>
@@ -88,7 +92,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `buy.gridTrade[${i}].stopPercentage`
               )}`}>
-              <span className='coin-info-label'>Stop percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.stopPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.stopPercentage - 1) * 100).toFixed(2)}%
               </div>
@@ -97,7 +103,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `buy.gridTrade[${i}].limitPercentage`
               )}`}>
-              <span className='coin-info-label'>Limit percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.limitPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.limitPercentage - 1) * 100).toFixed(2)}%
               </div>
@@ -107,7 +115,9 @@ class CoinWrapperSetting extends React.Component {
                 `buy.gridTrade[${i}].minPurchaseAmount`,
                 `buy.gridTrade[${i}].minPurchaseAmounts.${quoteAsset}`
               )}`}>
-              <span className='coin-info-label'>Min purchase amount:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.minPurchaseAmount')}
+              </span>
               <div className='coin-info-value'>
                 {grid.minPurchaseAmount} {quoteAsset}
               </div>
@@ -117,7 +127,9 @@ class CoinWrapperSetting extends React.Component {
                 `buy.gridTrade[${i}].maxPurchaseAmount`,
                 `buy.gridTrade[${i}].maxPurchaseAmounts.${quoteAsset}`
               )}`}>
-              <span className='coin-info-label'>Max purchase amount:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.maxPurchaseAmount')}
+              </span>
               <div className='coin-info-value'>
                 {grid.maxPurchaseAmount} {quoteAsset}
               </div>
@@ -133,13 +145,17 @@ class CoinWrapperSetting extends React.Component {
           key={'coin-wrapper-setting-sell-grid-row-' + symbol + '-' + i}>
           <div className='coin-info-column-grid'>
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Grid Trade #{i + 1}</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.gridTrade', { index: i + 1 })}
+              </span>
             </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `sell.gridTrade[${i}].triggerPercentage`
               )}`}>
-              <span className='coin-info-label'>Trigger percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.triggerPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.triggerPercentage - 1) * 100).toFixed(2)}%
               </div>
@@ -148,7 +164,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `sell.gridTrade[${i}].stopPercentage`
               )}`}>
-              <span className='coin-info-label'>Stop percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.stopPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.stopPercentage - 1) * 100).toFixed(2)}%
               </div>
@@ -157,7 +175,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 `sell.gridTrade[${i}].limitPercentage`
               )}`}>
-              <span className='coin-info-label'>Limit percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.limitPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.limitPercentage - 1) * 100).toFixed(2)}%
               </div>
@@ -167,7 +187,9 @@ class CoinWrapperSetting extends React.Component {
                 `sell.gridTrade[${i}].quantityPercentage`,
                 `sell.gridTrade[${i}].quantityPercentages.${quoteAsset}`
               )}`}>
-              <span className='coin-info-label'>Quantity Percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.quantityPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(parseFloat(grid.quantityPercentage) * 100).toFixed(2)}%
               </div>
@@ -186,12 +208,14 @@ class CoinWrapperSetting extends React.Component {
               <span className='coin-info-label'>TradingView #{i + 1}</span>
             </div>
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Interval:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.interval')}
+              </span>
               <div className='coin-info-value'>{tv.interval}</div>
             </div>
             <div className='coin-info-column coin-info-column-order'>
               <span className='coin-info-label'>
-                Buy trigger when <code>Strong Buy</code>:
+                {t('coin.setting.buyTriggerStrongBuy')}
               </span>
               <span className='coin-info-value'>
                 {tv.buy.whenStrongBuy ? (
@@ -203,7 +227,7 @@ class CoinWrapperSetting extends React.Component {
             </div>
             <div className='coin-info-column coin-info-column-order'>
               <span className='coin-info-label'>
-                Buy trigger when <code>Buy</code>:
+                {t('coin.setting.buyTriggerBuy')}
               </span>
               <span className='coin-info-value'>
                 {tv.buy.whenBuy ? (
@@ -215,7 +239,7 @@ class CoinWrapperSetting extends React.Component {
             </div>
             <div className='coin-info-column coin-info-column-order'>
               <span className='coin-info-label'>
-                Force sell when <code>Neutral</code>:
+                {t('coin.setting.forceSellNeutral')}
               </span>
               <span className='coin-info-value'>
                 {tv.sell.forceSellOverZeroBelowTriggerPrice.whenNeutral ? (
@@ -227,7 +251,7 @@ class CoinWrapperSetting extends React.Component {
             </div>
             <div className='coin-info-column coin-info-column-order'>
               <span className='coin-info-label'>
-                Force sell when <code>Sell</code>:
+                {t('coin.setting.forceSellSell')}
               </span>
               <span className='coin-info-value'>
                 {tv.sell.forceSellOverZeroBelowTriggerPrice.whenSell ? (
@@ -239,7 +263,7 @@ class CoinWrapperSetting extends React.Component {
             </div>
             <div className='coin-info-column coin-info-column-order'>
               <span className='coin-info-label'>
-                Force sell when <code>StrongSell</code>:
+                {t('coin.setting.forceSellStrongSell')}
               </span>
               <span className='coin-info-value'>
                 {tv.sell.forceSellOverZeroBelowTriggerPrice.whenStrongSell ? (
@@ -259,14 +283,14 @@ class CoinWrapperSetting extends React.Component {
         <div className='coin-info-column coin-info-column-title coin-info-column-title-setting'>
           <div className='coin-info-label'>
             <div className='mr-1'>
-              Setting{' '}
+              {t('coin.setting.title')}{' '}
               {this.isCustomised(configurationKeyName) ? (
                 <Badge pill variant='warning'>
-                  Customised
+                  {t('coin.setting.customised')}
                 </Badge>
               ) : (
                 <Badge pill variant='light'>
-                  Global
+                  {t('coin.setting.global')}
                 </Badge>
               )}
             </div>
@@ -285,12 +309,16 @@ class CoinWrapperSetting extends React.Component {
         <div
           className={`coin-info-content-setting ${collapsed ? 'd-none' : ''}`}>
           <div className='coin-info-sub-wrapper'>
-            <div className='coin-info-sub-label'>Candles</div>
+            <div className='coin-info-sub-label'>
+              {t('coin.setting.candles')}
+            </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'candles.interval'
               )}`}>
-              <span className='coin-info-label'>Interval:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.interval')}
+              </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.candles.interval}
               </div>
@@ -299,7 +327,7 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'candles.limit'
               )}`}>
-              <span className='coin-info-label'>Limit:</span>
+              <span className='coin-info-label'>{t('coin.setting.limit')}</span>
               <div className='coin-info-value'>
                 {symbolConfiguration.candles.limit}
               </div>
@@ -307,14 +335,16 @@ class CoinWrapperSetting extends React.Component {
           </div>
 
           <div className='coin-info-sub-wrapper'>
-            <div className='coin-info-sub-label'>Buy</div>
+            <div className='coin-info-sub-label'>{t('coin.setting.buy')}</div>
             <div
               className={`coin-info-column coin-info-column-order ${
                 this.warnIfAttributeCustomised('buy.enabled')
                   ? 'text-warning'
                   : ''
               }`}>
-              <span className='coin-info-label'>Trading enabled:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.tradingEnabled')}
+              </span>
               <span className='coin-info-value'>
                 {symbolConfiguration.buy.enabled ? (
                   <i className='fas fa-toggle-on'></i>
@@ -327,14 +357,14 @@ class CoinWrapperSetting extends React.Component {
           </div>
           <div className='coin-info-sub-wrapper'>
             <div className='coin-info-sub-label'>
-              Buy - Last buy price removal threshold
+              {t('coin.setting.buyLastBuyPriceRemoval')}
             </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'buy.lastBuyPriceRemoveThreshold'
               )}`}>
               <span className='coin-info-label'>
-                Remove last buy price under:
+                {t('coin.setting.removeLastBuyPriceUnder')}
               </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.buy.lastBuyPriceRemoveThreshold}{' '}
@@ -344,13 +374,15 @@ class CoinWrapperSetting extends React.Component {
           </div>
           <div className='coin-info-sub-wrapper'>
             <div className='coin-info-sub-label'>
-              Buy - Restriction with ATH
+              {t('coin.setting.buyRestrictionATH')}
             </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'buy.athRestriction.enabled'
               )}`}>
-              <span className='coin-info-label'>Restriction Enabled:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.restrictionEnabled')}
+              </span>
               <span className='coin-info-value'>
                 {symbolConfiguration.buy.athRestriction.enabled ? (
                   <i className='fas fa-toggle-on'></i>
@@ -363,7 +395,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'buy.athRestriction.candles.interval'
               )}`}>
-              <span className='coin-info-label'>Candles - Interval:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.candlesInterval')}
+              </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.buy.athRestriction.candles.interval}
               </div>
@@ -372,7 +406,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'buy.athRestriction.candles.limit'
               )}`}>
-              <span className='coin-info-label'>Candles - Limit:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.candlesLimit')}
+              </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.buy.athRestriction.candles.limit}
               </div>
@@ -381,7 +417,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'buy.athRestriction.restrictionPercentage'
               )}`}>
-              <span className='coin-info-label'>Restriction Percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.restrictionPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(
                   (symbolConfiguration.buy.athRestriction
@@ -395,14 +433,16 @@ class CoinWrapperSetting extends React.Component {
           </div>
 
           <div className='coin-info-sub-wrapper'>
-            <div className='coin-info-sub-label'>Sell</div>
+            <div className='coin-info-sub-label'>{t('coin.setting.sell')}</div>
             <div
               className={`coin-info-column coin-info-column-order ${
                 this.warnIfAttributeCustomised('sell.enabled')
                   ? 'text-warning'
                   : ''
               }`}>
-              <span className='coin-info-label'>Trading enabled:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.tradingEnabled')}
+              </span>
               <span className='coin-info-value'>
                 {symbolConfiguration.sell.enabled ? (
                   <i className='fas fa-toggle-on'></i>
@@ -415,12 +455,16 @@ class CoinWrapperSetting extends React.Component {
           </div>
 
           <div className='coin-info-sub-wrapper'>
-            <div className='coin-info-sub-label'>Sell - Stop Loss</div>
+            <div className='coin-info-sub-label'>
+              {t('coin.setting.sellStopLoss')}
+            </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'sell.stopLoss.enabled'
               )}`}>
-              <span className='coin-info-label'>Stop Loss Enabled:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.stopLossEnabled')}
+              </span>
               <span className='coin-info-value'>
                 {symbolConfiguration.sell.stopLoss.enabled ? (
                   <i className='fas fa-toggle-on'></i>
@@ -433,7 +477,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'sell.stopLoss.maxLossPercentage'
               )}`}>
-              <span className='coin-info-label'>Max Loss Percentage:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.maxLossPercentage')}
+              </span>
               <div className='coin-info-value'>
                 {(
                   (symbolConfiguration.sell.stopLoss.maxLossPercentage - 1) *
@@ -446,7 +492,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'sell.stopLoss.disableBuyMinutes'
               )}`}>
-              <span className='coin-info-label'>Temporary disable buy:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.tempDisableBuy')}
+              </span>
               <div className='coin-info-value'>
                 {moment
                   .duration(
@@ -460,7 +508,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'sell.stopLoss.orderType'
               )}`}>
-              <span className='coin-info-label'>Order Type:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.orderType')}
+              </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.sell.stopLoss.orderType}
               </div>
@@ -468,14 +518,16 @@ class CoinWrapperSetting extends React.Component {
           </div>
 
           <div className='coin-info-sub-wrapper'>
-            <div className='coin-info-sub-label'>TradingViews</div>
+            <div className='coin-info-sub-label'>
+              {t('coin.setting.tradingViews')}
+            </div>
             {tradingViewRows}
 
             {symbolConfiguration.botOptions.tradingViewOptions ? (
               <React.Fragment>
                 <div className='coin-info-column coin-info-column-order'>
                   <span className='coin-info-label'>
-                    Use data only updated within:
+                    {t('coin.setting.useDataOnlyUpdatedWithin')}
                   </span>
                   <span className='coin-info-value'>
                     {
@@ -486,13 +538,13 @@ class CoinWrapperSetting extends React.Component {
                 </div>
                 <div className='coin-info-column coin-info-column-order'>
                   <span className='coin-info-label'>
-                    If data passed "Use data only updated within":
+                    {t('coin.setting.ifDataExpired')}
                   </span>
                   <span className='coin-info-value'>
                     {symbolConfiguration.botOptions.tradingViewOptions
                       .ifExpires === 'ignore'
-                      ? 'Ignore data'
-                      : 'Do not buy'}
+                      ? t('coin.setting.ignoreData')
+                      : t('coin.setting.doNotBuy')}
                   </span>
                 </div>
               </React.Fragment>
@@ -503,13 +555,15 @@ class CoinWrapperSetting extends React.Component {
 
           <div className='coin-info-sub-wrapper'>
             <div className='coin-info-sub-label'>
-              Bot Options - Auto Trigger Buy
+              {t('coin.setting.autoTriggerBuy')}
             </div>
             <div
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'botOptions.autoTriggerBuy.enabled'
               )}`}>
-              <span className='coin-info-label'>Enabled:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.enabled')}
+              </span>
               <span className='coin-info-value'>
                 {symbolConfiguration.botOptions.autoTriggerBuy.enabled ? (
                   <i className='fas fa-toggle-on'></i>
@@ -522,7 +576,9 @@ class CoinWrapperSetting extends React.Component {
               className={`coin-info-column coin-info-column-order ${this.warnIfAttributeCustomised(
                 'botOptions.autoTriggerBuy.triggerAfter'
               )}`}>
-              <span className='coin-info-label'>Trigger after:</span>
+              <span className='coin-info-label'>
+                {t('coin.setting.triggerAfter')}
+              </span>
               <div className='coin-info-value'>
                 {moment
                   .duration(
@@ -537,7 +593,7 @@ class CoinWrapperSetting extends React.Component {
                 'botOptions.autoTriggerBuy.conditions.whenLessThanATHRestriction'
               )}`}>
               <span className='coin-info-label'>
-                Re-schedule when the current price is over ATH restriction:
+                {t('coin.setting.rescheduleOverATH')}
               </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.botOptions.autoTriggerBuy.conditions
@@ -553,7 +609,7 @@ class CoinWrapperSetting extends React.Component {
                 'botOptions.autoTriggerBuy.conditions.afterDisabledPeriod'
               )}`}>
               <span className='coin-info-label'>
-                Re-schedule when the action is disabled:
+                {t('coin.setting.rescheduleDisabled')}
               </span>
               <div className='coin-info-value'>
                 {symbolConfiguration.botOptions.autoTriggerBuy.conditions

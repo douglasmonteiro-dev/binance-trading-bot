@@ -5,11 +5,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.reconnectAttempts = 0;
+    this.maxReconnectAttempts = 15;
+    this.maxReconnectDelay = 30000;
+
     this.state = {
       webSocket: {
         instance: null,
         connected: false
       },
+      connectionFailed: false,
       packageVersion: '',
       gitHash: '',
       configuration: {},
@@ -22,29 +27,29 @@ class App extends React.Component {
       publicURL: '',
       dustTransfer: {},
       availableSortOptions: [
-        { sortBy: 'default', sortByDesc: false, label: 'Default' },
+        { sortBy: 'default', sortByDesc: false, labelKey: 'sort.default' },
         {
           sortBy: 'buy-difference',
           sortByDesc: false,
-          label: 'Buy - Difference (asc)'
+          labelKey: 'sort.buyDifferenceAsc'
         },
         {
           sortBy: 'buy-difference',
           sortByDesc: true,
-          label: 'Buy - Difference (desc)'
+          labelKey: 'sort.buyDifferenceDesc'
         },
         {
           sortBy: 'sell-profit',
           sortByDesc: false,
-          label: 'Sell - Profit (asc)'
+          labelKey: 'sort.sellProfitAsc'
         },
         {
           sortBy: 'sell-profit',
           sortByDesc: true,
-          label: 'Sell - Profit (desc)'
+          labelKey: 'sort.sellProfitDesc'
         },
-        { sortBy: 'alpha', sortByDesc: false, label: 'Alphabetical (asc)' },
-        { sortBy: 'alpha', sortByDesc: true, label: 'Alphabetical (desc)' }
+        { sortBy: 'alpha', sortByDesc: false, labelKey: 'sort.alphaAsc' },
+        { sortBy: 'alpha', sortByDesc: true, labelKey: 'sort.alphaDesc' }
       ],
       selectedSortOption: {
         sortBy: 'default',
@@ -62,8 +67,11 @@ class App extends React.Component {
       cachedMonitoringSymbolsCount: 0,
       page: 1,
       totalPages: 1,
+      consultation: {},
       tradingViewIntervals: ['1m', '5m', '15m', '30m', '1h', '2h', '4h', '1d'],
-      tradingViews: []
+      tradingViews: [],
+      currentLang: I18n.getLanguage(),
+      i18nReady: false
     };
     this.requestLatest = this.requestLatest.bind(this);
     this.connectWebSocket = this.connectWebSocket.bind(this);
@@ -174,15 +182,17 @@ class App extends React.Component {
 
     instance.onopen = () => {
       console.log('Connection is successfully established.');
+      self.reconnectAttempts = 0;
       this.toast({
         type: 'success',
-        title: 'Connected to the bot.'
+        title: t('app.toast.connected')
       });
       self.setState(prevState => ({
         webSocket: {
           ...prevState.webSocket,
           connected: true
-        }
+        },
+        connectionFailed: false
       }));
     };
 
@@ -229,6 +239,7 @@ class App extends React.Component {
             0
           ),
           totalPages: _.get(response, ['common', 'totalPages'], 1),
+          consultation: _.get(response, ['common', 'consultation'], {}),
           tradingViews: _.get(response, ['stats', 'tradingViews'], [])
         });
       }
@@ -254,12 +265,12 @@ class App extends React.Component {
     };
 
     instance.onclose = () => {
-      console.log('Socket is closed. Reconnect will be attempted in 1 second.');
+      self.reconnectAttempts++;
+      var delay = Math.min(
+        1000 * Math.pow(2, self.reconnectAttempts - 1),
+        self.maxReconnectDelay
+      );
 
-      this.toast({
-        type: 'info',
-        title: 'Disconnected from the bot. Reconnecting...'
-      });
       self.setState(prevState => ({
         webSocket: {
           ...prevState.webSocket,
@@ -267,9 +278,36 @@ class App extends React.Component {
         }
       }));
 
+      if (self.reconnectAttempts > self.maxReconnectAttempts) {
+        console.log(
+          'WebSocket connection failed after ' +
+            self.maxReconnectAttempts +
+            ' attempts. Giving up.'
+        );
+        self.setState({ connectionFailed: true });
+        this.toast({
+          type: 'error',
+          title: t('app.toast.connectionFailed')
+        });
+        return;
+      }
+
+      console.log(
+        'Socket is closed. Reconnect attempt ' +
+          self.reconnectAttempts +
+          ' in ' +
+          delay / 1000 +
+          's.'
+      );
+
+      this.toast({
+        type: 'info',
+        title: t('app.toast.disconnected')
+      });
+
       setTimeout(function () {
         self.connectWebSocket();
-      }, 1000);
+      }, delay);
     };
   }
 
@@ -309,14 +347,14 @@ class App extends React.Component {
     if (searchKeyword)
       this.toast({
         type: 'success',
-        title: `Filtering assets with ${searchKeyword}`
+        title: t('app.toast.filtering', { keyword: searchKeyword })
       });
     else
       this.toast({
         type: 'success',
         title: this.state.selectedSortOption.hideInactive
-          ? 'Showing active symbols'
-          : 'Showing all symbols'
+          ? t('app.toast.showingActive')
+          : t('app.toast.showingAll')
       });
 
     this.setState({
@@ -354,6 +392,10 @@ class App extends React.Component {
 
     this.connectWebSocket();
 
+    I18n.init(() => {
+      this.setState({ i18nReady: true });
+    });
+
     this.timerID = setInterval(() => this.requestLatest(), 1000);
   }
 
@@ -387,9 +429,45 @@ class App extends React.Component {
       totalProfitAndLoss,
       page,
       totalPages,
+      consultation,
       tradingViewIntervals,
       tradingViews
     } = this.state;
+
+    if (this.state.connectionFailed) {
+      return (
+        <div className='app-lock-screen flex-column d-flex h-100 justify-content-center align-content-center'>
+          <div className='lock-screen-wrapper w-100 text-center'>
+            <h1 className='app-h1 my-2'>
+              <img
+                src='./img/binance.png'
+                className='binance-img'
+                alt='Binance logo'
+              />{' '}
+              {t('app.title')}
+            </h1>
+            <div
+              className='alert alert-danger mx-auto mt-3'
+              style={{ maxWidth: '500px' }}>
+              <i className='fas fa-exclamation-triangle mr-2'></i>
+              {t('app.connectionFailed.message')}
+            </div>
+            <div className='text-muted small mt-2'>
+              {t('app.connectionFailed.hint')}
+            </div>
+            <button
+              className='btn btn-primary mt-3'
+              onClick={() => {
+                this.reconnectAttempts = 0;
+                this.setState({ connectionFailed: false });
+                this.connectWebSocket();
+              }}>
+              {t('app.connectionFailed.retry')}
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     if (isLoaded === false) {
       return <AppLoading />;
@@ -410,6 +488,16 @@ class App extends React.Component {
             s.symbolConfiguration.sell.enabled
         )
       : symbols;
+
+    const beginnerGuide = (
+      <div className='alert alert-info mx-3 mt-3 mb-2 small' role='alert'>
+        <div className='font-weight-bold mb-1'>{t('beginner.guide.title')}</div>
+        <div>{t('beginner.guide.tip1')}</div>
+        <div>{t('beginner.guide.tip2')}</div>
+        <div>{t('beginner.guide.tip3')}</div>
+        <div>{t('beginner.guide.tip4')}</div>
+      </div>
+    );
 
     const coinWrappers = activeSymbols.map((symbol, index) => {
       const symbolTradingViewIntervals = (
@@ -511,6 +599,7 @@ class App extends React.Component {
         />
         {_.isEmpty(configuration) === false ? (
           <div className='app-body'>
+            {beginnerGuide}
             <div className='app-body-header-wrapper'>
               <AccountWrapper
                 isAuthenticated={isAuthenticated}
@@ -544,13 +633,14 @@ class App extends React.Component {
                 streamsCount={streamsCount}
                 monitoringSymbolsCount={monitoringSymbolsCount}
                 cachedMonitoringSymbolsCount={cachedMonitoringSymbolsCount}
+                consultation={consultation}
               />
             </div>
           </div>
         ) : (
           <div className='app-body app-body-loading'>
             <Spinner animation='border' role='status'>
-              <span className='sr-only'>Loading...</span>
+              <span className='sr-only'>{t('app.loading')}</span>
             </Spinner>
           </div>
         )}

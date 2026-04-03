@@ -47,7 +47,9 @@ class CoinWrapperSellOrders extends React.Component {
         <React.Fragment key={'coin-wrapper-sell-grid-row-' + symbol + '-' + i}>
           <div className='coin-info-column-grid'>
             <div className='coin-info-column coin-info-column-price'>
-              <span className='coin-info-label'>Grid Trade #{i + 1}</span>
+              <span className='coin-info-label'>
+                {t('coin.sellSignal.gridTrade', { index: i + 1 })}
+              </span>
 
               <div className='coin-info-value'>
                 <OverlayTrigger
@@ -60,14 +62,20 @@ class CoinWrapperSellOrders extends React.Component {
                       <Popover.Content>
                         {grid.executed ? (
                           <React.Fragment>
-                            The grid trade #{i + 1} has been executed at.
+                            {t('coin.sellSignal.executed', {
+                              index: i + 1,
+                              timeFromNow: '',
+                              time: ''
+                            })}
                           </React.Fragment>
                         ) : (
                           <React.Fragment>
-                            The grid trade #{i + 1} has not been executed.{' '}
+                            {t('coin.sellSignal.notExecuted', { index: i + 1 })}{' '}
                             {currentGridTradeIndex === i
-                              ? 'Waiting to be executed.'
-                              : `Waiting the grid trade #${i} to be executed.`}
+                              ? t('coin.sellSignal.waitingExecution')
+                              : t('coin.sellSignal.waitingPrevious', {
+                                  index: i
+                                })}
                           </React.Fragment>
                         )}
                       </Popover.Content>
@@ -106,7 +114,7 @@ class CoinWrapperSellOrders extends React.Component {
               }`}>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Trigger price percentage:
+                  {t('coin.sellSignal.triggerPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.triggerPercentage - 1) * 100).toFixed(2)}%
@@ -114,7 +122,7 @@ class CoinWrapperSellOrders extends React.Component {
               </div>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Stop price percentage:
+                  {t('coin.sellSignal.stopPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.stopPercentage - 1) * 100).toFixed(2)}%
@@ -122,7 +130,7 @@ class CoinWrapperSellOrders extends React.Component {
               </div>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Limit price percentage:
+                  {t('coin.sellSignal.limitPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.limitPercentage - 1) * 100).toFixed(2)}%
@@ -130,7 +138,7 @@ class CoinWrapperSellOrders extends React.Component {
               </div>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Sell quantity percentage:
+                  {t('coin.sellSignal.quantityPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {(grid.quantityPercentage * 100).toFixed(2)}%
@@ -149,7 +157,9 @@ class CoinWrapperSellOrders extends React.Component {
           className='coin-info-sub-open-order-wrapper'>
           <div className='coin-info-column coin-info-column-title'>
             <div className='coin-info-label d-flex flex-row'>
-              <span>Open Order #{index + 1}</span>{' '}
+              <span>
+                {t('coin.sellOrders.openOrder', { index: index + 1 })}
+              </span>{' '}
               <SymbolCancelIcon
                 symbol={symbol}
                 order={openOrder}
@@ -162,33 +172,39 @@ class CoinWrapperSellOrders extends React.Component {
               <HightlightChange
                 className='coin-info-value'
                 title={openOrder.updatedAt}>
-                placed at {moment(openOrder.updatedAt).format('HH:mm:ss')}
+                {t('coin.sellOrders.placedAt', {
+                  time: moment(openOrder.updatedAt).format('HH:mm:ss')
+                })}
               </HightlightChange>
             ) : (
               ''
             )}
           </div>
           <div className='coin-info-column coin-info-column-order'>
-            <span className='coin-info-label'>Status:</span>
+            <span className='coin-info-label'>
+              {t('coin.sellOrders.status')}
+            </span>
             <HightlightChange className='coin-info-value'>
               {openOrder.status}
             </HightlightChange>
           </div>
           <div className='coin-info-column coin-info-column-order'>
-            <span className='coin-info-label'>Type:</span>
+            <span className='coin-info-label'>{t('coin.sellOrders.type')}</span>
             <HightlightChange className='coin-info-value'>
               {openOrder.type}
             </HightlightChange>
           </div>
           <div className='coin-info-column coin-info-column-order'>
-            <span className='coin-info-label'>Qty:</span>
+            <span className='coin-info-label'>{t('coin.sellOrders.qty')}</span>
             <HightlightChange className='coin-info-value'>
               {parseFloat(openOrder.origQty).toFixed(precision)}
             </HightlightChange>
           </div>
           {openOrder.price > 0 ? (
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Price:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.price')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {parseFloat(openOrder.price).toFixed(precision)}
               </HightlightChange>
@@ -198,7 +214,9 @@ class CoinWrapperSellOrders extends React.Component {
           )}
           {openOrder.stopPrice > 0 ? (
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Stop Price:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.stopPrice')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {parseFloat(openOrder.stopPrice).toFixed(precision)}
               </HightlightChange>
@@ -210,7 +228,9 @@ class CoinWrapperSellOrders extends React.Component {
 
           {openOrder.currentPrice ? (
             <div className='coin-info-column coin-info-column-price'>
-              <span className='coin-info-label'>Current price:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.currentPrice')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {parseFloat(openOrder.currentPrice).toFixed(precision)}
               </HightlightChange>
@@ -220,7 +240,9 @@ class CoinWrapperSellOrders extends React.Component {
           )}
           {openOrder.minimumProfit ? (
             <div className='coin-info-column coin-info-column-price'>
-              <span className='coin-info-label'>Minimum profit:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.minimumProfit')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {parseFloat(openOrder.minimumProfit).toFixed(precision)}{' '}
                 {quoteAsset} (
@@ -233,7 +255,9 @@ class CoinWrapperSellOrders extends React.Component {
           <div className='coin-info-column coin-info-column-price divider'></div>
           {openOrder.limitPrice ? (
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Current limit Price:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.currentLimitPrice')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {parseFloat(openOrder.limitPrice).toFixed(precision)}
               </HightlightChange>
@@ -243,7 +267,9 @@ class CoinWrapperSellOrders extends React.Component {
           )}
           {openOrder.differenceToCancel ? (
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Difference to cancel:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.differenceToCancel')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {openOrder.differenceToCancel.toFixed(2)}%
               </HightlightChange>
@@ -253,7 +279,9 @@ class CoinWrapperSellOrders extends React.Component {
           )}
           {openOrder.currentPrice ? (
             <div className='coin-info-column coin-info-column-price'>
-              <span className='coin-info-label'>Current price:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.currentPrice')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {openOrder.currentPrice.toFixed(precision)}
               </HightlightChange>
@@ -263,7 +291,9 @@ class CoinWrapperSellOrders extends React.Component {
           )}
           {openOrder.differenceToExecute ? (
             <div className='coin-info-column coin-info-column-order'>
-              <span className='coin-info-label'>Difference to execute:</span>
+              <span className='coin-info-label'>
+                {t('coin.sellOrders.differenceToExecute')}
+              </span>
               <HightlightChange className='coin-info-value'>
                 {openOrder.differenceToExecute.toFixed(2)}%
               </HightlightChange>
@@ -279,7 +309,7 @@ class CoinWrapperSellOrders extends React.Component {
       <div className='coin-info-sub-wrapper'>
         <div className='coin-info-column coin-info-column-title'>
           <div className='coin-info-label'>
-            Sell Open Orders{' '}
+            {t('coin.sellOrders.title')}{' '}
             <span className='coin-info-value'>
               {symbolConfiguration.sell.enabled ? (
                 <i className='fas fa-toggle-on'></i>

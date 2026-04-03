@@ -25,15 +25,16 @@ class SymbolSettingActionResetToGlobalSetting extends React.Component {
         size='md'>
         <Modal.Header className='pt-1 pb-1'>
           <Modal.Title>
-            <span className='text-danger'>⚠ Reset to Global Setting</span>
+            <span className='text-danger'>
+              {t('symbolSettings.resetToGlobalTitle')}
+            </span>
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          Warning: You are about to reset the symbol setting to the global
-          setting.
+          {t('symbolSettings.resetToGlobalBody')}
           <br />
           <br />
-          Do you want to delete current symbol setting?
+          {t('symbolSettings.resetToGlobalConfirm')}
         </Modal.Body>
 
         <Modal.Footer>
@@ -41,13 +42,13 @@ class SymbolSettingActionResetToGlobalSetting extends React.Component {
             variant='secondary'
             size='sm'
             onClick={() => this.props.handleModalClose('resetGlobalSetting')}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant='success'
             size='sm'
             onClick={() => this.resetToGlobalConfiguration()}>
-            Yes
+            {t('common.yes')}
           </Button>
         </Modal.Footer>
       </Modal>

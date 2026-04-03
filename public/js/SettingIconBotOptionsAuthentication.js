@@ -40,7 +40,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              Authentication
+              {t('settings.authentication')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
@@ -58,7 +58,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
                         onChange={this.props.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Lock List{' '}
+                        {t('settings.lockList')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key='bot-options-lock-list-overlay'
@@ -66,12 +66,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
                           overlay={
                             <Popover id='bot-options-lock-list-overlay-right'>
                               <Popover.Content>
-                                If enabled, the bot will show the login screen
-                                before showing the list. If disabled, the bot
-                                will display the list, but all actions will be
-                                disabled. To unlock, click the icon{' '}
-                                <i className='fas fas-unlock-alt fa-xs'></i> on
-                                the top right.
+                                {t('settings.lockListTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -92,7 +87,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
                         controlId='field-bot-options-lock-after'
                         className='mb-2'>
                         <Form.Label className='mb-0'>
-                          Lock after
+                          {t('settings.lockAfter')}
                           <OverlayTrigger
                             trigger='click'
                             key='limit-overlay'
@@ -100,9 +95,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
                             overlay={
                               <Popover id='limit-overlay-right'>
                                 <Popover.Content>
-                                  Set the minutes to allow authentication. Once
-                                  the time passes the configured minutes after
-                                  login, the bot will be automatically locked.
+                                  {t('settings.lockAfterTooltip')}
                                 </Popover.Content>
                               </Popover>
                             }>
@@ -116,7 +109,7 @@ class SettingIconBotOptionsAuthentication extends React.Component {
                         <Form.Control
                           size='sm'
                           type='number'
-                          placeholder='Enter minutes'
+                          placeholder={t('settings.placeholderEnterMinutes')}
                           required
                           min='1'
                           step='1'

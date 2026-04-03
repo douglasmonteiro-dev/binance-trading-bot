@@ -45,7 +45,7 @@ class AccountWrapperAsset extends React.Component {
           </div>
           <div className='account-asset-row'>
             <span className='account-asset-label'>
-              <span>Free</span>
+              <span>{t('account.free')}</span>
             </span>
             <span className='account-asset-value'>
               {parseFloat(balance.free).toFixed(5)}
@@ -56,7 +56,7 @@ class AccountWrapperAsset extends React.Component {
               balance.locked > 0 ? 'text-warning' : ''
             }`}>
             <span className='account-asset-label'>
-              <span>Locked</span>
+              <span>{t('account.locked')}</span>
             </span>
             <span className='account-asset-value'>
               {parseFloat(balance.locked).toFixed(5)}

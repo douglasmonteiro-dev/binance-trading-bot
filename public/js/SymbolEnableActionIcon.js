@@ -57,29 +57,24 @@ class SymbolEnableActionIcon extends React.Component {
 
         <Modal show={this.state.showModal} onHide={this.handleModalClose}>
           <Modal.Header className='pt-1 pb-1'>
-            <Modal.Title>Resume Symbol Action - {symbol}</Modal.Title>
+            <Modal.Title>
+              {t('symbolEnableAction.title')} - {symbol}
+            </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            Are you sure to resume action for this symbol?
-            <br />
-            Note that when the market is volatile, the bot may buy again and
-            sell in market order.
-            <br />
-            Please proceed with precaution.
-          </Modal.Body>
+          <Modal.Body>{t('symbolEnableAction.confirmation')}</Modal.Body>
           <Modal.Footer>
             <Button
               variant='secondary'
               size='sm'
               onClick={this.handleModalClose}>
-              Close
+              {t('common.close')}
             </Button>
             <Button
               type='button'
               variant='danger'
               size='sm'
               onClick={this.handleDelete}>
-              Resume
+              {t('common.resume')}
             </Button>
           </Modal.Footer>
         </Modal>

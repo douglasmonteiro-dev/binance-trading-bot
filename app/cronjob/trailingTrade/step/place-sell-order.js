@@ -134,7 +134,9 @@ const execute = async (logger, rawData) => {
     orderQuantity = parseFloat(maxQty);
   }
 
-  const orderQuantityNotional = roundToEightDecimals(orderQuantity * limitPrice);
+  const orderQuantityNotional = roundToEightDecimals(
+    orderQuantity * limitPrice
+  );
 
   if (orderQuantityNotional < parseFloat(minNotional)) {
     return setMessage(

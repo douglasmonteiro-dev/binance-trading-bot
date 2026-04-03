@@ -66,29 +66,19 @@ class SettingIconActionBackupConfirmModal extends React.Component {
         <Modal.Header className='pt-1 pb-1'>
           <Modal.Title>
             <span className='text-primary'>
-              <i className='fas fa-cloud-download-alt'></i>&nbsp; Backup
-              database
+              <i className='fas fa-cloud-download-alt'></i>&nbsp;{' '}
+              {t('settings.backupTitle')}
             </span>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          Warning: You are about to backup database. If your database is large,
-          then the bot may be slow down during the backup.
-          <br />
-          <br />
-          Note that the logs will be excluded from the backup to reduce the
-          size. <br />
-          <br />
-          Once the backup is completed, then it will be downloading the archive
-          file. You can use the archive file to restore later.
-        </Modal.Body>
+        <Modal.Body>{t('settings.backupWarning')}</Modal.Body>
 
         <Modal.Footer>
           <Button
             variant='secondary'
             size='sm'
             onClick={() => this.props.handleModalClose('backup-confirm')}>
-            Cancel
+            {t('common.cancel')}
           </Button>
           <Button
             variant='success'
@@ -101,12 +91,12 @@ class SettingIconActionBackupConfirmModal extends React.Component {
                 role='status'
                 className='mr-2'
                 style={{ width: '1rem', height: '1rem' }}>
-                <span className='sr-only'>Loading...</span>
+                <span className='sr-only'>{t('common.loading')}</span>
               </Spinner>
             ) : (
               ''
             )}
-            Backup &amp; Download
+            {t('settings.backupDownload')}
           </Button>
         </Modal.Footer>
       </Modal>

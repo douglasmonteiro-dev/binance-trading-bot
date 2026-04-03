@@ -30,7 +30,9 @@ log
 !/public/dist/.gitkeep
 /public/data/*
 !/public/data/.gitkeep
+!/public/data/i18n/
 
 result.csv
 .~lock.result.csv#
 tradingview/*/__pycache__
+.vercel

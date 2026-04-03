@@ -60,7 +60,7 @@ class SettingIconActions extends React.Component {
                 variant='link'
                 eventKey='0'
                 className='p-0 fs-7 text-uppercase'>
-                Actions
+                {t('settings.actions')}
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey='0'>
@@ -73,7 +73,7 @@ class SettingIconActions extends React.Component {
                       type='button'
                       className='mr-2'
                       onClick={() => this.handleModalShow('backup-confirm')}>
-                      Backup Database
+                      {t('settings.backupDatabase')}
                     </Button>
 
                     <Button
@@ -81,7 +81,7 @@ class SettingIconActions extends React.Component {
                       size='sm'
                       type='button'
                       onClick={() => this.handleModalShow('restore-confirm')}>
-                      Restore Database
+                      {t('settings.restoreDatabase')}
                     </Button>
                   </div>
                 </div>

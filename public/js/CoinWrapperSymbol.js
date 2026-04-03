@@ -55,13 +55,10 @@ class CoinWrapperSymbol extends React.Component {
             overlay={
               <Popover id='monitoring-status-alert-overlay-bottom'>
                 <Popover.Content>
-                  {symbol} exists in your monitoring list. However, it is not
-                  active on Binance due to emergency downtime, due to it was
-                  actually delisted or due to market move too fast. For more
-                  details, check Binance announcements.
+                  {t('coin.symbol.inactive')}
                   <br />
                   <br />
-                  Current Status:{' '}
+                  {t('coin.symbol.currentStatus')}{' '}
                   <span className='font-weight-bold'>
                     {symbolInfo.symbolInfo.status}
                   </span>
