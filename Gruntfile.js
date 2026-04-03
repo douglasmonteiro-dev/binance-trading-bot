@@ -34,6 +34,7 @@ module.exports = grunt => {
       dist: {
         src: [
           './public/dist/js/Config.min.js',
+          './public/dist/js/I18n.min.js',
           './public/dist/js/HighlightChange.min.js',
           './public/dist/js/CoinWrapperSellLastBuyPrice.min.js',
           './public/dist/js/CoinWrapperSetting.min.js',

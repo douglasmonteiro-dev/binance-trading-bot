@@ -40,7 +40,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              TradingView
+              {t('settings.tradingView')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
@@ -51,7 +51,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
                     controlId='field-bot-options-tradingview-options-use-only-within'
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Use data only updated within
+                      {t('settings.useDataWithin')}
                       <OverlayTrigger
                         trigger='click'
                         key='tradingview-options-use-only-within-overlay'
@@ -59,10 +59,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
                         overlay={
                           <Popover id='tradingview-options-use-only-within-overlay-right'>
                             <Popover.Content>
-                              Set the minutes to allow to use TradingView
-                              technical analysis data. If the data is older than
-                              configured minutes, the bot will ignore the
-                              TradingView technical analysis data.
+                              {t('settings.useDataWithinTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -77,7 +74,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
                     <InputGroup size='sm'>
                       <Form.Control
                         type='number'
-                        placeholder='Enter minutes'
+                        placeholder={t('settings.placeholderEnterMinutes')}
                         required
                         min='1'
                         step='1'
@@ -86,7 +83,9 @@ class SettingIconBotOptionsTradingView extends React.Component {
                         onChange={this.props.handleInputChange}
                       />
                       <InputGroup.Append>
-                        <InputGroup.Text>minutes</InputGroup.Text>
+                        <InputGroup.Text>
+                          {t('settings.minutes')}
+                        </InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
                   </Form.Group>
@@ -96,7 +95,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
                     controlId='field-bot-options-tradingview-options-if-expires'
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      If data passed allowed updated
+                      {t('settings.ifDataPassed')}
                       <OverlayTrigger
                         trigger='click'
                         key='bot-options-tradingview-options-if-expires-overlay'
@@ -104,8 +103,7 @@ class SettingIconBotOptionsTradingView extends React.Component {
                         overlay={
                           <Popover id='bot-options-tradingview-options-if-expires-overlay-right'>
                             <Popover.Content>
-                              Set an action method if the TradingView technical
-                              analysis data is passed allowed minutes.
+                              {t('settings.ifDataPassedTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -122,8 +120,10 @@ class SettingIconBotOptionsTradingView extends React.Component {
                       data-state-key='tradingViewOptions.ifExpires'
                       value={botOptions.tradingViewOptions.ifExpires}
                       onChange={this.props.handleInputChange}>
-                      <option value='ignore'>Ignore data</option>
-                      <option value='do-not-buy'>Do not buy</option>
+                      <option value='ignore'>{t('settings.ignoreData')}</option>
+                      <option value='do-not-buy'>
+                        {t('settings.doNotBuy')}
+                      </option>
                     </Form.Control>
                   </Form.Group>
                 </div>

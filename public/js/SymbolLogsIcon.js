@@ -268,7 +268,7 @@ class SymbolLogsIcon extends React.Component {
           <Modal.Header closeButton className='pt-1 pb-1'>
             <Modal.Title>
               <div className='d-flex w-100 flex-row'>
-                Logs for {symbol}{' '}
+                {t('symbolLogs.title')} {symbol} }
                 <button
                   type='button'
                   className='btn btn-sm btn-link p-0 ml-1'
@@ -282,7 +282,9 @@ class SymbolLogsIcon extends React.Component {
             <React.Fragment>
               {rows.length === 0 ? (
                 <div className='row'>
-                  <div className='col-12 text-center p-3'>No log found</div>
+                  <div className='col-12 text-center p-3'>
+                    {t('symbolLogs.noLog')}
+                  </div>
                 </div>
               ) : (
                 <React.Fragment>
@@ -298,12 +300,14 @@ class SymbolLogsIcon extends React.Component {
                       <thead>
                         <tr>
                           <th className='text-center' width='12%'>
-                            Logged At
+                            {t('symbolLogs.loggedAt')}
                           </th>
                           <th className='text-center' width='80%'>
-                            Message
+                            {t('symbolLogs.message')}
                           </th>
-                          <th className='text-center'>Data</th>
+                          <th className='text-center'>
+                            {t('symbolLogs.data')}
+                          </th>
                         </tr>
                       </thead>
                       <tbody>{logRows}</tbody>
@@ -323,7 +327,8 @@ class SymbolLogsIcon extends React.Component {
                         className='btn btn-sm btn-info'
                         disabled={loading}
                         onClick={() => this.downloadLogs()}>
-                        <i className='fas fas-download'></i> Export logs
+                        <i className='fas fas-download'></i>{' '}
+                        {t('symbolLogs.exportLogs')}
                       </button>
                     </div>
                   </div>
@@ -338,7 +343,7 @@ class SymbolLogsIcon extends React.Component {
           onHide={() => this.handleModalClose('logDetail')}
           size='xl'>
           <Modal.Header closeButton className='pt-1 pb-1'>
-            <Modal.Title>Log</Modal.Title>
+            <Modal.Title>{t('symbolLogs.logTitle')}</Modal.Title>
           </Modal.Header>
           <Modal.Body className='py-0'>
             <textarea

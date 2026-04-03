@@ -25,12 +25,35 @@ class Header extends React.Component {
               <img
                 src='./img/binance.png'
                 className='binance-img'
-                alt='Binance logo'
+                alt={t('header.logoAlt')}
               />{' '}
-              Binance Trading Bot
+              {t('header.title')}
             </h1>
           </div>
           <div className='header-column header-column-icon'>
+            <div className='header-column-icon-wrapper'>
+              <Form.Control
+                as='select'
+                size='sm'
+                value={I18n.getLanguage()}
+                onChange={e => {
+                  I18n.setLanguage(e.target.value, () => {
+                    window.location.reload();
+                  });
+                }}
+                style={{
+                  width: 'auto',
+                  display: 'inline-block',
+                  fontSize: '0.75rem'
+                }}
+                title={t('language.selector')}>
+                {I18n.getSupportedLanguages().map(lang => (
+                  <option key={lang} value={lang}>
+                    {I18n.getLanguageLabel(lang)}
+                  </option>
+                ))}
+              </Form.Control>
+            </div>
             <FilterIcon
               availableSortOptions={availableSortOptions}
               selectedSortOption={selectedSortOption}

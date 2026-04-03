@@ -62,7 +62,7 @@ const handleAuth = async (funcLogger, app, { loginLimiter }) => {
 
     logger.info(
       {
-        inputProvided: !!(requestedPassword),
+        inputProvided: !!requestedPassword,
         success: checkPasswordSuccess,
         clientIp
       },

@@ -22,29 +22,29 @@ class App extends React.Component {
       publicURL: '',
       dustTransfer: {},
       availableSortOptions: [
-        { sortBy: 'default', sortByDesc: false, label: 'Default' },
+        { sortBy: 'default', sortByDesc: false, labelKey: 'sort.default' },
         {
           sortBy: 'buy-difference',
           sortByDesc: false,
-          label: 'Buy - Difference (asc)'
+          labelKey: 'sort.buyDifferenceAsc'
         },
         {
           sortBy: 'buy-difference',
           sortByDesc: true,
-          label: 'Buy - Difference (desc)'
+          labelKey: 'sort.buyDifferenceDesc'
         },
         {
           sortBy: 'sell-profit',
           sortByDesc: false,
-          label: 'Sell - Profit (asc)'
+          labelKey: 'sort.sellProfitAsc'
         },
         {
           sortBy: 'sell-profit',
           sortByDesc: true,
-          label: 'Sell - Profit (desc)'
+          labelKey: 'sort.sellProfitDesc'
         },
-        { sortBy: 'alpha', sortByDesc: false, label: 'Alphabetical (asc)' },
-        { sortBy: 'alpha', sortByDesc: true, label: 'Alphabetical (desc)' }
+        { sortBy: 'alpha', sortByDesc: false, labelKey: 'sort.alphaAsc' },
+        { sortBy: 'alpha', sortByDesc: true, labelKey: 'sort.alphaDesc' }
       ],
       selectedSortOption: {
         sortBy: 'default',
@@ -62,8 +62,11 @@ class App extends React.Component {
       cachedMonitoringSymbolsCount: 0,
       page: 1,
       totalPages: 1,
+      consultation: {},
       tradingViewIntervals: ['1m', '5m', '15m', '30m', '1h', '2h', '4h', '1d'],
-      tradingViews: []
+      tradingViews: [],
+      currentLang: I18n.getLanguage(),
+      i18nReady: false
     };
     this.requestLatest = this.requestLatest.bind(this);
     this.connectWebSocket = this.connectWebSocket.bind(this);
@@ -176,7 +179,7 @@ class App extends React.Component {
       console.log('Connection is successfully established.');
       this.toast({
         type: 'success',
-        title: 'Connected to the bot.'
+        title: t('app.toast.connected')
       });
       self.setState(prevState => ({
         webSocket: {
@@ -229,6 +232,7 @@ class App extends React.Component {
             0
           ),
           totalPages: _.get(response, ['common', 'totalPages'], 1),
+          consultation: _.get(response, ['common', 'consultation'], {}),
           tradingViews: _.get(response, ['stats', 'tradingViews'], [])
         });
       }
@@ -258,7 +262,7 @@ class App extends React.Component {
 
       this.toast({
         type: 'info',
-        title: 'Disconnected from the bot. Reconnecting...'
+        title: t('app.toast.disconnected')
       });
       self.setState(prevState => ({
         webSocket: {
@@ -309,14 +313,14 @@ class App extends React.Component {
     if (searchKeyword)
       this.toast({
         type: 'success',
-        title: `Filtering assets with ${searchKeyword}`
+        title: t('app.toast.filtering', { keyword: searchKeyword })
       });
     else
       this.toast({
         type: 'success',
         title: this.state.selectedSortOption.hideInactive
-          ? 'Showing active symbols'
-          : 'Showing all symbols'
+          ? t('app.toast.showingActive')
+          : t('app.toast.showingAll')
       });
 
     this.setState({
@@ -354,6 +358,10 @@ class App extends React.Component {
 
     this.connectWebSocket();
 
+    I18n.init(() => {
+      this.setState({ i18nReady: true });
+    });
+
     this.timerID = setInterval(() => this.requestLatest(), 1000);
   }
 
@@ -387,6 +395,7 @@ class App extends React.Component {
       totalProfitAndLoss,
       page,
       totalPages,
+      consultation,
       tradingViewIntervals,
       tradingViews
     } = this.state;
@@ -410,6 +419,16 @@ class App extends React.Component {
             s.symbolConfiguration.sell.enabled
         )
       : symbols;
+
+    const beginnerGuide = (
+      <div className='alert alert-info mx-3 mt-3 mb-2 small' role='alert'>
+        <div className='font-weight-bold mb-1'>{t('beginner.guide.title')}</div>
+        <div>{t('beginner.guide.tip1')}</div>
+        <div>{t('beginner.guide.tip2')}</div>
+        <div>{t('beginner.guide.tip3')}</div>
+        <div>{t('beginner.guide.tip4')}</div>
+      </div>
+    );
 
     const coinWrappers = activeSymbols.map((symbol, index) => {
       const symbolTradingViewIntervals = (
@@ -511,6 +530,7 @@ class App extends React.Component {
         />
         {_.isEmpty(configuration) === false ? (
           <div className='app-body'>
+            {beginnerGuide}
             <div className='app-body-header-wrapper'>
               <AccountWrapper
                 isAuthenticated={isAuthenticated}
@@ -544,13 +564,14 @@ class App extends React.Component {
                 streamsCount={streamsCount}
                 monitoringSymbolsCount={monitoringSymbolsCount}
                 cachedMonitoringSymbolsCount={cachedMonitoringSymbolsCount}
+                consultation={consultation}
               />
             </div>
           </div>
         ) : (
           <div className='app-body app-body-loading'>
             <Spinner animation='border' role='status'>
-              <span className='sr-only'>Loading...</span>
+              <span className='sr-only'>{t('app.loading')}</span>
             </Spinner>
           </div>
         )}

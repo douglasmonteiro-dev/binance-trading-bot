@@ -97,17 +97,21 @@ class SymbolEditLastBuyPriceIcon extends React.Component {
           <Form onSubmit={this.handleFormSubmit}>
             <Modal.Header className='pt-1 pb-1'>
               <Modal.Title>
-                Edit Last Buy Price for {symbolInfo.symbol}
+                {t('symbolEditLastBuyPrice.title')} {symbolInfo.symbol}
               </Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              <h2 className='form-header'>Sell Signal</h2>
+              <h2 className='form-header'>
+                {t('symbolEditLastBuyPrice.sellSignal')}
+              </h2>
               <Form.Group controlId='field-candles-interval'>
-                <Form.Label>Last Buy Price</Form.Label>
+                <Form.Label>
+                  {t('symbolEditLastBuyPrice.lastBuyPrice')}
+                </Form.Label>
                 <Form.Control
                   size='sm'
                   type='number'
-                  placeholder='Enter last buy price'
+                  placeholder={t('symbolEditLastBuyPrice.placeholder')}
                   required
                   min='0'
                   step='0.00000001'
@@ -116,23 +120,7 @@ class SymbolEditLastBuyPriceIcon extends React.Component {
                   onChange={this.handleInputChange}
                 />
                 <Form.Text className='text-muted'>
-                  Set/modify the last buy price of the symbol.
-                  <br />
-                  <br />
-                  If the bot purchased the coin, then the last buy price will
-                  automatically set.
-                  <br />
-                  <br />
-                  If you purchased the coin manually, then you can set the last
-                  buy price to allow the bot to sell at the expected price.
-                  <br />
-                  <br />
-                  Once the last buy price is set, then the bot will start
-                  monitoring the sell signal.
-                  <br />
-                  <br />
-                  If you want to remove the last buy price, simply enter{' '}
-                  <code>0</code>.
+                  {t('symbolEditLastBuyPrice.helpText')}
                 </Form.Text>
               </Form.Group>
             </Modal.Body>
@@ -141,10 +129,10 @@ class SymbolEditLastBuyPriceIcon extends React.Component {
                 variant='secondary'
                 size='sm'
                 onClick={this.handleModalClose}>
-                Close
+                {t('common.close')}
               </Button>
               <Button type='submit' variant='primary' size='sm'>
-                Save Changes
+                {t('common.saveChanges')}
               </Button>
             </Modal.Footer>
           </Form>

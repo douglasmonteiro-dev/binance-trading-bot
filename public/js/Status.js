@@ -7,7 +7,8 @@ class Status extends React.Component {
       apiInfo,
       monitoringSymbolsCount,
       cachedMonitoringSymbolsCount,
-      streamsCount
+      streamsCount,
+      consultation
     } = this.props;
 
     if (!apiInfo) {
@@ -15,6 +16,8 @@ class Status extends React.Component {
     }
 
     let monitoringSymbolsStatus = '';
+    const marketConsultation = (consultation || {}).market || {};
+    const riskConsultation = (consultation || {}).risk || {};
 
     if (monitoringSymbolsCount < cachedMonitoringSymbolsCount) {
       monitoringSymbolsStatus = (
@@ -25,13 +28,7 @@ class Status extends React.Component {
           overlay={
             <Popover id='monitoring-symbols-status-alert-overlay-bottom'>
               <Popover.Content>
-                You are currently monitoring <b>{monitoringSymbolsCount}</b>{' '}
-                symbols. However, the symbols you have in your frontend is equal
-                to <b>{cachedMonitoringSymbolsCount}</b>. That means you added
-                some symbols in your <b>Global Settings</b> and after that you
-                removed them. These symbols will remain exists in your frontend
-                and you can see them but they are not monitored. You can remove
-                them by clicking on the cross icon.
+                {t('status.monitoringSymbolsInfo')}
               </Popover.Content>
             </Popover>
           }>
@@ -56,31 +53,58 @@ class Status extends React.Component {
               <button
                 type='button'
                 className='btn btn-sm btn-link btn-status text-uppercase font-weight-bold'>
-                Status
+                {t('status.title')}
               </button>
             </Accordion.Toggle>
             <Accordion.Collapse eventKey='0'>
               <Card.Body className='status-wrapper-body p-3 card-body'>
                 <ul className='status-wrapper-ul list-unstyled mb-0'>
+                  <li className='text-muted small mb-2'>
+                    {t('status.beginnerTip')}
+                  </li>
                   <li>
-                    Used Weight (1m):{' '}
+                    {t('status.usedWeight')}{' '}
                     <HightlightChange className='coin-info-value'>
                       {apiInfo.spot.usedWeight1m}
                     </HightlightChange>
                     /1200
                   </li>
                   <li>
-                    Streams Count (Max: 1024):{' '}
+                    {t('status.streamsCount')}{' '}
                     <HightlightChange className='coin-info-value'>
                       {streamsCount}
                     </HightlightChange>
                   </li>
                   <li>
-                    Monitoring Symbols:{' '}
+                    {t('status.monitoringSymbols')}{' '}
                     <HightlightChange className='coin-info-value'>
                       {monitoringSymbolsCount}
                     </HightlightChange>
                     {monitoringSymbolsStatus}
+                  </li>
+                  <li>
+                    {t('status.buySideSignals')}{' '}
+                    <HightlightChange className='coin-info-value'>
+                      {marketConsultation.buySignals || 0}
+                    </HightlightChange>
+                  </li>
+                  <li>
+                    {t('status.sellSideSignals')}{' '}
+                    <HightlightChange className='coin-info-value'>
+                      {marketConsultation.sellSignals || 0}
+                    </HightlightChange>
+                  </li>
+                  <li>
+                    {t('status.nearStopLoss')}{' '}
+                    <HightlightChange className='coin-info-value'>
+                      {riskConsultation.nearStopLoss || 0}
+                    </HightlightChange>
+                  </li>
+                  <li>
+                    {t('status.disabledSymbols')}{' '}
+                    <HightlightChange className='coin-info-value'>
+                      {riskConsultation.disabledSymbols || 0}
+                    </HightlightChange>
                   </li>
                 </ul>
               </Card.Body>

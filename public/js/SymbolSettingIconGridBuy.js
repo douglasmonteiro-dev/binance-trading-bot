@@ -206,7 +206,7 @@ class SymbolSettingIconGridBuy extends React.Component {
         <React.Fragment key={'grid-row-buy-' + i}>
           <tr>
             <td className='align-middle font-weight-bold' width='90%'>
-              Grid Trade #{i + 1}
+              {t('settings.gridTrade', { index: i + 1 })}
             </td>
             <td className='align-middle text-center'>
               {i !== 0 && grid.executed !== true ? (
@@ -229,11 +229,11 @@ class SymbolSettingIconGridBuy extends React.Component {
                     controlId={'field-grid-buy-' + i + '-trigger-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Trigger percentage{' '}
+                      {t('settings.buyTriggerPercentage')}{' '}
                       <strong>
                         {i === 0
-                          ? `based on the lowest price`
-                          : `based on the last buy price`}
+                          ? t('settings.basedOnLowestPrice')
+                          : t('settings.basedOnLastBuyPrice')}
                       </strong>{' '}
                       <OverlayTrigger
                         trigger='click'
@@ -249,29 +249,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                               '-trigger-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              {i === 0 ? (
-                                <React.Fragment>
-                                  Set the trigger percentage for buying based on
-                                  the lowest price. i.e. if set{' '}
-                                  <code>1.01</code> and the lowest price is{' '}
-                                  <code>$100</code>, then the bot will buy the
-                                  coin when the current price reaches{' '}
-                                  <code>$101</code>. You cannot set less than 1,
-                                  because it will never reach the trigger price
-                                  unless there is a deep decline before the next
-                                  process.
-                                </React.Fragment>
-                              ) : (
-                                <React.Fragment>
-                                  Set the trigger percentage for buying based on
-                                  the last buy price. i.e. if set{' '}
-                                  <code>0.8</code> and the last buy price is{' '}
-                                  <code>$100</code>, then the bot will buy the
-                                  coin when the current price reaches{' '}
-                                  <code>$80</code>. You cannot set higher than
-                                  1.
-                                </React.Fragment>
-                              )}
+                              {i === 0
+                                ? t('settings.buyTriggerPopoverLowest')
+                                : t('settings.buyTriggerPopoverLastBuy')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -285,7 +265,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter trigger percentage'
+                      placeholder={t('settings.placeholderTriggerPercentage')}
                       required
                       min={i === 0 ? '1' : '0'}
                       max={i === 0 ? '1.9999' : '0.9999'}
@@ -306,7 +286,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     controlId={'field-grid-buy-' + i + '-stop-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Stop price percentage{' '}
+                      {t('settings.stopPricePercentage')}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -323,10 +303,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                               '-stop-price-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the percentage to calculate stop price. i.e.
-                              if set <code>1.01</code> and current price{' '}
-                              <code>$100</code>, stop price will be{' '}
-                              <code>$101</code> for stop limit order.
+                              {t('settings.buyStopPricePopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -340,7 +317,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter stop price percentage'
+                      placeholder={t('settings.placeholderStopPricePercentage')}
                       required
                       min='0'
                       step='0.0001'
@@ -359,7 +336,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     controlId={'field-grid-buy-' + i + '-limit-percentage'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Limit price percentage{' '}
+                      {t('settings.limitPricePercentage')}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -374,10 +351,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                               '-limit-percentage-overlay-right'
                             }>
                             <Popover.Content>
-                              Set the percentage to calculate limit price. i.e.
-                              if set <code>1.011</code> and current price{' '}
-                              <code>$100</code>, limit price will be{' '}
-                              <code>$101.10</code> for stop limit order.
+                              {t('settings.buyLimitPricePopover')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -391,7 +365,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder='Enter limit price percentage'
+                      placeholder={t(
+                        'settings.placeholderLimitPricePercentage'
+                      )}
                       required
                       min='0'
                       step='0.0001'
@@ -411,7 +387,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     controlId={'field-grid-buy-' + i + '-min-purchase-amount'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Min purchase amount{' '}
+                      {t('settings.minPurchaseAmount', { quoteAsset })}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -426,11 +402,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                               '-min-purchase-amount-overlay-right'
                             }>
                             <Popover.Content>
-                              Set min purchase amount for symbols with quote
-                              asset "{quoteAsset}". The min purchase amount will
-                              be applied to the symbols which ends with "
-                              {quoteAsset}" if not configured the symbol
-                              configuration.
+                              {t('settings.minPurchaseAmountPopover', {
+                                quoteAsset
+                              })}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -444,7 +418,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder={'Enter min purchase amount'}
+                      placeholder={t(
+                        'settings.placeholderMinPurchaseAmountSimple'
+                      )}
                       required
                       min='0'
                       step='0.0001'
@@ -464,7 +440,7 @@ class SymbolSettingIconGridBuy extends React.Component {
                     controlId={'field-grid-buy-' + i + '-max-purchase-amount'}
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Max purchase amount{' '}
+                      {t('settings.maxPurchaseAmount', { quoteAsset })}{' '}
                       <OverlayTrigger
                         trigger='click'
                         key={
@@ -479,11 +455,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                               '-max-purchase-amount-overlay-right'
                             }>
                             <Popover.Content>
-                              Set max purchase amount for symbols with quote
-                              asset "{quoteAsset}". The max purchase amount will
-                              be applied to the symbols which ends with "
-                              {quoteAsset}" if not configured the symbol
-                              configuration.
+                              {t('settings.maxPurchaseAmountPopover', {
+                                quoteAsset
+                              })}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -497,7 +471,9 @@ class SymbolSettingIconGridBuy extends React.Component {
                     <Form.Control
                       size='sm'
                       type='number'
-                      placeholder={'Enter max purchase amount'}
+                      placeholder={t(
+                        'settings.placeholderMaxPurchaseAmountSimple'
+                      )}
                       required
                       min='0'
                       step='0.0001'
@@ -535,7 +511,7 @@ class SymbolSettingIconGridBuy extends React.Component {
               type='button'
               className='btn btn-sm btn-add-new-grid-trade-buy'
               onClick={this.onAddGridTrade}>
-              Add new grid trade
+              {t('settings.addGridTrade')}
             </button>
           </div>
         </div>

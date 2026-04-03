@@ -33,7 +33,9 @@ const prepareJob = async (funcLogger, symbol, _jobPayload) => {
     logger.info({ symbol }, `Queue ${symbol} job #${pos} waiting`);
     while (pos > finishedJobs[symbol]) {
       // eslint-disable-next-line no-await-in-loop
-      await new Promise(resolve => { jobEvents[symbol].once('complete', resolve); });
+      await new Promise(resolve => {
+        jobEvents[symbol].once('complete', resolve);
+      });
     }
   }
 

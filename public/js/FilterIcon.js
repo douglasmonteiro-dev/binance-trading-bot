@@ -138,7 +138,7 @@ class FilterIcon extends React.Component {
             size='sm'
             className='btn-block mb-1'
             onClick={() => this.setSortOption(option)}>
-            {option.label}
+            {t(option.labelKey)}
           </Button>
         </div>
       );
@@ -159,7 +159,7 @@ class FilterIcon extends React.Component {
           onHide={() => this.handleModalClose('filter')}
           size='xl'>
           <Modal.Header closeButton className='pt-1 pb-1'>
-            <Modal.Title>Filter</Modal.Title>
+            <Modal.Title>{t('filter.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Accordion defaultActiveKey='0'>
@@ -170,7 +170,7 @@ class FilterIcon extends React.Component {
                     variant='link'
                     eventKey='0'
                     className='p-0 fs-7 text-uppercase'>
-                    Search symbols
+                    {t('filter.searchSymbols')}
                   </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey='0'>
@@ -179,7 +179,7 @@ class FilterIcon extends React.Component {
                       <Form.Control
                         size='sm'
                         type='search'
-                        placeholder='Enter keyword...'
+                        placeholder={t('filter.enterKeyword')}
                         defaultValue={searchKeyword}
                         onChange={this.setSearchKeyword}
                       />
@@ -196,7 +196,7 @@ class FilterIcon extends React.Component {
                     variant='link'
                     eventKey='0'
                     className='p-0 fs-7 text-uppercase'>
-                    Sort symbols
+                    {t('filter.sortSymbols')}
                   </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey='0'>
@@ -213,7 +213,7 @@ class FilterIcon extends React.Component {
                           onChange={this.setHideOption}
                         />
                         <Form.Check.Label>
-                          Hide temporarily disabled symbols{' '}
+                          {t('filter.hideDisabledSymbols')}{' '}
                           <OverlayTrigger
                             trigger='click'
                             key='hide-inactive.enabled'
@@ -221,10 +221,7 @@ class FilterIcon extends React.Component {
                             overlay={
                               <Popover id='hide-inactive.enabled-right'>
                                 <Popover.Content>
-                                  If enabled, the dashboard won't show coins for
-                                  which buy and sell tradings are both
-                                  temporarily disabled, but are still been
-                                  monitored.
+                                  {t('filter.hideDisabledSymbolsInfo')}
                                 </Popover.Content>
                               </Popover>
                             }>
@@ -247,14 +244,14 @@ class FilterIcon extends React.Component {
               variant='secondary'
               size='sm'
               onClick={() => this.handleModalClose('filter')}>
-              Close
+              {t('common.close')}
             </Button>
             <Button
               type='button'
               variant='danger'
               size='sm'
               onClick={this.handleApply}>
-              Apply
+              {t('common.apply')}
             </Button>
           </Modal.Footer>
         </Modal>

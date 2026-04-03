@@ -70,8 +70,9 @@ class CoinWrapperBuySignal extends React.Component {
             <div className='coin-info-column-grid'>
               <div className='coin-info-column coin-info-column-price'>
                 <div className='coin-info-label text-center text-muted'>
-                  ... {hiddenCount} grid trade{hiddenCount === 1 ? '' : 's'}{' '}
-                  hidden ...
+                  {t('coin.buySignal.gridTradeHidden', {
+                    hiddenCount: hiddenCount
+                  })}
                 </div>
               </div>
             </div>
@@ -85,7 +86,9 @@ class CoinWrapperBuySignal extends React.Component {
         <React.Fragment key={'coin-wrapper-buy-grid-row-' + symbol + '-' + i}>
           <div className='coin-info-column-grid'>
             <div className='coin-info-column coin-info-column-price'>
-              <div className='coin-info-label'>Grid Trade #{i + 1}</div>
+              <div className='coin-info-label'>
+                {t('coin.buySignal.gridTrade', { index: i + 1 })}
+              </div>
 
               <div className='coin-info-value'>
                 {buy.openOrders.length === 0 &&
@@ -110,24 +113,33 @@ class CoinWrapperBuySignal extends React.Component {
                         {grid.executed ? (
                           <React.Fragment>
                             <span>
-                              The grid trade #{i + 1} has been executed{' '}
-                              {moment(grid.executedOrder.updateTime).fromNow()}{' '}
-                              ({moment(grid.executedOrder.updateTime).format()}
-                              ).
+                              {t('coin.buySignal.executed', {
+                                index: i + 1,
+                                timeFromNow: moment(
+                                  grid.executedOrder.updateTime
+                                ).fromNow(),
+                                time: moment(
+                                  grid.executedOrder.updateTime
+                                ).format()
+                              })}
                             </span>
                           </React.Fragment>
                         ) : (
                           <React.Fragment>
-                            The grid trade #{i + 1} has not been executed.{' '}
+                            {t('coin.buySignal.notExecuted', { index: i + 1 })}{' '}
                             {sell.lastBuyPrice > 0
                               ? i === 0
-                                ? 'This grid trade will not be executed because the last buy price is recorded and the first grid trade is not executed.'
+                                ? t('coin.buySignal.notExecutedLastBuyPrice')
                                 : currentGridTradeIndex === i
-                                ? `Waiting to be executed.`
-                                : `Waiting the grid trade #${i} to be executed.`
+                                ? t('coin.buySignal.waitingExecution')
+                                : t('coin.buySignal.waitingPrevious', {
+                                    index: i
+                                  })
                               : currentGridTradeIndex === i
-                              ? 'Waiting to be executed.'
-                              : `Waiting the grid trade #${i} to be executed.`}
+                              ? t('coin.buySignal.waitingExecution')
+                              : t('coin.buySignal.waitingPrevious', {
+                                  index: i
+                                })}
                           </React.Fragment>
                         )}
                       </Popover.Content>
@@ -174,7 +186,7 @@ class CoinWrapperBuySignal extends React.Component {
                   className='coin-info-label d-flex flex-row justify-content-start'
                   style={{ flex: '0 100%' }}>
                   <span>
-                    &#62; Trigger price (
+                    &#62; {t('coin.buySignal.triggerPrice')} (
                     {(parseFloat(grid.triggerPercentage - 1) * 100).toFixed(2)}
                     %):
                   </span>
@@ -189,18 +201,14 @@ class CoinWrapperBuySignal extends React.Component {
                       overlay={
                         <Popover id='buy-trigger-price-overlay-right'>
                           <Popover.Content>
-                            The trigger price{' '}
-                            <code>
-                              {parseFloat(buy.triggerPrice).toFixed(precision)}
-                            </code>{' '}
-                            is higher than the ATH buy restricted price{' '}
-                            <code>
-                              {parseFloat(buy.athRestrictionPrice).toFixed(
-                                precision
-                              )}
-                            </code>
-                            . The bot will not place an order even if the
-                            current price reaches the trigger price.
+                            {t('coin.buySignal.athRestriction', {
+                              triggerPrice: parseFloat(
+                                buy.triggerPrice
+                              ).toFixed(precision),
+                              athPrice: parseFloat(
+                                buy.athRestrictionPrice
+                              ).toFixed(precision)
+                            })}
                           </Popover.Content>
                         </Popover>
                       }>
@@ -231,7 +239,9 @@ class CoinWrapperBuySignal extends React.Component {
             )}
             {buy.difference && currentGridTradeIndex === i ? (
               <div className='coin-info-column coin-info-column-price'>
-                <span className='coin-info-label'>Difference to buy:</span>
+                <span className='coin-info-label'>
+                  {t('coin.buySignal.differenceToBuy')}
+                </span>
                 <HightlightChange
                   className={`coin-info-value ${
                     buy.difference > 0
@@ -254,7 +264,9 @@ class CoinWrapperBuySignal extends React.Component {
                   collapsed ? 'd-none' : ''
                 }`}>
                 <div className='coin-info-column coin-info-column-order'>
-                  <span className='coin-info-label'>- Purchased date:</span>
+                  <span className='coin-info-label'>
+                    {t('coin.buySignal.purchasedDate')}
+                  </span>
                   <div className='coin-info-value'>
                     {moment(grid.executedOrder.transactTime).format(
                       'YYYY-MM-DD HH:mm'
@@ -262,19 +274,25 @@ class CoinWrapperBuySignal extends React.Component {
                   </div>
                 </div>
                 <div className='coin-info-column coin-info-column-order'>
-                  <span className='coin-info-label'>- Purchased price:</span>
+                  <span className='coin-info-label'>
+                    {t('coin.buySignal.purchasedPrice')}
+                  </span>
                   <div className='coin-info-value'>
                     {parseFloat(grid.executedOrder.price).toFixed(precision)}
                   </div>
                 </div>
                 <div className='coin-info-column coin-info-column-order'>
-                  <span className='coin-info-label'>- Purchased qty:</span>
+                  <span className='coin-info-label'>
+                    {t('coin.buySignal.purchasedQty')}
+                  </span>
                   <div className='coin-info-value'>
                     {parseFloat(grid.executedOrder.executedQty)}
                   </div>
                 </div>
                 <div className='coin-info-column coin-info-column-order'>
-                  <span className='coin-info-label'>- Purchased amount:</span>
+                  <span className='coin-info-label'>
+                    {t('coin.buySignal.purchasedAmount')}
+                  </span>
                   <div className='coin-info-value'>
                     {parseFloat(grid.executedOrder.cummulativeQuoteQty).toFixed(
                       precision
@@ -292,7 +310,7 @@ class CoinWrapperBuySignal extends React.Component {
               }`}>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Trigger price percentage:
+                  {t('coin.buySignal.triggerPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.triggerPercentage - 1) * 100).toFixed(2)}%
@@ -300,7 +318,7 @@ class CoinWrapperBuySignal extends React.Component {
               </div>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Stop price percentage:
+                  {t('coin.buySignal.stopPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.stopPercentage - 1) * 100).toFixed(2)}%
@@ -308,7 +326,7 @@ class CoinWrapperBuySignal extends React.Component {
               </div>
               <div className='coin-info-column coin-info-column-order'>
                 <span className='coin-info-label'>
-                  - Limit price percentage:
+                  {t('coin.buySignal.limitPercentage')}
                 </span>
                 <div className='coin-info-value'>
                   {((grid.limitPercentage - 1) * 100).toFixed(2)}%
@@ -317,7 +335,7 @@ class CoinWrapperBuySignal extends React.Component {
               {grid.minPurchaseAmount > 0 ? (
                 <div className='coin-info-column coin-info-column-order'>
                   <span className='coin-info-label'>
-                    - Min purchase amount:
+                    {t('coin.buySignal.minPurchaseAmount')}
                   </span>
                   <div className='coin-info-value'>
                     {grid.minPurchaseAmount} {quoteAsset}
@@ -327,7 +345,9 @@ class CoinWrapperBuySignal extends React.Component {
                 ''
               )}
               <div className='coin-info-column coin-info-column-order'>
-                <span className='coin-info-label'>- Max purchase amount:</span>
+                <span className='coin-info-label'>
+                  - {t('coin.buySignal.maxPurchaseAmount')}
+                </span>
                 <div className='coin-info-value'>
                   {grid.maxPurchaseAmount} {quoteAsset}
                 </div>
@@ -345,7 +365,7 @@ class CoinWrapperBuySignal extends React.Component {
         <React.Fragment key={'coin-wrapper-buy-next-grid-row-' + symbol}>
           <div className='coin-info-column coin-info-column-price'>
             <span className='coin-info-label'>
-              &#62; Suggested breakeven amount
+              &#62; {t('coin.buySignal.suggestedBreakeven')}
               <SymbolGridCalculator
                 symbol={symbol}
                 symbolInfo={symbolInfo}
@@ -355,7 +375,7 @@ class CoinWrapperBuySignal extends React.Component {
             <span className='coin-info-value'>
               {nextGridAmount !== null && nextGridAmount > 0
                 ? `${nextGridAmount.toFixed(precision)} ${quoteAsset}`
-                : 'N/A'}
+                : t('coin.lastBuyPrice.na')}
             </span>
           </div>
         </React.Fragment>
@@ -366,7 +386,7 @@ class CoinWrapperBuySignal extends React.Component {
       <div className='coin-info-sub-wrapper'>
         <div className='coin-info-column coin-info-column-title'>
           <div className='coin-info-label'>
-            Buy Signal ({symbolConfiguration.candles.interval}/
+            {t('coin.buySignal.title')} ({symbolConfiguration.candles.interval}/
             {symbolConfiguration.candles.limit}){' '}
             <span className='coin-info-value'>
               {symbolConfiguration.buy.enabled ? (
@@ -378,7 +398,7 @@ class CoinWrapperBuySignal extends React.Component {
           </div>
           {symbolConfiguration.buy.enabled === false ? (
             <HightlightChange className='coin-info-message badge-pill badge-danger'>
-              Trading is disabled.
+              {t('coin.buySignal.tradingDisabled')}
             </HightlightChange>
           ) : (
             ''
@@ -389,7 +409,7 @@ class CoinWrapperBuySignal extends React.Component {
             {buy.athPrice ? (
               <div className='coin-info-column coin-info-column-price'>
                 <span className='coin-info-label'>
-                  ATH price (
+                  {t('coin.buySignal.athPrice')} (
                   {symbolConfiguration.buy.athRestriction.candles.interval}/
                   {symbolConfiguration.buy.athRestriction.candles.limit}):
                 </span>
@@ -406,7 +426,7 @@ class CoinWrapperBuySignal extends React.Component {
                   className='coin-info-label d-flex flex-row justify-content-start'
                   style={{ flex: '0 100%' }}>
                   <span>
-                    &#62; Restricted price (
+                    &#62; {t('coin.buySignal.restrictedPrice')} (
                     {(
                       parseFloat(
                         symbolConfiguration.buy.athRestriction
@@ -462,7 +482,9 @@ class CoinWrapperBuySignal extends React.Component {
 
         {buy.highestPrice ? (
           <div className='coin-info-column coin-info-column-price'>
-            <span className='coin-info-label'>Highest price:</span>
+            <span className='coin-info-label'>
+              {t('coin.buySignal.highestPrice')}
+            </span>
             <HightlightChange className='coin-info-value'>
               {parseFloat(buy.highestPrice).toFixed(precision)}
             </HightlightChange>
@@ -472,7 +494,9 @@ class CoinWrapperBuySignal extends React.Component {
         )}
         {buy.currentPrice ? (
           <div className='coin-info-column coin-info-column-price'>
-            <span className='coin-info-label'>Current price:</span>
+            <span className='coin-info-label'>
+              {t('coin.buySignal.currentPrice')}
+            </span>
             <HightlightChange className='coin-info-value'>
               {parseFloat(buy.currentPrice).toFixed(precision)}
             </HightlightChange>
@@ -482,7 +506,9 @@ class CoinWrapperBuySignal extends React.Component {
         )}
         {buy.lowestPrice ? (
           <div className='coin-info-column coin-info-column-lowest-price'>
-            <span className='coin-info-label'>Lowest price:</span>
+            <span className='coin-info-label'>
+              {t('coin.buySignal.lowestPrice')}
+            </span>
             <HightlightChange className='coin-info-value'>
               {parseFloat(buy.lowestPrice).toFixed(precision)}
             </HightlightChange>

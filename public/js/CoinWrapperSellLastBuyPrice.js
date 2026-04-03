@@ -17,7 +17,7 @@ class CoinWrapperSellLastBuyPrice extends React.Component {
     return (
       <div className='coin-info-column coin-info-column-price'>
         <span className='coin-info-label coin-info-label-with-icon'>
-          Last buy price:
+          {t('coin.lastBuyPrice')}
           <SymbolEditLastBuyPriceIcon
             symbolInfo={symbolInfo}
             sendWebSocket={sendWebSocket}
@@ -31,7 +31,9 @@ class CoinWrapperSellLastBuyPrice extends React.Component {
             </HightlightChange>
           </div>
         ) : (
-          <span className='coin-info-value coin-info-value-with-icon'>N/A</span>
+          <span className='coin-info-value coin-info-value-with-icon'>
+            {t('coin.lastBuyPrice.na')}
+          </span>
         )}
       </div>
     );

@@ -81,28 +81,24 @@ class SymbolDeleteIcon extends React.Component {
 
           <Modal show={this.state.showModal} onHide={this.handleModalClose}>
             <Modal.Header className='pt-1 pb-1'>
-              <Modal.Title>Remove Symbol - {symbolInfo.symbol}</Modal.Title>
+              <Modal.Title>
+                {t('symbolDelete.title')} - {symbolInfo.symbol}
+              </Modal.Title>
             </Modal.Header>
-            <Modal.Body>
-              Are you sure to remove this symbol from the cache?
-              <br />
-              Note that it is simply removing cache values for the symbol.
-              <br />
-              If the symbol is still monitoring, then it will show up again.
-            </Modal.Body>
+            <Modal.Body>{t('symbolDelete.confirmation')}</Modal.Body>
             <Modal.Footer>
               <Button
                 variant='secondary'
                 size='sm'
                 onClick={this.handleModalClose}>
-                Close
+                {t('common.close')}
               </Button>
               <Button
                 type='button'
                 variant='danger'
                 size='sm'
                 onClick={this.handleDelete}>
-                Remove
+                {t('common.remove')}
               </Button>
             </Modal.Footer>
           </Modal>

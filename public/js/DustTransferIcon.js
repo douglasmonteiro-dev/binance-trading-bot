@@ -108,7 +108,7 @@ class DustTransferIcon extends React.Component {
             type='button'
             className='btn btn-sm btn-link btn-dust-transfer'
             onClick={() => this.handleModalShow()}>
-            Convert small balance to BNB
+            {t('dustTransfer.title')}
           </button>
         </div>
         <Modal
@@ -117,26 +117,24 @@ class DustTransferIcon extends React.Component {
           backdrop='static'
           size='xl'>
           <Modal.Header closeButton className='pt-1 pb-1'>
-            <Modal.Title>Convert small balance to BNB</Modal.Title>
+            <Modal.Title>{t('dustTransfer.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <p className='d-block text-muted mb-2'>
-              You can convert balances with a valuation below 0.001 BTC to BNB
-              once every 6 hours. It is not currently possible to convert
-              delisted coins.
+              {t('dustTransfer.description')}
             </p>
             <div className='dust-transfer-symbols-parent-wrappers'>
               {loading ? (
                 <div className='text-center w-100'>
                   <Spinner animation='border' role='status'>
-                    <span className='sr-only'>Loading...</span>
+                    <span className='sr-only'>{t('common.loading')}</span>
                   </Spinner>
                 </div>
               ) : (
                 <div className='dust-transfer-symbols-wrappers'>
                   {_.isEmpty(symbols) ? (
                     <div className='text-center'>
-                      There is no asset to convert.
+                      {t('dustTransfer.noAsset')}
                     </div>
                   ) : (
                     <React.Fragment>
@@ -148,7 +146,7 @@ class DustTransferIcon extends React.Component {
                           type='button'
                           className='btn btn-sm btn-primary w-100 btn-dust-transfer-execute'
                           onClick={() => this.executeDustTransfer()}>
-                          Convert
+                          {t('dustTransfer.convert')}
                         </button>
                       </div>
                     </React.Fragment>

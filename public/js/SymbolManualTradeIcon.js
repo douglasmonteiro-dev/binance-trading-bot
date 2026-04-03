@@ -443,7 +443,8 @@ class SymbolManualTradeIcon extends React.Component {
             type='button'
             className='btn btn-sm btn-manual-trade mr-1'
             onClick={() => this.handleModalShow()}>
-            <i className='fas fa-shopping-bag'></i> Trade
+            <i className='fas fa-shopping-bag'></i>{' '}
+            {t('symbolManualTrade.trade')}
           </button>
         </div>
         <Modal
@@ -452,29 +453,35 @@ class SymbolManualTradeIcon extends React.Component {
           backdrop='static'
           size='xl'>
           <Modal.Header closeButton className='pt-1 pb-1'>
-            <Modal.Title>Manual trade for {symbol}</Modal.Title>
+            <Modal.Title>
+              {t('symbolManualTrade.title')} - {symbol}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <div className='alert alert-warning small mb-2'>
+              <div className='font-weight-bold mb-1'>
+                {t('symbolManualTrade.tip.title')}
+              </div>
+              <div>{t('symbolManualTrade.tip1')}</div>
+              <div>{t('symbolManualTrade.tip2')}</div>
+            </div>
             <p className='d-block text-muted mb-2'>
-              In this modal, you can trade {symbol} manually. If you already
-              have the last buy price, then the bot will calculate average cost
-              and re-calculate the last buy price.
-              <br />
-              To make sure the last buy price is recorded only if the order is
-              successfully executed, the bot will monitor the order after
-              placing the buy order. This action may increase the use of API
-              weight.
+              {t('symbolManualTrade.description', { symbol })}
             </p>
 
             <div className='manual-trade-wrappers'>
               <div className='manual-trade-wrapper manual-trade-buy-wrapper'>
                 <div className='manual-trade-title-wrapper d-flex flex-row justify-content-between'>
                   <span className='manual-trade-title-buy'>
-                    Buy {baseAssetBalance.asset}
+                    {t('symbolManualTrade.buyAsset', {
+                      asset: baseAssetBalance.asset
+                    })}
                   </span>
                 </div>
                 <div className='manual-trade-row d-flex flex-row justify-content-between mt-1'>
-                  <div className='manual-trade-label'>Current price</div>
+                  <div className='manual-trade-label'>
+                    {t('symbolManualTrade.currentPrice')}
+                  </div>
                   <span className='manual-trade-quote-asset'>
                     1 {baseAssetBalance.asset} ={' '}
                     {parseFloat(lastCandle.close).toFixed(quoteAssetTickSize)}{' '}
@@ -482,7 +489,9 @@ class SymbolManualTradeIcon extends React.Component {
                   </span>
                 </div>
                 <div className='manual-trade-row d-flex flex-row justify-content-between mt-1'>
-                  <div className='manual-trade-label'>Balance</div>
+                  <div className='manual-trade-label'>
+                    {t('symbolManualTrade.balance')}
+                  </div>
                   <span className='manual-trade-quote-asset'>
                     {parseFloat(quoteAssetBalance.free).toFixed(
                       quoteAssetTickSize
@@ -500,7 +509,7 @@ class SymbolManualTradeIcon extends React.Component {
                       data-state-key='buy.type'
                       data-state-value='limit'
                       onClick={e => this.handleInputChange(e)}>
-                      Limit
+                      {t('symbolManualTrade.limit')}
                     </Button>
                     <Button
                       variant={
@@ -510,24 +519,26 @@ class SymbolManualTradeIcon extends React.Component {
                       data-state-key='buy.type'
                       data-state-value='market'
                       onClick={e => this.handleInputChange(e)}>
-                      Market
+                      {t('symbolManualTrade.market')}
                     </Button>
                   </ButtonGroup>
                 </div>
                 <div className='manual-trade-row manual-trade-price-wrapper mt-2'>
                   <Form.Group controlId='field-buy-price' className='mb-2'>
                     <Form.Label htmlFor='field-buy-price-input' srOnly>
-                      Price
+                      {t('symbolManualTrade.price')}
                     </Form.Label>
                     <InputGroup size='sm'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text>Price</InputGroup.Text>
+                        <InputGroup.Text>
+                          {t('symbolManualTrade.price')}
+                        </InputGroup.Text>
                       </InputGroup.Prepend>
                       {order.buy.type === 'limit' ? (
                         <FormControl
                           id='field-buy-price-input'
                           type='number'
-                          placeholder='Price'
+                          placeholder={t('symbolManualTrade.price')}
                           step={filterPrice.tickSize}
                           className='text-right'
                           data-state-key='buy.price'
@@ -540,7 +551,7 @@ class SymbolManualTradeIcon extends React.Component {
                           id='field-buy-price-input'
                           type='text'
                           className='text-right'
-                          value='Market'
+                          value={t('symbolManualTrade.market')}
                           disabled={true}
                         />
                       )}
@@ -557,16 +568,18 @@ class SymbolManualTradeIcon extends React.Component {
                   <div className='manual-trade-row manual-trade-quantity-wrapper mt-2'>
                     <Form.Group controlId='field-buy-quantity' className='mb-2'>
                       <Form.Label htmlFor='field-buy-quantity-input' srOnly>
-                        Amount
+                        {t('symbolManualTrade.amount')}
                       </Form.Label>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
-                          <InputGroup.Text>Amount</InputGroup.Text>
+                          <InputGroup.Text>
+                            {t('symbolManualTrade.amount')}
+                          </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
                           id='field-buy-quantity-input'
                           type='number'
-                          placeholder='Amount'
+                          placeholder={t('symbolManualTrade.amount')}
                           step={filterLotSize.stepSize}
                           className='text-right'
                           max={filterLotSize.maxQty}
@@ -600,7 +613,7 @@ class SymbolManualTradeIcon extends React.Component {
                           data-state-key='buy.marketType'
                           data-state-value='total'
                           onClick={e => this.handleInputChange(e)}>
-                          Total
+                          {t('symbolManualTrade.total')}
                         </Button>
                         <Button
                           variant={
@@ -612,7 +625,7 @@ class SymbolManualTradeIcon extends React.Component {
                           data-state-key='buy.marketType'
                           data-state-value='amount'
                           onClick={e => this.handleInputChange(e)}>
-                          Amount
+                          {t('symbolManualTrade.amount')}
                         </Button>
                       </ButtonGroup>
                     </div>
@@ -625,22 +638,22 @@ class SymbolManualTradeIcon extends React.Component {
                           htmlFor='field-buy-market-total-input'
                           srOnly>
                           {order.buy.marketType === 'total'
-                            ? 'Total'
-                            : 'Amount'}
+                            ? t('symbolManualTrade.total')
+                            : t('symbolManualTrade.amount')}
                         </Form.Label>
                         <InputGroup size='sm'>
                           <InputGroup.Prepend>
                             <InputGroup.Text>
                               {order.buy.marketType === 'total'
-                                ? 'Total'
-                                : 'Amount'}
+                                ? t('symbolManualTrade.total')
+                                : t('symbolManualTrade.amount')}
                             </InputGroup.Text>
                           </InputGroup.Prepend>
                           {order.buy.marketType === 'total' ? (
                             <FormControl
                               id='field-buy-market-total-input'
                               type='number'
-                              placeholder='Quantity'
+                              placeholder={t('symbolManualTrade.quantity')}
                               step={filterPrice.tickSize}
                               className='text-right'
                               data-state-key='buy.quoteOrderQty'
@@ -656,7 +669,7 @@ class SymbolManualTradeIcon extends React.Component {
                               id='field-buy-market-total-input'
                               type='number'
                               step={filterLotSize.stepSize}
-                              placeholder='Total'
+                              placeholder={t('symbolManualTrade.total')}
                               className='text-right'
                               data-state-key='buy.marketQuantity'
                               value={order.buy.marketQuantity}
@@ -719,16 +732,18 @@ class SymbolManualTradeIcon extends React.Component {
                   <div className='manual-trade-row manual-trade-total-wrapper mt-2'>
                     <Form.Group controlId='field-buy-total' className='mb-2'>
                       <Form.Label htmlFor='field-buy-total-input' srOnly>
-                        Total
+                        {t('symbolManualTrade.total')}
                       </Form.Label>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
-                          <InputGroup.Text>Total</InputGroup.Text>
+                          <InputGroup.Text>
+                            {t('symbolManualTrade.total')}
+                          </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
                           id='field-buy-total-input'
                           type='number'
-                          placeholder='Amount'
+                          placeholder={t('symbolManualTrade.amount')}
                           className='text-right'
                           value={order.buy.total}
                           disabled
@@ -756,19 +771,25 @@ class SymbolManualTradeIcon extends React.Component {
                       this.handleInputChange(e);
                       this.handleFormSubmit(e);
                     }}>
-                    Buy {baseAssetBalance.asset}
+                    {t('symbolManualTrade.buyAsset', {
+                      asset: baseAssetBalance.asset
+                    })}
                   </button>
                 </div>
               </div>
               <div className='manual-trade-wrapper manual-trade-sell-wrapper'>
                 <div className='manual-trade-title-wrapper d-flex flex-row justify-content-between'>
                   <span className='manual-trade-title-buy font-weight-bolder'>
-                    Sell {baseAssetBalance.asset}
+                    {t('symbolManualTrade.sellAsset', {
+                      asset: baseAssetBalance.asset
+                    })}
                   </span>
                 </div>
 
                 <div className='manual-trade-row d-flex flex-row justify-content-between mt-1'>
-                  <div className='manual-trade-label'>Current price</div>
+                  <div className='manual-trade-label'>
+                    {t('symbolManualTrade.currentPrice')}
+                  </div>
                   <span className='manual-trade-quote-asset'>
                     1 {baseAssetBalance.asset} ={' '}
                     {parseFloat(lastCandle.close).toFixed(quoteAssetTickSize)}{' '}
@@ -776,7 +797,9 @@ class SymbolManualTradeIcon extends React.Component {
                   </span>
                 </div>
                 <div className='manual-trade-row d-flex flex-row justify-content-between'>
-                  <div className='manual-trade-label'>Balance</div>
+                  <div className='manual-trade-label'>
+                    {t('symbolManualTrade.balance')}
+                  </div>
                   <span className='manual-trade-base-asset'>
                     {parseFloat(baseAssetBalance.free).toFixed(
                       baseAssetStepSize
@@ -794,7 +817,7 @@ class SymbolManualTradeIcon extends React.Component {
                       data-state-key='sell.type'
                       data-state-value='limit'
                       onClick={e => this.handleInputChange(e)}>
-                      Limit
+                      {t('symbolManualTrade.limit')}
                     </Button>
                     <Button
                       variant={
@@ -804,24 +827,26 @@ class SymbolManualTradeIcon extends React.Component {
                       data-state-key='sell.type'
                       data-state-value='market'
                       onClick={e => this.handleInputChange(e)}>
-                      Market
+                      {t('symbolManualTrade.market')}
                     </Button>
                   </ButtonGroup>
                 </div>
                 <div className='manual-trade-row manual-trade-price-wrapper mt-2'>
                   <Form.Group controlId='field-sell-price' className='mb-2'>
                     <Form.Label htmlFor='field-sell-price-input' srOnly>
-                      Price
+                      {t('symbolManualTrade.price')}
                     </Form.Label>
                     <InputGroup size='sm'>
                       <InputGroup.Prepend>
-                        <InputGroup.Text>Price</InputGroup.Text>
+                        <InputGroup.Text>
+                          {t('symbolManualTrade.price')}
+                        </InputGroup.Text>
                       </InputGroup.Prepend>
                       {order.sell.type === 'limit' ? (
                         <FormControl
                           id='field-sell-price-input'
                           type='number'
-                          placeholder='Price'
+                          placeholder={t('symbolManualTrade.price')}
                           step={filterPrice.tickSize}
                           className='text-right'
                           data-state-key='sell.price'
@@ -834,7 +859,7 @@ class SymbolManualTradeIcon extends React.Component {
                           id='field-sell-price-input'
                           type='text'
                           className='text-right'
-                          value='Market'
+                          value={t('symbolManualTrade.market')}
                           disabled={true}
                         />
                       )}
@@ -853,16 +878,18 @@ class SymbolManualTradeIcon extends React.Component {
                       controlId='field-sell-quantity'
                       className='mb-2'>
                       <Form.Label htmlFor='field-sell-quantity-input' srOnly>
-                        Amount
+                        {t('symbolManualTrade.amount')}
                       </Form.Label>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
-                          <InputGroup.Text>Amount</InputGroup.Text>
+                          <InputGroup.Text>
+                            {t('symbolManualTrade.amount')}
+                          </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
                           id='field-sell-quantity-input'
                           type='number'
-                          placeholder='Amount'
+                          placeholder={t('symbolManualTrade.amount')}
                           step={filterLotSize.stepSize}
                           className='text-right'
                           max={filterLotSize.maxQty}
@@ -896,7 +923,7 @@ class SymbolManualTradeIcon extends React.Component {
                           data-state-key='sell.marketType'
                           data-state-value='total'
                           onClick={e => this.handleInputChange(e)}>
-                          Total
+                          {t('symbolManualTrade.total')}
                         </Button>
                         <Button
                           variant={
@@ -908,7 +935,7 @@ class SymbolManualTradeIcon extends React.Component {
                           data-state-key='sell.marketType'
                           data-state-value='amount'
                           onClick={e => this.handleInputChange(e)}>
-                          Amount
+                          {t('symbolManualTrade.amount')}
                         </Button>
                       </ButtonGroup>
                     </div>
@@ -921,22 +948,22 @@ class SymbolManualTradeIcon extends React.Component {
                           htmlFor='field-sell-market-total-input'
                           srOnly>
                           {order.sell.marketType === 'total'
-                            ? 'Total'
-                            : 'Amount'}
+                            ? t('symbolManualTrade.total')
+                            : t('symbolManualTrade.amount')}
                         </Form.Label>
                         <InputGroup size='sm'>
                           <InputGroup.Prepend>
                             <InputGroup.Text>
                               {order.sell.marketType === 'total'
-                                ? 'Total'
-                                : 'Amount'}
+                                ? t('symbolManualTrade.total')
+                                : t('symbolManualTrade.amount')}
                             </InputGroup.Text>
                           </InputGroup.Prepend>
                           {order.sell.marketType === 'total' ? (
                             <FormControl
                               id='field-sell-market-total-input'
                               type='number'
-                              placeholder='Quantity'
+                              placeholder={t('symbolManualTrade.quantity')}
                               step={filterPrice.tickSize}
                               className='text-right'
                               data-state-key='sell.quoteOrderQty'
@@ -952,7 +979,7 @@ class SymbolManualTradeIcon extends React.Component {
                               id='field-sell-market-total-input'
                               type='number'
                               step={filterLotSize.stepSize}
-                              placeholder='Total'
+                              placeholder={t('symbolManualTrade.total')}
                               className='text-right'
                               data-state-key='sell.marketQuantity'
                               value={order.sell.marketQuantity}
@@ -1015,16 +1042,18 @@ class SymbolManualTradeIcon extends React.Component {
                   <div className='manual-trade-row manual-trade-total-wrapper mt-2'>
                     <Form.Group controlId='field-sell-total' className='mb-2'>
                       <Form.Label htmlFor='field-sell-total-input' srOnly>
-                        Total
+                        {t('symbolManualTrade.total')}
                       </Form.Label>
                       <InputGroup size='sm'>
                         <InputGroup.Prepend>
-                          <InputGroup.Text>Total</InputGroup.Text>
+                          <InputGroup.Text>
+                            {t('symbolManualTrade.total')}
+                          </InputGroup.Text>
                         </InputGroup.Prepend>
                         <FormControl
                           id='field-sell-total-input'
                           type='number'
-                          placeholder='Amount'
+                          placeholder={t('symbolManualTrade.amount')}
                           className='text-right'
                           value={order.sell.total}
                           disabled
@@ -1052,7 +1081,9 @@ class SymbolManualTradeIcon extends React.Component {
                       this.handleInputChange(e);
                       this.handleFormSubmit(e);
                     }}>
-                    Sell {baseAssetBalance.asset}
+                    {t('symbolManualTrade.sellAsset', {
+                      asset: baseAssetBalance.asset
+                    })}
                   </button>
                 </div>
               </div>

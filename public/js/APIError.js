@@ -20,7 +20,7 @@ class APIError extends React.Component {
               className='binance-img'
               alt='Binance logo'
             />{' '}
-            Binance Trading Bot
+            {t('apiError.title')}
           </h1>
 
           <h3 className='text-danger'>

@@ -166,7 +166,7 @@ class SettingIconTradingView extends React.Component {
         <React.Fragment key={'trading-view-' + i}>
           <tr>
             <td className='align-middle font-weight-bold' width='90%'>
-              TradingView #{i + 1}
+              {t('settings.tvNumber', { index: i + 1 })}
             </td>
             <td className='align-middle text-center'>
               {i !== 0 ? (
@@ -189,7 +189,7 @@ class SettingIconTradingView extends React.Component {
                     controlId={'field-tradingview-' + i + '-interval'}
                     className='mb-0'>
                     <Form.Label className='mb-0'>
-                      Interval
+                      {t('settings.tvInterval')}
                       <OverlayTrigger
                         trigger='click'
                         key={'field-tradingview-' + i + '-interval-overlay'}
@@ -202,7 +202,7 @@ class SettingIconTradingView extends React.Component {
                               '-interval-overlay-right'
                             }>
                             <Popover.Content>
-                              Set TradingView candle interval.
+                              {t('settings.tvIntervalTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -234,10 +234,10 @@ class SettingIconTradingView extends React.Component {
                 </div>
                 <div className='col-12'>
                   <p className='mb-0'>
-                    Buy action
+                    {t('settings.buyAction')}
                     {isBuyTriggerActive === false ? (
                       <span className='text-warning font-weight-bold ml-3'>
-                        This interval won't trigger the buy action.
+                        {t('settings.tvNoBuyTrigger')}
                       </span>
                     ) : (
                       ''
@@ -259,8 +259,7 @@ class SettingIconTradingView extends React.Component {
                         onChange={this.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Allow buy trigger when recommendation is{' '}
-                        <code>Strong buy</code>{' '}
+                        {t('settings.tvStrongBuy')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key={
@@ -277,12 +276,7 @@ class SettingIconTradingView extends React.Component {
                                 '-buy-when-strong-buy-overlay-right'
                               }>
                               <Popover.Content>
-                                If enabled, the bot will use TradingView
-                                recommendation to trigger the buy. If the buy
-                                trigger price is reached, the bot will check
-                                TradingView recommendation and if it is not
-                                `Strong buy`, then the bot will not place a buy
-                                order.
+                                {t('settings.tvStrongBuyTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -308,8 +302,7 @@ class SettingIconTradingView extends React.Component {
                         onChange={this.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Allow buy trigger when recommendation is{' '}
-                        <code>Buy</code>{' '}
+                        {t('settings.tvBuy')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key={
@@ -324,11 +317,7 @@ class SettingIconTradingView extends React.Component {
                                 '-buy-when--buy-overlay-right'
                               }>
                               <Popover.Content>
-                                If enabled, the bot will use TradingView
-                                recommendation to trigger the buy. If the buy
-                                trigger price is reached, the bot will check
-                                TradingView recommendation and if it is not
-                                `Buy`, then the bot will not place a buy order.
+                                {t('settings.tvBuyTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -344,10 +333,10 @@ class SettingIconTradingView extends React.Component {
                 </div>
                 <div className='col-12'>
                   <p className='mb-0'>
-                    Sell action
+                    {t('settings.sellAction')}
                     {isForceSellTriggerActive === false ? (
                       <span className='text-warning font-weight-bold ml-3'>
-                        This interval won't trigger the force sell action.
+                        {t('settings.tvNoSellTrigger')}
                       </span>
                     ) : (
                       ''
@@ -373,9 +362,7 @@ class SettingIconTradingView extends React.Component {
                         onChange={this.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Force sell at the market price when recommendation is{' '}
-                        <code>Neutral</code> and the profit is between{' '}
-                        <code>0</code> to <code>trigger price</code>{' '}
+                        {t('settings.tvForceSellNeutral')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key={
@@ -392,16 +379,7 @@ class SettingIconTradingView extends React.Component {
                                 '-sell-force-sell-over-zero-below-trigger-price-when-neutral-overlay-right'
                               }>
                               <Popover.Content>
-                                If enabled, the bot will use TradingView
-                                recommendation to sell the coin at the market
-                                price if the profit is over 0 but under the
-                                trigger price. When the condition is met and the
-                                TradingView recommendation is `Neutral`, then
-                                the bot will place a market sell order
-                                immediately. If the auto-buy trigger is enabled,
-                                then it will place a buy order later. Note that
-                                this action can cause loss if the profit is less
-                                than commission.
+                                {t('settings.tvForceSellNeutralTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -434,9 +412,7 @@ class SettingIconTradingView extends React.Component {
                         onChange={this.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Force sell at the market price when recommendation is{' '}
-                        <code>Sell</code> and the profit is between{' '}
-                        <code>0</code> to <code>trigger price</code>{' '}
+                        {t('settings.tvForceSellSell')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key={
@@ -453,16 +429,7 @@ class SettingIconTradingView extends React.Component {
                                 '-sell-force-sell-over-zero-below-trigger-price-when-sell-overlay-right'
                               }>
                               <Popover.Content>
-                                If enabled, the bot will use TradingView
-                                recommendation to sell the coin at the market
-                                price if the profit is over 0 but under the
-                                trigger price. When the condition is met and the
-                                TradingView recommendation is `Sell`, then the
-                                bot will place a market sell order immediately.
-                                If the auto-buy trigger is enabled, then it will
-                                place a buy order later. Note that this action
-                                can cause loss if the profit is less than
-                                commission.
+                                {t('settings.tvForceSellSellTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -495,9 +462,7 @@ class SettingIconTradingView extends React.Component {
                         onChange={this.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Force sell at the market price when recommendation is{' '}
-                        <code>Strong sell</code> and the profit is between{' '}
-                        <code>0</code> to <code>trigger price</code>{' '}
+                        {t('settings.tvForceSellStrongSell')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key={
@@ -514,16 +479,7 @@ class SettingIconTradingView extends React.Component {
                                 '-sell-force-sell-over-zero-below-trigger-price-when-strong-sell-overlay-right'
                               }>
                               <Popover.Content>
-                                If enabled, the bot will use TradingView
-                                recommendation to sell the coin at the market
-                                price if the profit is over 0 but under the
-                                trigger price. When the condition is met and the
-                                TradingView recommendation is `Strong sell`,
-                                then the bot will place a market sell order
-                                immediately. If the auto-buy trigger is enabled,
-                                then it will place a buy order later. Note that
-                                this action can cause loss if the profit is less
-                                than commission.
+                                {t('settings.tvForceSellStrongSellTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -553,14 +509,14 @@ class SettingIconTradingView extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              TradingView
+              {t('settings.tradingView')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
             <Card.Body className='px-2 py-1'>
               <div className='row pb-2'>
                 <div className='col-12'>
-                  What is{' '}
+                  {t('settings.whatIsTradingView')}{' '}
                   <a
                     href='https://www.tradingview.com/symbols/BTCUSDT/technicals/'
                     target='_blank'
@@ -575,11 +531,7 @@ class SettingIconTradingView extends React.Component {
                     overlay={
                       <Popover id='bot-options-auto-trigger-buy-conditions-tradingview-when-strong-buy-overlay-right'>
                         <Popover.Content>
-                          TradingView is the service that provides technical
-                          analysis based on various indicators such as
-                          oscillators and moving averages. The bot is integrated
-                          with TradingView summary recommendation to control the
-                          buy/sell actions.
+                          {t('settings.tvDescription')}
                         </Popover.Content>
                       </Popover>
                     }>
@@ -588,25 +540,20 @@ class SettingIconTradingView extends React.Component {
                     </Button>
                   </OverlayTrigger>
                   <br />
-                  - At least one condition must be checked to activate the
-                  TradingView interval. If the interval's conditions are not
-                  checked, then the TradingView recommendation of the interval
-                  will be ignored. <br />
-                  - Buy trigger must be satisfied with all intervals'
-                  recommendations.
+                  {t('settings.tvInfoCondition')} <br />
+                  {t('settings.tvInfoBuyTrigger')}
                   <br />
-                  - Force sell will be executed if satisfy any recommendation.
+                  {t('settings.tvInfoForceSell')}
                   <br />
-                  - A maximum of three intervals can add to avoid massive
-                  traffic to TradingView.
+                  {t('settings.tvInfoMaxIntervals')}
                   <br />
                   <br />
-                  For more detailed information,{' '}
+                  {t('settings.tvInfoMoreDetails')}{' '}
                   <a
                     href='https://github.com/chrisleekr/binance-trading-bot/wiki/TradingView'
                     target='_blank'
                     rel='noreferrer'>
-                    please check out the Wiki page
+                    {t('settings.checkWikiPage')}
                   </a>
                   .
                 </div>
@@ -625,7 +572,7 @@ class SettingIconTradingView extends React.Component {
                     className='btn btn-sm btn-add-new-tradingview'
                     disabled={canAddTradingView === false}
                     onClick={this.onAddTradingView}>
-                    Add new TrdingView
+                    {t('settings.addTradingView')}
                   </button>
                 </div>
               </div>

@@ -19,45 +19,47 @@ class CoinWrapperAction extends React.Component {
     let label;
     switch (action) {
       case 'buy':
-        label = 'Buy';
+        label = t('coin.action.buy');
         break;
       case 'buy-temporary-disabled':
-        label = 'Temporary disabled';
+        label = t('coin.action.tempDisabledBuy');
         break;
       case 'buy-order-checking':
-        label = 'Checking for buy order';
+        label = t('coin.action.checkingBuyOrder');
         break;
       case 'buy-order-wait':
-        label = 'Wait for buy order';
+        label = t('coin.action.waitBuy');
         break;
       case 'sell':
-        label = 'Sell';
+        label = t('coin.action.sell');
         break;
       case 'sell-temporary-disabled':
-        label = 'Temporary disabled';
+        label = t('coin.action.tempDisabledSell');
         break;
       case 'sell-stop-loss':
-        label = 'Selling due to stop-loss';
+        label = t('coin.action.stopLoss');
         break;
       case 'sell-order-checking':
-        label = 'Checking for sell order';
+        label = t('coin.action.checkingSellOrder');
         break;
       case 'sell-order-wait':
-        label = 'Wait for sell order';
+        label = t('coin.action.waitSell');
         break;
       case 'sell-wait':
-        label = 'Wait';
+        label = t('coin.action.wait');
         break;
       default:
-        label = 'Wait';
+        label = t('coin.action.wait');
     }
 
     if (isLocked) {
-      label = 'Locked';
+      label = t('coin.action.locked');
     }
 
     if (isActionDisabled.isDisabled) {
-      label = `Disabled by ${isActionDisabled.disabledBy}`;
+      label = t('coin.action.disabledBy', {
+        disabledBy: isActionDisabled.disabledBy
+      });
     }
 
     let renderOverrideAction = '';
@@ -67,9 +69,11 @@ class CoinWrapperAction extends React.Component {
           <div
             className='w-100 px-1 text-warning'
             title={overrideData.actionAt}>
-            Action <strong>{overrideData.action}</strong> will be executed{' '}
-            {moment(overrideData.actionAt).fromNow()}, triggered by{' '}
-            {overrideData.triggeredBy}.
+            {t('coin.action.willBeExecuted', {
+              action: overrideData.action,
+              timeFromNow: moment(overrideData.actionAt).fromNow(),
+              triggeredBy: overrideData.triggeredBy
+            })}
           </div>
         </div>
       );
@@ -84,7 +88,7 @@ class CoinWrapperAction extends React.Component {
       <div className='coin-info-sub-wrapper'>
         <div className='coin-info-column coin-info-column-title border-bottom-0 mb-0 pb-0'>
           <div className='coin-info-label'>
-            Action -{' '}
+            {t('coin.action.label')} -{' '}
             <HightlightChange className='coin-info-value' id='updated-at'>
               {updatedAt.format('HH:mm:ss')}
             </HightlightChange>
@@ -102,12 +106,10 @@ class CoinWrapperAction extends React.Component {
                 overlay={
                   <Popover id='action-updated-at-alert-overlay-right'>
                     <Popover.Content>
-                      The bot didn't receive the price change for over a min. It
-                      means the price hasn't changed in Binance. It will be
-                      updated when the bot receives a new price change.
+                      {t('coin.action.priceNotUpdated')}
                       <br />
                       <br />
-                      Last updated: {updatedAt.fromNow()}
+                      {t('coin.action.lastUpdated')} {updatedAt.fromNow()}
                     </Popover.Content>
                   </Popover>
                 }>
@@ -142,7 +144,7 @@ class CoinWrapperAction extends React.Component {
                   ''
                 )}
                 ({moment.duration(isActionDisabled.ttl, 'seconds').humanize()}{' '}
-                left){' '}
+                {t('coin.action.left')}){' '}
               </div>
             ) : (
               ''

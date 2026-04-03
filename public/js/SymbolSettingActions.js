@@ -57,7 +57,7 @@ class SymbolSettingIconActions extends React.Component {
                 variant='link'
                 eventKey='0'
                 className='p-0 fs-7 text-uppercase'>
-                Actions
+                {t('symbolSettings.actions')}
               </Accordion.Toggle>
             </Card.Header>
             <Accordion.Collapse eventKey='0'>
@@ -72,7 +72,7 @@ class SymbolSettingIconActions extends React.Component {
                       onClick={() =>
                         this.handleModalShow('resetGlobalSetting')
                       }>
-                      Reset to Global Setting
+                      {t('symbolSettings.resetToGlobal')}
                     </Button>
 
                     <Button
@@ -80,7 +80,7 @@ class SymbolSettingIconActions extends React.Component {
                       size='sm'
                       type='button'
                       onClick={() => this.handleModalShow('resetGridTrade')}>
-                      Reset Grid Trade
+                      {t('symbolSettings.resetGridTrade')}
                     </Button>
                   </div>
                 </div>

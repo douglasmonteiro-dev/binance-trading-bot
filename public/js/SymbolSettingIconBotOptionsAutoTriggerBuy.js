@@ -40,7 +40,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              Auto Trigger Buy
+              {t('settings.autoTriggerBuy')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
@@ -58,7 +58,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                         onChange={this.props.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Enabled{' '}
+                        {t('common.enabled')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key='bot-options-auto-trigger-buy-enabled-overlay'
@@ -66,12 +66,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                           overlay={
                             <Popover id='bot-options-auto-trigger-buy-enabled-overlay-right'>
                               <Popover.Content>
-                                If enabled, the bot will trigger 1st grid trade
-                                for buying after removing the last buy price due
-                                to completed grid trades for selling. Note that
-                                this action may be triggered if you sell the
-                                coin in Binance directly and the last buy price
-                                was recorded.
+                                {t('settings.autoTriggerBuyTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -92,7 +87,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                         controlId='field-bot-options-auto-trigger-buy-trigger-after'
                         className='mb-2'>
                         <Form.Label className='mb-0'>
-                          Trigger after
+                          {t('settings.triggerAfter')}
                           <OverlayTrigger
                             trigger='click'
                             key='limit-overlay'
@@ -100,10 +95,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                             overlay={
                               <Popover id='limit-overlay-right'>
                                 <Popover.Content>
-                                  Set the minutes to wait for triggering the
-                                  grid trade for buying. Once the time passes
-                                  the configured minutes, the bot will trigger
-                                  the grid trade for buying.
+                                  {t('settings.triggerAfterTooltip')}
                                 </Popover.Content>
                               </Popover>
                             }>
@@ -117,7 +109,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                         <Form.Control
                           size='sm'
                           type='number'
-                          placeholder='Enter minutes'
+                          placeholder={t('settings.placeholderEnterMinutes')}
                           required
                           min='0.1'
                           step='0.1'
@@ -128,7 +120,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                       </Form.Group>
                     </div>
                     <div className='col-12'>
-                      <strong>Conditions</strong>
+                      <strong>{t('settings.conditions')}</strong>
                     </div>
                     <div className='col-6'>
                       <Form.Group
@@ -145,8 +137,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                             onChange={this.props.handleInputChange}
                           />
                           <Form.Check.Label>
-                            Re-schedule when the current price is over ATH
-                            restriction{' '}
+                            {t('settings.rescheduleATH')}{' '}
                             <OverlayTrigger
                               trigger='click'
                               key='bot-options-auto-trigger-buy-conditions-when-less-than-ath-restriction-overlay'
@@ -154,9 +145,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                               overlay={
                                 <Popover id='bot-options-auto-trigger-buy-conditions-when-less-than-ath-restriction-overlay-right'>
                                   <Popover.Content>
-                                    If enabled, the bot will re-schedule the
-                                    auto-buy trigger action if the price is over
-                                    the ATH restriction.
+                                    {t('settings.rescheduleATHTooltip')}
                                   </Popover.Content>
                                 </Popover>
                               }>
@@ -185,7 +174,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                             onChange={this.props.handleInputChange}
                           />
                           <Form.Check.Label>
-                            Re-schedule when the action is disabled{' '}
+                            {t('settings.rescheduleDisabled')}{' '}
                             <OverlayTrigger
                               trigger='click'
                               key='bot-options-auto-trigger-buy-conditions-after-disabled-period-overlay'
@@ -193,10 +182,7 @@ class SymbolSettingIconBotOptionsAutoTriggerBuy extends React.Component {
                               overlay={
                                 <Popover id='bot-options-auto-trigger-buy-conditions-after-disabled-period-overlay-right'>
                                   <Popover.Content>
-                                    If enabled, the bot will re-schedule the
-                                    auto-buy trigger action if the action is
-                                    currently disabled by the stop-loss or other
-                                    actions.
+                                    {t('settings.rescheduleDisabledTooltip')}
                                   </Popover.Content>
                                 </Popover>
                               }>

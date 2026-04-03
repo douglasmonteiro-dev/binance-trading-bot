@@ -40,7 +40,7 @@ class SettingIconBotOptionsLogs extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              Logs
+              {t('settings.logs')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
@@ -51,7 +51,7 @@ class SettingIconBotOptionsLogs extends React.Component {
                     controlId='field-bot-options-logs-delete-after'
                     className='mb-2'>
                     <Form.Label className='mb-0'>
-                      Delete after
+                      {t('settings.deleteAfter')}
                       <OverlayTrigger
                         trigger='click'
                         key='logs-delete-after-overlay'
@@ -59,9 +59,7 @@ class SettingIconBotOptionsLogs extends React.Component {
                         overlay={
                           <Popover id='logs-delete-after-overlay-right'>
                             <Popover.Content>
-                              Set the minutes to delete the log. If the log is
-                              older than the configured minutes, the log will be
-                              removed from the database.
+                              {t('settings.deleteAfterTooltip')}
                             </Popover.Content>
                           </Popover>
                         }>
@@ -76,7 +74,7 @@ class SettingIconBotOptionsLogs extends React.Component {
                     <InputGroup size='sm'>
                       <Form.Control
                         type='number'
-                        placeholder='Enter minutes'
+                        placeholder={t('settings.placeholderEnterMinutes')}
                         required
                         min='0'
                         step='1'
@@ -85,7 +83,9 @@ class SettingIconBotOptionsLogs extends React.Component {
                         onChange={this.props.handleInputChange}
                       />
                       <InputGroup.Append>
-                        <InputGroup.Text>minutes</InputGroup.Text>
+                        <InputGroup.Text>
+                          {t('settings.minutes')}
+                        </InputGroup.Text>
                       </InputGroup.Append>
                     </InputGroup>
                   </Form.Group>

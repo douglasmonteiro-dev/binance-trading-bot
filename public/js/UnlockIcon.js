@@ -90,20 +90,20 @@ class UnlockIcon extends React.Component {
           type='button'
           className='btn btn-sm btn-link p-0 pl-1'
           onClick={this.handleModalShow}
-          title='Unlock the bot'>
+          title={t('unlock.title')}>
           <i className='fas fa-unlock-alt'></i>
         </button>
 
         <Modal show={this.state.showModal} onHide={this.handleModalClose}>
           <Modal.Header className='pt-1 pb-1'>
-            <Modal.Title>Unlock</Modal.Title>
+            <Modal.Title>{t('unlock.title')}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <div className='lock-screen-wrapper w-100'>
               {loading ? (
                 <div className='text-center w-100'>
                   <Spinner animation='border' role='status'>
-                    <span className='sr-only'>Loading...</span>
+                    <span className='sr-only'>{t('common.loading')}</span>
                   </Spinner>
                 </div>
               ) : (
@@ -117,7 +117,7 @@ class UnlockIcon extends React.Component {
 
                     <Form.Control
                       type='password'
-                      placeholder='Enter your password'
+                      placeholder={t('unlock.enterPassword')}
                       required
                       defaultValue={password}
                       onChange={this.handlePasswordChange}
@@ -152,7 +152,7 @@ class UnlockIcon extends React.Component {
                   variant='primary'
                   size='sm'
                   onClick={this.handleFormSubmit}>
-                  Unlock
+                  {t('unlock.unlock')}
                 </Button>
               </React.Fragment>
             ) : (

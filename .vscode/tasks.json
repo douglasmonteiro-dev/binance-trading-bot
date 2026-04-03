@@ -84,6 +84,18 @@
 			"type": "shell",
 			"command": "docker ps -a --filter name=binance-redis --format '{{.Names}} {{.Status}} {{.Networks}}' && docker inspect binance-redis --format '{{json .NetworkSettings.Networks}}'",
 			"isBackground": false
+		},
+		{
+			"label": "targeted-jest-continue",
+			"type": "shell",
+			"command": "npx",
+			"args": [
+				"jest",
+				"--runInBand",
+				"app/frontend/websocket/handlers/__tests__/latest.test.js",
+				"app/cronjob/trailingTrade/step/__tests__/place-sell-stop-loss-order.test.js"
+			],
+			"isBackground": false
 		}
 	]
 }

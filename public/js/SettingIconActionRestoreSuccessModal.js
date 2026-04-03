@@ -15,24 +15,19 @@ class SettingIconActionRestoreSuccessModal extends React.Component {
         <Modal.Header className='pt-1 pb-1'>
           <Modal.Title>
             <span className='text-primary'>
-              <i className='fas fa-cloud-upload-alt'></i>&nbsp; Successfully
-              restored
+              <i className='fas fa-cloud-upload-alt'></i>&nbsp;{' '}
+              {t('settings.restoreSuccessTitle')}
             </span>
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body>
-          As the bot restarted, it looks like the restoration was completed
-          successfully. <br />
-          <br />
-          You can click the "Refresh" button to see the restored data.
-        </Modal.Body>
+        <Modal.Body>{t('settings.restoreSuccessMessage')}</Modal.Body>
 
         <Modal.Footer>
           <Button
             variant='success'
             size='sm'
             onClick={() => this.refreshWindow()}>
-            Refresh
+            {t('common.refresh')}
           </Button>
         </Modal.Footer>
       </Modal>

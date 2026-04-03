@@ -28,6 +28,61 @@ describe('latest.test.js', () => {
   let mockIsActionDisabled;
   let mockGetConfiguration;
 
+  const buildExpectedConsultation = (symbols, common, globalConfiguration) => {
+    const countActionByPrefix = prefix =>
+      symbols.filter(symbol => (symbol.action || '').startsWith(prefix)).length;
+    const countSymbolsWithOpenOrders = side =>
+      symbols.filter(
+        symbol => ((symbol[side] || {}).openOrders || []).length > 0
+      ).length;
+    const countNearStopLoss = () =>
+      symbols.filter(symbol => {
+        const { stopLossDifference } = (symbol || {}).sell || {};
+
+        return (
+          typeof stopLossDifference === 'number' &&
+          stopLossDifference >= 0 &&
+          stopLossDifference <= 1
+        );
+      }).length;
+    const countStopLossTriggered = () =>
+      symbols.filter(symbol => {
+        const { stopLossDifference } = (symbol || {}).sell || {};
+
+        return (
+          symbol.action === 'sell-stop-loss' ||
+          (typeof stopLossDifference === 'number' && stopLossDifference < 0)
+        );
+      }).length;
+
+    return {
+      generatedAt: expect.any(String),
+      market: {
+        buySignals: countActionByPrefix('buy'),
+        sellSignals: countActionByPrefix('sell'),
+        openBuyOrders: countSymbolsWithOpenOrders('buy'),
+        openSellOrders: countSymbolsWithOpenOrders('sell')
+      },
+      risk: {
+        nearStopLoss: countNearStopLoss(),
+        stopLossTriggered: countStopLossTriggered(),
+        disabledSymbols: symbols.filter(
+          symbol => mockIsActionDisabled(symbol.symbol).isDisabled === true
+        ).length,
+        maxOpenTradesReached:
+          globalConfiguration.botOptions.orderLimit.enabled === true &&
+          common.orderStats.numberOfOpenTrades >=
+            globalConfiguration.botOptions.orderLimit.maxOpenTrades,
+        maxBuyOpenOrdersReached:
+          globalConfiguration.botOptions.orderLimit.enabled === true &&
+          common.orderStats.numberOfBuyOpenOrders >=
+            globalConfiguration.botOptions.orderLimit.maxBuyOpenOrders,
+        apiWeightHigh: parseFloat(common.apiInfo.spot.usedWeight1m) >= 1000,
+        streamsNearLimit: common.streamsCount >= 900
+      }
+    };
+  };
+
   beforeEach(() => {
     jest.clearAllMocks().resetModules();
 
@@ -174,13 +229,35 @@ describe('latest.test.js', () => {
     });
 
     it('triggers ws.send with latest', () => {
+      const payload = JSON.parse(
+        mockWebSocketServerWebSocketSend.mock.calls[0][0]
+      );
+
       trailingTradeStateInvalidCache.common.version =
         require('../../../../../package.json').version;
       trailingTradeStateInvalidCache.common.gitHash = 'some-hash';
 
-      expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
-        JSON.stringify(trailingTradeStateInvalidCache)
-      );
+      expect(payload).toMatchObject({
+        ...trailingTradeStateInvalidCache,
+        common: {
+          ...trailingTradeStateInvalidCache.common,
+          consultation: buildExpectedConsultation(
+            trailingTradeSymbols,
+            {
+              ...trailingTradeStateInvalidCache.common,
+              apiInfo: {
+                spot: { usedWeight1m: '60' },
+                futures: {}
+              }
+            },
+            {
+              enabled: true,
+              symbols: ['BTCUSDT', 'BNBUSDT'],
+              botOptions: { orderLimit: { enabled: false } }
+            }
+          )
+        }
+      });
     });
   });
 
@@ -279,27 +356,29 @@ describe('latest.test.js', () => {
       });
 
       it('triggers ws.send with latest', () => {
-        expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
-          JSON.stringify({
-            result: true,
-            type: 'latest',
-            isAuthenticated: false,
-            botOptions: {
-              authentication: { lockList: true, lockAfter: 120 },
-              autoTriggerBuy: { enabled: false, triggerAfter: 20 },
-              orderLimit: {
-                enabled: true,
-                maxBuyOpenOrders: 3,
-                maxOpenTrades: 5
-              }
-            },
-            configuration: {},
-            common: {},
-            closedTradesSetting: {},
-            closedTrades: [],
-            stats: {}
-          })
+        const payload = JSON.parse(
+          mockWebSocketServerWebSocketSend.mock.calls[0][0]
         );
+
+        expect(payload).toStrictEqual({
+          result: true,
+          type: 'latest',
+          isAuthenticated: false,
+          botOptions: {
+            authentication: { lockList: true, lockAfter: 120 },
+            autoTriggerBuy: { enabled: false, triggerAfter: 20 },
+            orderLimit: {
+              enabled: true,
+              maxBuyOpenOrders: 3,
+              maxOpenTrades: 5
+            }
+          },
+          configuration: {},
+          common: {},
+          closedTradesSetting: {},
+          closedTrades: [],
+          stats: {}
+        });
       });
     });
 
@@ -371,14 +450,26 @@ describe('latest.test.js', () => {
       });
 
       it('triggers ws.send with latest', () => {
+        const payload = JSON.parse(
+          mockWebSocketServerWebSocketSend.mock.calls[0][0]
+        );
+
         trailingTradeStateNotAuthenticatedUnlockList.common.version =
           require('../../../../../package.json').version;
         trailingTradeStateNotAuthenticatedUnlockList.common.gitHash =
           'some-hash';
 
-        expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
-          JSON.stringify(trailingTradeStateNotAuthenticatedUnlockList)
-        );
+        expect(payload).toMatchObject({
+          ...trailingTradeStateNotAuthenticatedUnlockList,
+          common: {
+            ...trailingTradeStateNotAuthenticatedUnlockList.common,
+            consultation: buildExpectedConsultation(
+              trailingTradeSymbols,
+              trailingTradeStateNotAuthenticatedUnlockList.common,
+              trailingTradeStateNotAuthenticatedUnlockList.configuration
+            )
+          }
+        });
       });
     });
 
@@ -450,13 +541,25 @@ describe('latest.test.js', () => {
       });
 
       it('triggers ws.send with latest', () => {
+        const payload = JSON.parse(
+          mockWebSocketServerWebSocketSend.mock.calls[0][0]
+        );
+
         trailingTradeStatsAuthenticated.common.version =
           require('../../../../../package.json').version;
         trailingTradeStatsAuthenticated.common.gitHash = 'some-hash';
 
-        expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
-          JSON.stringify(trailingTradeStatsAuthenticated)
-        );
+        expect(payload).toMatchObject({
+          ...trailingTradeStatsAuthenticated,
+          common: {
+            ...trailingTradeStatsAuthenticated.common,
+            consultation: buildExpectedConsultation(
+              trailingTradeSymbols,
+              trailingTradeStatsAuthenticated.common,
+              trailingTradeStatsAuthenticated.configuration
+            )
+          }
+        });
       });
     });
 
@@ -531,14 +634,26 @@ describe('latest.test.js', () => {
       });
 
       it('triggers ws.send with latest', () => {
+        const payload = JSON.parse(
+          mockWebSocketServerWebSocketSend.mock.calls[0][0]
+        );
+
         trailingTradeStatsAuthenticated.common.version =
           require('../../../../../package.json').version;
         trailingTradeStatsAuthenticated.common.gitHash = 'unspecified';
         trailingTradeStatsAuthenticated.common.closedTradesSetting = {};
 
-        expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
-          JSON.stringify(trailingTradeStatsAuthenticated)
-        );
+        expect(payload).toMatchObject({
+          ...trailingTradeStatsAuthenticated,
+          common: {
+            ...trailingTradeStatsAuthenticated.common,
+            consultation: buildExpectedConsultation(
+              trailingTradeSymbols,
+              trailingTradeStatsAuthenticated.common,
+              trailingTradeStatsAuthenticated.configuration
+            )
+          }
+        });
       });
     });
   });

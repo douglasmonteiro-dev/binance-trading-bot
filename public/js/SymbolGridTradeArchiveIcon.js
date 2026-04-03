@@ -186,12 +186,14 @@ class SymbolGridTradeArchiveIcon extends React.Component {
             </td>
             <td
               title={
-                'Buy via Grid Trade: ' +
+                t('archive.buyViaGridTrade') +
+                ': ' +
                 parseFloat(row.buyGridTradeQuoteQty).toFixed(
                   quoteAssetTickSize
                 ) +
                 '\n' +
-                'Buy via Manual Trade: ' +
+                t('archive.buyViaManualTrade') +
+                ': ' +
                 parseFloat(row.buyManualQuoteQty).toFixed(quoteAssetTickSize)
               }
               className={`text-center align-middle ${
@@ -202,15 +204,18 @@ class SymbolGridTradeArchiveIcon extends React.Component {
             </td>
             <td
               title={
-                'Sell via Grid Trade: ' +
+                t('archive.sellViaGridTrade') +
+                ': ' +
                 parseFloat(row.sellGridTradeQuoteQty).toFixed(
                   quoteAssetTickSize
                 ) +
                 '\n' +
-                'Sell via Manual Trade: ' +
+                t('archive.sellViaManualTrade') +
+                ': ' +
                 parseFloat(row.sellManualQuoteQty).toFixed(quoteAssetTickSize) +
                 '\n' +
-                'Sell via Stop Loss: ' +
+                t('archive.sellViaStopLoss') +
+                ': ' +
                 parseFloat(row.stopLossQuoteQty).toFixed(quoteAssetTickSize)
               }
               className={`text-center align-middle ${
@@ -240,7 +245,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                     () => this.handleModalShow('deleteByKey')
                   );
                 }}>
-                Delete
+                {t('common.delete')}
               </button>
             </td>
           </tr>
@@ -324,13 +329,15 @@ class SymbolGridTradeArchiveIcon extends React.Component {
           onHide={() => this.handleModalClose('archive')}
           size='xl'>
           <Modal.Header closeButton className='pt-1 pb-1'>
-            <Modal.Title>Closed Trades for {symbol}</Modal.Title>
+            <Modal.Title>
+              {t('closedTrades.title')} - {symbol}
+            </Modal.Title>
           </Modal.Header>
           <Modal.Body className='py-0'>
             {loading ? (
               <div className='text-center w-100'>
                 <Spinner animation='border' role='status'>
-                  <span className='sr-only'>Loading...</span>
+                  <span className='sr-only'>{t('common.loading')}</span>
                 </Spinner>
               </div>
             ) : (
@@ -339,7 +346,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   <Card className='border-0 trade-stat-wrapper'>
                     <Card.Body className='p-2 text-center'>
                       <Card.Title className='fs-7 font-weight-bold mb-0'>
-                        Total Profit
+                        {t('closedTrades.totalProfit')}
                       </Card.Title>
                       <Card.Text
                         title={stats.profit}
@@ -359,7 +366,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   <Card className='border-0 trade-stat-wrapper'>
                     <Card.Body className='p-2 text-center'>
                       <Card.Title className='fs-7 font-weight-bold mb-0'>
-                        Total Buy:
+                        {t('closedTrades.totalBuy')}
                       </Card.Title>
                       <Card.Text
                         title={stats.totalBuyQuoteQty}
@@ -376,7 +383,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   <Card className='border-0 trade-stat-wrapper'>
                     <Card.Body className='p-2 text-center'>
                       <Card.Title className='fs-7 font-weight-bold mb-0'>
-                        Total Sell
+                        {t('closedTrades.totalSell')}
                       </Card.Title>
                       <Card.Text
                         title={stats.totalSellQuoteQty}
@@ -393,7 +400,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   <Card className='border-0 trade-stat-wrapper'>
                     <Card.Body className='p-2 text-center'>
                       <Card.Title className='fs-7 font-weight-bold mb-0'>
-                        Trades
+                        {t('closedTrades.trades')}
                       </Card.Title>
                       <Card.Text
                         className={stats.trades === 0 ? 'text-muted' : ''}>
@@ -404,9 +411,9 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                 </div>
                 <div className='row mb-1'>
                   <div className='col-sm-12 col-md-6'>
-                    <strong>Period:</strong>{' '}
+                    <strong>{t('closedTrades.period')}</strong>{' '}
                     {period === 'a'
-                      ? 'All time'
+                      ? t('closedTrades.allTime')
                       : `${moment(start).format('YYYY-MM-DD')} ~ ${moment(
                           end
                         ).format('YYYY-MM-DD')}`}
@@ -418,8 +425,8 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                         period === 'd' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setPeriod('d')}
-                      title='Day'>
-                      Day
+                      title={t('closedTrades.day')}>
+                      {t('closedTrades.day')}
                     </button>
                     <button
                       type='button'
@@ -427,8 +434,8 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                         period === 'w' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setPeriod('w')}
-                      title='W'>
-                      Week
+                      title={t('closedTrades.week')}>
+                      {t('closedTrades.week')}
                     </button>
                     <button
                       type='button'
@@ -436,8 +443,8 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                         period === 'm' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setPeriod('m')}
-                      title='Month'>
-                      Month
+                      title={t('closedTrades.month')}>
+                      {t('closedTrades.month')}
                     </button>
                     <button
                       type='button'
@@ -445,13 +452,15 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                         period === 'a' ? 'btn-info' : 'btn-light'
                       }`}
                       onClick={() => this.setPeriod('a')}>
-                      All
+                      {t('closedTrades.all')}
                     </button>
                   </div>
                 </div>
                 {rows.length === 0 ? (
                   <div className='row'>
-                    <div className='col-12 text-center p-3'>No trade found</div>
+                    <div className='col-12 text-center p-3'>
+                      {t('closedTrades.noTradeFound')}
+                    </div>
                   </div>
                 ) : (
                   <React.Fragment>
@@ -466,11 +475,21 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                       <Table striped bordered hover size='sm' responsive>
                         <thead>
                           <tr>
-                            <th className='text-center'>Profit</th>
-                            <th className='text-center'>Buy</th>
-                            <th className='text-center'>Sell</th>
-                            <th className='text-center'>Closed At</th>
-                            <th className='text-center'>Action</th>
+                            <th className='text-center'>
+                              {t('closedTrades.profit')}
+                            </th>
+                            <th className='text-center'>
+                              {t('closedTrades.buy')}
+                            </th>
+                            <th className='text-center'>
+                              {t('closedTrades.sell')}
+                            </th>
+                            <th className='text-center'>
+                              {t('closedTrades.closedAt')}
+                            </th>
+                            <th className='text-center'>
+                              {t('closedTrades.action')}
+                            </th>
                           </tr>
                         </thead>
                         <tbody>{tradeRows}</tbody>
@@ -488,7 +507,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                             onClick={() =>
                               this.handleModalShow('deleteAllBySymbol')
                             }>
-                            Delete all
+                            {t('closedTrades.deleteAll')}
                           </button>
                         </div>
                       </div>
@@ -506,22 +525,19 @@ class SymbolGridTradeArchiveIcon extends React.Component {
           size='md'>
           <Modal.Header className='pt-1 pb-1'>
             <Modal.Title>
-              <span className='text-danger'>⚠ Delete Closed Trade</span>
+              <span className='text-danger'>
+                ⚠ {t('closedTrades.deleteTradeTitle')}
+              </span>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            You are about to delete the existing closed grid trade.
-            <br />
-            <br />
-            Do you want to delete the closed grid trade?
-          </Modal.Body>
+          <Modal.Body>{t('closedTrades.deleteTradeBody')}</Modal.Body>
 
           <Modal.Footer>
             <Button
               variant='secondary'
               size='sm'
               onClick={() => this.handleModalClose('deleteByKey')}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant='danger'
@@ -531,7 +547,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   key: selectedDeleteByKey
                 })
               }>
-              Delete
+              {t('common.delete')}
             </Button>
           </Modal.Footer>
         </Modal>
@@ -542,22 +558,19 @@ class SymbolGridTradeArchiveIcon extends React.Component {
           size='md'>
           <Modal.Header className='pt-1 pb-1'>
             <Modal.Title>
-              <span className='text-danger'>⚠ Delete All Closed Trade</span>
+              <span className='text-danger'>
+                ⚠ {t('closedTrades.deleteAllTradeTitle')}
+              </span>
             </Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            You are about to delete the all closed grid trade.
-            <br />
-            <br />
-            Do you want to delete the closed grid trade?
-          </Modal.Body>
+          <Modal.Body>{t('closedTrades.deleteAllTradeBody')}</Modal.Body>
 
           <Modal.Footer>
             <Button
               variant='secondary'
               size='sm'
               onClick={() => this.handleModalClose('deleteAllBySymbol')}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               variant='danger'
@@ -567,7 +580,7 @@ class SymbolGridTradeArchiveIcon extends React.Component {
                   symbol
                 })
               }>
-              Delete All
+              {t('closedTrades.deleteAll')}
             </Button>
           </Modal.Footer>
         </Modal>

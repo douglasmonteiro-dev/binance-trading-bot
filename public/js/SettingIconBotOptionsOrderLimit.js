@@ -40,7 +40,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              Order Limit
+              {t('settings.orderLimit')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>
@@ -58,7 +58,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                         onChange={this.props.handleInputChange}
                       />
                       <Form.Check.Label>
-                        Enabled{' '}
+                        {t('common.enabled')}{' '}
                         <OverlayTrigger
                           trigger='click'
                           key='bot-options-order-limit-enabled-overlay'
@@ -66,8 +66,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                           overlay={
                             <Popover id='bot-options-order-limit-enabled-overlay-right'>
                               <Popover.Content>
-                                If enabled, the bot will not place orders if the
-                                conditions meet.
+                                {t('settings.orderLimitEnabledTooltip')}
                               </Popover.Content>
                             </Popover>
                           }>
@@ -88,7 +87,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                         controlId='field-bot-options-order-limit-max-buy-open-orders'
                         className='mb-2'>
                         <Form.Label className='mb-0'>
-                          Max. Buy Open Orders
+                          {t('settings.maxBuyOpenOrders')}
                           <OverlayTrigger
                             trigger='click'
                             key='max-buy-open-orders-overlay'
@@ -96,9 +95,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                             overlay={
                               <Popover id='max-buy-open-orders-overlay-right'>
                                 <Popover.Content>
-                                  Set the maximum number of concurrent open
-                                  orders for buying. If set 3, then the bot will
-                                  not place more than 3 buy open orders.
+                                  {t('settings.maxBuyOpenOrdersTooltip')}
                                 </Popover.Content>
                               </Popover>
                             }>
@@ -112,7 +109,9 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                         <Form.Control
                           size='sm'
                           type='number'
-                          placeholder='Enter maximum number of buy open orders'
+                          placeholder={t(
+                            'settings.placeholderMaxBuyOpenOrders'
+                          )}
                           required
                           min='1'
                           step='1'
@@ -127,7 +126,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                         controlId='field-bot-options-order-limit-max-open-trades'
                         className='mb-2'>
                         <Form.Label className='mb-0'>
-                          Max. Open Trades
+                          {t('settings.maxOpenTrades')}
                           <OverlayTrigger
                             trigger='click'
                             key='max-open-trades-overlay'
@@ -135,10 +134,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                             overlay={
                               <Popover id='max-open-trades-overlay-right'>
                                 <Popover.Content>
-                                  Set the maximum number of open trades. If set
-                                  5,, then the bot will not place a buy order
-                                  when there are 5 symbols recorded with the
-                                  last buy price.
+                                  {t('settings.maxOpenTradesTooltip')}
                                 </Popover.Content>
                               </Popover>
                             }>
@@ -152,7 +148,7 @@ class SettingIconBotOptionsOrderLimit extends React.Component {
                         <Form.Control
                           size='sm'
                           type='number'
-                          placeholder='Enter maximum number of open trades'
+                          placeholder={t('settings.placeholderMaxOpenTrades')}
                           required
                           min='1'
                           step='1'

@@ -62,7 +62,7 @@ class SettingIconBotOptions extends React.Component {
               variant='link'
               eventKey='0'
               className='p-0 fs-7 text-uppercase'>
-              Bot Options
+              {t('settings.botOptions')}
             </Accordion.Toggle>
           </Card.Header>
           <Accordion.Collapse eventKey='0'>

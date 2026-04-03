@@ -57,7 +57,7 @@ const execute = async (logger, rawData) => {
     },
     action,
     baseAssetBalance: { free: baseAssetFreeBalance },
-    sell: { currentPrice, openOrders },
+    sell: { currentPrice, openOrders, lastBuyPrice, stopLossTriggerPrice },
     canDisable
   } = data;
 
@@ -165,7 +165,24 @@ const execute = async (logger, rawData) => {
   const newGridTrade = {
     buy: buyGridTrade,
     sell: sellGridTrade,
-    stopLoss: orderResult
+    stopLoss: {
+      ...orderResult,
+      triggeredBy: 'stop-loss',
+      quantity: orderQuantity,
+      currentPrice,
+      executedAt: moment().utc().toDate(),
+      ...(lastBuyPrice > 0
+        ? {
+            lastBuyPrice,
+            lossPercentage: (currentPrice / lastBuyPrice - 1) * 100
+          }
+        : {}),
+      ...(stopLossTriggerPrice > 0
+        ? {
+            triggerPrice: stopLossTriggerPrice
+          }
+        : {})
+    }
   };
   await saveSymbolGridTrade(logger, symbol, newGridTrade);
 
