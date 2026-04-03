@@ -5,11 +5,16 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
+    this.reconnectAttempts = 0;
+    this.maxReconnectAttempts = 15;
+    this.maxReconnectDelay = 30000;
+
     this.state = {
       webSocket: {
         instance: null,
         connected: false
       },
+      connectionFailed: false,
       packageVersion: '',
       gitHash: '',
       configuration: {},
@@ -177,6 +182,7 @@ class App extends React.Component {
 
     instance.onopen = () => {
       console.log('Connection is successfully established.');
+      self.reconnectAttempts = 0;
       this.toast({
         type: 'success',
         title: t('app.toast.connected')
@@ -185,7 +191,8 @@ class App extends React.Component {
         webSocket: {
           ...prevState.webSocket,
           connected: true
-        }
+        },
+        connectionFailed: false
       }));
     };
 
@@ -258,12 +265,12 @@ class App extends React.Component {
     };
 
     instance.onclose = () => {
-      console.log('Socket is closed. Reconnect will be attempted in 1 second.');
+      self.reconnectAttempts++;
+      var delay = Math.min(
+        1000 * Math.pow(2, self.reconnectAttempts - 1),
+        self.maxReconnectDelay
+      );
 
-      this.toast({
-        type: 'info',
-        title: t('app.toast.disconnected')
-      });
       self.setState(prevState => ({
         webSocket: {
           ...prevState.webSocket,
@@ -271,9 +278,36 @@ class App extends React.Component {
         }
       }));
 
+      if (self.reconnectAttempts > self.maxReconnectAttempts) {
+        console.log(
+          'WebSocket connection failed after ' +
+            self.maxReconnectAttempts +
+            ' attempts. Giving up.'
+        );
+        self.setState({ connectionFailed: true });
+        this.toast({
+          type: 'error',
+          title: t('app.toast.connectionFailed')
+        });
+        return;
+      }
+
+      console.log(
+        'Socket is closed. Reconnect attempt ' +
+          self.reconnectAttempts +
+          ' in ' +
+          delay / 1000 +
+          's.'
+      );
+
+      this.toast({
+        type: 'info',
+        title: t('app.toast.disconnected')
+      });
+
       setTimeout(function () {
         self.connectWebSocket();
-      }, 1000);
+      }, delay);
     };
   }
 
@@ -399,6 +433,41 @@ class App extends React.Component {
       tradingViewIntervals,
       tradingViews
     } = this.state;
+
+    if (this.state.connectionFailed) {
+      return (
+        <div className='app-lock-screen flex-column d-flex h-100 justify-content-center align-content-center'>
+          <div className='lock-screen-wrapper w-100 text-center'>
+            <h1 className='app-h1 my-2'>
+              <img
+                src='./img/binance.png'
+                className='binance-img'
+                alt='Binance logo'
+              />{' '}
+              {t('app.title')}
+            </h1>
+            <div
+              className='alert alert-danger mx-auto mt-3'
+              style={{ maxWidth: '500px' }}>
+              <i className='fas fa-exclamation-triangle mr-2'></i>
+              {t('app.connectionFailed.message')}
+            </div>
+            <div className='text-muted small mt-2'>
+              {t('app.connectionFailed.hint')}
+            </div>
+            <button
+              className='btn btn-primary mt-3'
+              onClick={() => {
+                this.reconnectAttempts = 0;
+                this.setState({ connectionFailed: false });
+                this.connectWebSocket();
+              }}>
+              {t('app.connectionFailed.retry')}
+            </button>
+          </div>
+        </div>
+      );
+    }
 
     if (isLoaded === false) {
       return <AppLoading />;
