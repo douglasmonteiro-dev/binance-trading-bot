@@ -1,5 +1,6 @@
 const compression = require('compression');
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path');
 const config = require('config');
@@ -34,6 +35,11 @@ const runFrontend = async serverLogger => {
   );
 
   const app = express();
+  app.use(
+    helmet({
+      contentSecurityPolicy: false // disable CSP — frontend uses inline <script> tags via Grunt/Babel
+    })
+  );
   app.use(compression());
   app.use(cors({ origin: process.env.CORS_ALLOWED_ORIGIN || '*' }));
   app.use(express.urlencoded({ extended: true }));

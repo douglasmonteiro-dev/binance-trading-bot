@@ -64,6 +64,8 @@
     "mongodb": "4.1.0",
     "pubsub-js": "^1.9.4",
     "qs": "^6.11.0",
+    "helmet": "^8.1.0",
+    "helmet": "^8.1.0",
     "rate-limiter-flexible": "^2.3.8",
     "redlock": "^4.2.0",
     "request-ip": "^3.3.0",
@@ -110,6 +112,7 @@
     "lint-staged": "^12.4.2",
     "nodemon": "^2.0.19",
     "prettier": "^2.6.2",
+    "supertest": "^7.2.2",
     "webpack": "^5.72.1",
     "webpack-cli": "^4.9.2"
   },

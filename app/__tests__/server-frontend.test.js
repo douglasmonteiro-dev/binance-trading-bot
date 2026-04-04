@@ -10,6 +10,7 @@ describe('server-frontend', () => {
   let mockExpressJson;
   let mockExpress;
 
+  let mockHelmet;
   let mockCompression;
   let mockCors;
   let mockFileUpload;
@@ -46,6 +47,9 @@ describe('server-frontend', () => {
 
     jest.mock('ws');
     jest.mock('config');
+
+    mockHelmet = jest.fn().mockReturnValue(function helmetMiddleware() {});
+    jest.mock('helmet', () => (...args) => mockHelmet(...args));
 
     mockCompression = jest.fn().mockReturnValue(true);
     mockCors = jest.fn().mockReturnValue(true);
@@ -87,7 +91,9 @@ describe('server-frontend', () => {
     mockRateLimiterMiddlewareNext = jest.fn().mockReturnValue(true);
 
     mockExpressUse = jest.fn().mockImplementation(async fn => {
-      if (fn.name === 'compression') {
+      if (fn && fn.name === 'helmetMiddleware') {
+        // helmet middleware registered — no-op in test
+      } else if (fn.name === 'compression') {
         mockCompression();
       } else if (fn.name === 'corsMiddleware') {
         mockCors();
@@ -188,6 +194,12 @@ describe('server-frontend', () => {
           points: 5,
           duration: 10800,
           blockDuration: 900
+        });
+      });
+
+      it('applies helmet middleware', () => {
+        expect(mockHelmet).toHaveBeenCalledWith({
+          contentSecurityPolicy: false
         });
       });
 
