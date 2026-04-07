@@ -2,5 +2,5 @@
 . "$(dirname "$0")/_/husky.sh"
 
 # Validate branch name
-npx branch-name-lint .branch-name-list.json
+node scripts/validate-branch-name.js .branch-name-list.json
 
