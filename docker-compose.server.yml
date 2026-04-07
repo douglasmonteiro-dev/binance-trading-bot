@@ -9,12 +9,17 @@ services:
     env_file:
       - .env
     restart: unless-stopped
+    depends_on:
+      - binance-redis
+      - binance-mongo
     environment:
       # - BINANCE_MODE=test
       - BINANCE_MODE=live
       - BINANCE_REDIS_HOST=binance-redis
       - BINANCE_REDIS_PORT=6379
       - BINANCE_REDIS_PASSWORD=secretp422
+      - BINANCE_MONGO_HOST=binance-mongo
+      - BINANCE_MONGO_PORT=27017
       - BINANCE_LOG_LEVEL=INFO
     ports:
       - 8080:80

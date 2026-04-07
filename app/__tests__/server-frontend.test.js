@@ -48,8 +48,13 @@ describe('server-frontend', () => {
     jest.mock('ws');
     jest.mock('config');
 
-    mockHelmet = jest.fn().mockReturnValue(function helmetMiddleware() {});
-    jest.mock('helmet', () => (...args) => mockHelmet(...args));
+    mockHelmet = jest.fn().mockReturnValue(() => {});
+    jest.mock(
+      'helmet',
+      () =>
+        (...args) =>
+          mockHelmet(...args)
+    );
 
     mockCompression = jest.fn().mockReturnValue(true);
     mockCors = jest.fn().mockReturnValue(true);

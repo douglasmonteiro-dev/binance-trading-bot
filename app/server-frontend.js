@@ -37,7 +37,7 @@ const runFrontend = async serverLogger => {
   const app = express();
   app.use(
     helmet({
-      contentSecurityPolicy: false // disable CSP — frontend uses inline <script> tags via Grunt/Babel
+      contentSecurityPolicy: false // disable CSP — frontend still uses inline <script> tags in the static HTML shell
     })
   );
   app.use(compression());

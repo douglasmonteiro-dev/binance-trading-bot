@@ -8,7 +8,7 @@ This application is powered by Node.js & Docker compose!
 
 It runs on macOS, and Linux environments. I did not test or run this application on Windows environment.
 
-You'll need Node.js version 14. To install Node.js, [download the "LTS" installer from nodejs.org](https://nodejs.org). If you're using [`nodenv`](https://github.com/nodenv/nodenv), read the [`nodenv` docs](#nodenv) for instructions on switching Node.js versions.
+You'll need Node.js version 14. To install Node.js, [download the "LTS" installer from nodejs.org](https://nodejs.org). If you're using [`nodenv`](https://github.com/nodenv/nodenv), read the [nodenv docs](https://github.com/nodenv/nodenv) for instructions on switching Node.js versions.
 
 In addition, you will need Docker Compose. To install Docker Compose, [refer steps from docker.com](https://docs.docker.com/compose/install/).
 
@@ -58,19 +58,17 @@ The project enforces the branch name.
   bump/bump-version
 ```
 
-| type        | description       |
-| ----------- | ----------------- |
-| `build`     | Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm) |
-| `ci`        | Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs) |
-| `chore`     | Updating grunt tasks etc; no production code change, Other changes that don't modify src or test files |
-| `docs`      | Changes to the documentation |
-| `feat`      | New feature for the user, not a new feature for build script |
-| `fix`       | Bug fix for the user, not a fix to a build script |
-| `perf`      | A code change that improves performance |
-| `refactor`  | Refactoring production code, eg. renaming a variable, A code change that neither fixes a bug nor adds a feature |
-| `revert`    | Reverts a previous commit |
-| `style`     | Formatting, missing semi colons, etc. (white-space, formatting, missing semi-colons, changes that do not affect the meaning of the code, etc); no production code change |
-| `test`      | Adding missing tests, refactoring tests; no production code change |
+- `build`: Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)
+- `ci`: Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)
+- `chore`: Updating build scripts or tooling; no production code change, other changes that don't modify src or test files
+- `docs`: Changes to the documentation
+- `feat`: New feature for the user, not a new feature for build script
+- `fix`: Bug fix for the user, not a fix to a build script
+- `perf`: A code change that improves performance
+- `refactor`: Refactoring production code, eg. renaming a variable, a code change that neither fixes a bug nor adds a feature
+- `revert`: Reverts a previous commit
+- `style`: Formatting, missing semi colons, etc. (white-space, formatting, missing semi-colons, changes that do not affect the meaning of the code, etc); no production code change
+- `test`: Adding missing tests, refactoring tests; no production code change
 
 ## Commit message conventions
 
