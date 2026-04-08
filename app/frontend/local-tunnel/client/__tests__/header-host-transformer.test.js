@@ -81,9 +81,7 @@ describe('header-host-transformer', () => {
 
       const output = await outputPromise;
       const headerEndIndex = output.indexOf('\r\n\r\n');
-      const headers = output
-        .subarray(0, headerEndIndex + 4)
-        .toString('latin1');
+      const headers = output.subarray(0, headerEndIndex + 4).toString('latin1');
       const body = output.subarray(headerEndIndex + 4).toString('latin1');
 
       expect(headers).toContain('Host: split-host.local');

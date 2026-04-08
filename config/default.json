@@ -25,7 +25,9 @@
   "mongo": {
     "host": "binance-mongo",
     "port": 27017,
-    "database": "binance-bot"
+    "database": "binance-bot",
+    "username": "",
+    "password": ""
   },
   "tradingview": {
     "host": "tradingview",

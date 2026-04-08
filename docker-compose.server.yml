@@ -21,6 +21,9 @@ services:
       - BINANCE_MONGO_HOST=binance-mongo
       - BINANCE_MONGO_PORT=27017
       - BINANCE_LOG_LEVEL=INFO
+      # Set to exact origin (e.g. https://yourdomain.com) to restrict CORS.
+      # Leave empty or unset to block all cross-origin requests (recommended).
+      - CORS_ALLOWED_ORIGIN=
     ports:
       - 8080:80
     logging:
@@ -64,6 +67,12 @@ services:
       - internal
     volumes:
       - mongo_data:/data/db
+    environment:
+      # MongoDB 3.2 uses MONGO_INITDB_ROOT_USERNAME/PASSWORD for auth.
+      # Set MONGO_INITDB_ROOT_USERNAME and MONGO_INITDB_ROOT_PASSWORD via .env
+      # and update BINANCE_MONGO_USERNAME / BINANCE_MONGO_PASSWORD accordingly.
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-}
 
 networks:
   internal:

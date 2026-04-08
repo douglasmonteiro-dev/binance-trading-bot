@@ -37,7 +37,9 @@
       "__name": "BINANCE_MONGO_PORT",
       "__format": "number"
     },
-    "database": "BINANCE_MONGO_DATABASE"
+    "database": "BINANCE_MONGO_DATABASE",
+    "username": "BINANCE_MONGO_USERNAME",
+    "password": "BINANCE_MONGO_PASSWORD"
   },
   "tradingview": {
     "host": "BINANCE_TRADINGVIEW_HOST",
