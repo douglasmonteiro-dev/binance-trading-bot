@@ -86,7 +86,7 @@
     "@commitlint/cli": "^17.0.1",
     "@commitlint/config-conventional": "^17.0.0",
     "@types/express": "^4.17.13",
-    "@types/jest": "^27.5.1",
+    "@types/jest": "^30.0.0",
     "@types/node": "^17.0.36",
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.2.5",
@@ -104,7 +104,7 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.30.0",
     "eslint-plugin-react-hooks": "^4.5.0",
-    "jest": "^28.1.0",
+    "jest": "^30.3.0",
     "lint-staged": "^12.4.2",
     "nodemon": "^3.1.14",
     "prettier": "^2.6.2",
@@ -118,7 +118,9 @@
   "jest": {
     "testEnvironment": "node",
     "resetMocks": false,
-    "globalSetup": "./jest.setup.js",
+    "setupFiles": [
+      "./jest.setup.js"
+    ],
     "collectCoverageFrom": [
       "app/**/*.js",
       "!**/node_modules/**",
