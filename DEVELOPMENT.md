@@ -8,7 +8,7 @@ This application is powered by Node.js & Docker compose!
 
 It runs on macOS, and Linux environments. I did not test or run this application on Windows environment.
 
-You'll need Node.js version 14. To install Node.js, [download the "LTS" installer from nodejs.org](https://nodejs.org). If you're using [`nodenv`](https://github.com/nodenv/nodenv), read the [nodenv docs](https://github.com/nodenv/nodenv) for instructions on switching Node.js versions.
+You'll need Node.js version 20 LTS. To install Node.js, [download the "LTS" installer from nodejs.org](https://nodejs.org). If you're using [`nodenv`](https://github.com/nodenv/nodenv) or `nvm`, the included `.nvmrc` file pins the correct version — run `nvm use` after cloning.
 
 In addition, you will need Docker Compose. To install Docker Compose, [refer steps from docker.com](https://docs.docker.com/compose/install/).
 

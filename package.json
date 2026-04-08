@@ -37,6 +37,10 @@
   ],
   "author": "Chris Lee <git@chrislee.kr>",
   "license": "MIT",
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
   "bugs": {
     "url": "https://github.com/chrisleekr/binance-traiding-bot/issues"
   },
