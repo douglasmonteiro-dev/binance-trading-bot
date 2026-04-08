@@ -28,6 +28,24 @@ When you're ready to stop your local server, run the following:
 docker-compose down
 ```
 
+## Running tests
+
+The project uses Jest 30.
+
+Run the full suite with:
+
+```sh
+npm test
+```
+
+For targeted runs while developing, prefer invoking Jest directly without coverage:
+
+```sh
+npx jest path/to/test-file.test.js --no-coverage
+```
+
+If you are running the test suite on a newer local runtime such as Node.js 24, keep using the repository Jest configuration as-is. The test bootstrap in `jest.setup.js` includes a small compatibility shim for the legacy `config` package used by this project.
+
 ## Branch naming conventions
 
 The project enforces the branch name.
