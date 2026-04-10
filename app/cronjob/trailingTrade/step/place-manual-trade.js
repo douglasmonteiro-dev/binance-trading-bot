@@ -1,11 +1,12 @@
 const moment = require('moment');
-const { binance, slack, PubSub } = require('../../../helpers');
+const { financialClient, slack, PubSub } = require('../../../helpers');
 const {
   getAPILimit,
   getAndCacheOpenOrdersForSymbol,
   getAccountInfoFromAPI
 } = require('../../trailingTradeHelper/common');
 const { saveManualOrder } = require('../../trailingTradeHelper/order');
+const { getFinancialContext } = require('./financial-context');
 
 /**
  * Set message and return data
@@ -236,6 +237,7 @@ const recordOrder = async (logger, orderResult) => {
  */
 const execute = async (logger, rawData) => {
   const data = rawData;
+  const financialContext = getFinancialContext(data);
   const { symbol, action, baseAssetBalance, order } = data;
 
   if (action !== 'manual-trade') {
@@ -252,7 +254,10 @@ const execute = async (logger, rawData) => {
     baseAssetBalance
   });
 
-  const orderResult = await binance.client.order(orderParams);
+  const orderResult = await financialClient.placeOrder(
+    orderParams,
+    financialContext
+  );
 
   logger.info({ orderResult }, 'Manual order result');
 

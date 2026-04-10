@@ -115,6 +115,9 @@ describe('tickers.js', () => {
     it('triggers queue.execute for BTCUSDT', () => {
       expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
         correlationId: expect.any(String),
+        requestContext: {
+          correlationId: expect.any(String)
+        },
         preprocessFn: expect.any(Function),
         processFn: expect.any(Function)
       });
@@ -123,6 +126,9 @@ describe('tickers.js', () => {
     it('triggers queue.execute for BNBUSDT', () => {
       expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BNBUSDT', {
         correlationId: expect.any(String),
+        requestContext: {
+          correlationId: expect.any(String)
+        },
         preprocessFn: expect.any(Function),
         processFn: expect.any(Function)
       });
@@ -154,6 +160,9 @@ describe('tickers.js', () => {
       it('triggers queue.execute for BTCUSDT', () => {
         expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
           correlationId: expect.any(String),
+          requestContext: {
+            correlationId: expect.any(String)
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function)
         });

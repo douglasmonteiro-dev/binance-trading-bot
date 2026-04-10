@@ -471,12 +471,20 @@ describe('server-binance', () => {
 
         it('triggers queue.execute for BTCUSDT', () => {
           expect(mockQueue.execute).toHaveBeenCalledWith(logger, 'BTCUSDT', {
+            correlationId: expect.any(String),
+            requestContext: {
+              correlationId: expect.any(String)
+            },
             processFn: expect.any(Function)
           });
         });
 
         it('triggers queue.execute for LTCUSDT', () => {
           expect(mockQueue.execute).toHaveBeenCalledWith(logger, 'LTCUSDT', {
+            correlationId: expect.any(String),
+            requestContext: {
+              correlationId: expect.any(String)
+            },
             processFn: expect.any(Function)
           });
         });

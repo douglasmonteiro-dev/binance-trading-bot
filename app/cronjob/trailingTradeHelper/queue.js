@@ -73,7 +73,8 @@ const executeJob = async (funcLogger, symbol, jobPayload) => {
     await jobPayload.processFn(
       funcLogger,
       symbol,
-      _.get(jobPayload, 'correlationId')
+      _.get(jobPayload, 'correlationId'),
+      _.get(jobPayload, 'requestContext')
     );
   }
 

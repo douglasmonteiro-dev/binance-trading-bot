@@ -22,6 +22,25 @@
       "secretKey": "BINANCE_TEST_SECRET_KEY"
     }
   },
+  "financial": {
+    "provider": "BINANCE_FINANCIAL_PROVIDER",
+    "core": {
+      "url": "BINANCE_FINANCIAL_CORE_URL",
+      "apiKey": "BINANCE_FINANCIAL_CORE_API_KEY",
+      "timeout": {
+        "__name": "BINANCE_FINANCIAL_CORE_TIMEOUT",
+        "__format": "number"
+      },
+      "maxRetries": {
+        "__name": "BINANCE_FINANCIAL_CORE_MAX_RETRIES",
+        "__format": "number"
+      },
+      "retryDelay": {
+        "__name": "BINANCE_FINANCIAL_CORE_RETRY_DELAY",
+        "__format": "number"
+      }
+    }
+  },
   "redis": {
     "host": "BINANCE_REDIS_HOST",
     "port": {

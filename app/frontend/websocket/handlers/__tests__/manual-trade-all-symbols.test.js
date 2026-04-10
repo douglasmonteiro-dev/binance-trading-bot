@@ -280,6 +280,8 @@ describe('manual-trade-all-symbols.js', () => {
       } = require('../manual-trade-all-symbols');
       await handleManualTradeAllSymbols(loggerMock, mockWebSocketServer, {
         data: {
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
           orders
         }
       });
@@ -317,6 +319,11 @@ describe('manual-trade-all-symbols.js', () => {
               it('triggers queue.execute', () => {
                 expect(mockExecute).toHaveBeenCalledWith(loggerMock, symbol, {
                   correlationId: 'correlationId',
+                  requestContext: {
+                    botId: 'bot-1',
+                    exchangeAccountId: 'acc-1',
+                    correlationId: 'correlationId'
+                  },
                   preprocessFn: expect.any(Function),
                   processFn: expect.any(Function)
                 });
@@ -381,6 +388,8 @@ describe('manual-trade-all-symbols.js', () => {
       } = require('../manual-trade-all-symbols');
       await handleManualTradeAllSymbols(loggerMock, mockWebSocketServer, {
         data: {
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
           orders
         }
       });
@@ -421,6 +430,11 @@ describe('manual-trade-all-symbols.js', () => {
                   'BTCUSDT',
                   {
                     correlationId: 'correlationId',
+                    requestContext: {
+                      botId: 'bot-1',
+                      exchangeAccountId: 'acc-1',
+                      correlationId: 'correlationId'
+                    },
                     preprocessFn: expect.any(Function),
                     processFn: expect.any(Function)
                   }
@@ -459,6 +473,54 @@ describe('manual-trade-all-symbols.js', () => {
           result: true,
           type: 'manual-trade-all-symbols-result',
           message: 'The orders have been received.'
+        })
+      );
+    });
+  });
+
+  describe('when exchangeAccountId is missing', () => {
+    beforeEach(async () => {
+      mockGetGlobalConfiguration = jest.fn().mockResolvedValue({
+        system: { placeManualOrderInterval: 5 }
+      });
+
+      jest.mock(
+        '../../../../cronjob/trailingTradeHelper/configuration',
+        () => ({
+          getGlobalConfiguration: mockGetGlobalConfiguration
+        })
+      );
+
+      jest.clearAllMocks();
+
+      const {
+        handleManualTradeAllSymbols
+      } = require('../manual-trade-all-symbols');
+      await handleManualTradeAllSymbols(loggerMock, mockWebSocketServer, {
+        data: {
+          orders
+        }
+      });
+    });
+
+    it('does not trigger PubSub.publish', () => {
+      expect(PubSubMock.publish).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger saveOverrideAction', () => {
+      expect(mockSaveOverrideAction).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger queue.execute', () => {
+      expect(mockExecute).not.toHaveBeenCalled();
+    });
+
+    it('returns validation error', () => {
+      expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
+        JSON.stringify({
+          result: false,
+          type: 'manual-trade-all-symbols-result',
+          message: 'exchangeAccountId is required to place manual orders.'
         })
       );
     });

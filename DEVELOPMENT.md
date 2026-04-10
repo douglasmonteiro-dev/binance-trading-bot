@@ -20,6 +20,21 @@ npm install
 docker-compose up -d --build
 ```
 
+By default, the bot still executes orders through the local Binance client. To prepare SaaS-oriented development against the Financial Core, you can switch the financial provider with environment variables:
+
+```sh
+export BINANCE_FINANCIAL_PROVIDER=financial-core
+export BINANCE_FINANCIAL_CORE_URL=http://localhost:3001
+export BINANCE_FINANCIAL_CORE_API_KEY=replace-me
+export BINANCE_FINANCIAL_CORE_TIMEOUT=5000
+export BINANCE_FINANCIAL_CORE_MAX_RETRIES=2
+export BINANCE_FINANCIAL_CORE_RETRY_DELAY=250
+```
+
+If `BINANCE_FINANCIAL_PROVIDER` is omitted or set to `local`, the existing Binance helper remains the execution backend.
+
+In Financial Core mode, automatic retries are intentionally conservative: the helper retries only read operations such as account and open-order queries. Order placement and cancellation failures are surfaced immediately so the caller can apply an explicit idempotency strategy before retrying write operations.
+
 You should now have a running server! Visit [localhost:8080](http://localhost:8080) in your browser. Unfortunately, it does not automatically refresh the change. Please refresh the browser to see the change.
 
 When you're ready to stop your local server, run the following:

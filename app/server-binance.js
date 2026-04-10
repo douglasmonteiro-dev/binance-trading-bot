@@ -1,3 +1,4 @@
+const { v4: uuidv4 } = require('uuid');
 const _ = require('lodash');
 const config = require('config');
 const { PubSub, cache, mongo } = require('./helpers');
@@ -174,9 +175,17 @@ const setupBinance = async logger => {
     const symbols = _.keys(cachedOpenOrders);
 
     await Promise.all(
-      symbols.map(async symbol =>
-        queue.execute(logger, symbol, { processFn: executeTrailingTrade })
-      )
+      symbols.map(async symbol => {
+        const correlationId = uuidv4();
+
+        return queue.execute(logger, symbol, {
+          correlationId,
+          requestContext: {
+            correlationId
+          },
+          processFn: executeTrailingTrade
+        });
+      })
     );
   });
 

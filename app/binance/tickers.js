@@ -79,6 +79,9 @@ const setupTickersWebsocket = async (logger, symbols) => {
           if (canExecuteTrailingTrade) {
             queue.execute(symbolLogger, monitoringSymbol, {
               correlationId,
+              requestContext: {
+                correlationId
+              },
               preprocessFn: saveCandle,
               processFn: executeTrailingTrade
             });

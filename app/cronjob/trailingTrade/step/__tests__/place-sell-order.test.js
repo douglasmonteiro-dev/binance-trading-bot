@@ -5,6 +5,7 @@ describe('place-sell-order.js', () => {
   let rawData;
 
   let binanceMock;
+  let financialClientMock;
   let slackMock;
   let loggerMock;
 
@@ -21,14 +22,21 @@ describe('place-sell-order.js', () => {
     });
 
     beforeEach(async () => {
-      const { binance, slack, logger } = require('../../../../helpers');
+      const {
+        binance,
+        financialClient,
+        slack,
+        logger
+      } = require('../../../../helpers');
 
       binanceMock = binance;
+      financialClientMock = financialClient;
       slackMock = slack;
       loggerMock = logger;
 
       slackMock.sendMessage = jest.fn().mockResolvedValue(true);
       binanceMock.client.order = jest.fn().mockResolvedValue(true);
+      jest.spyOn(financialClientMock, 'placeOrder');
 
       mockIsExceedAPILimit = jest.fn().mockReturnValue(false);
       mockGetAPILimit = jest.fn().mockResolvedValue(10);
@@ -1223,6 +1231,12 @@ describe('place-sell-order.js', () => {
 
             rawData = {
               symbol: 'ALPHABTC',
+              tenantId: 'tenant-1',
+              userId: 'user-1',
+              botId: 'bot-1',
+              exchangeAccountId: 'acc-1',
+              correlationId: 'corr-1',
+              idempotencyKey: 'idem-1',
               symbolInfo: {
                 filterLotSize: {
                   minQty: '1.00000000',
@@ -1270,6 +1284,28 @@ describe('place-sell-order.js', () => {
               timeInForce: 'GTC',
               type: 'STOP_LOSS_LIMIT'
             });
+          });
+
+          it('forwards financial context to financialClient.placeOrder', () => {
+            expect(financialClientMock.placeOrder).toHaveBeenCalledWith(
+              {
+                price: 0.00003729,
+                quantity: 90000000,
+                side: 'sell',
+                stopPrice: 0.00003733,
+                symbol: 'ALPHABTC',
+                timeInForce: 'GTC',
+                type: 'STOP_LOSS_LIMIT'
+              },
+              {
+                tenantId: 'tenant-1',
+                userId: 'user-1',
+                botId: 'bot-1',
+                exchangeAccountId: 'acc-1',
+                correlationId: 'corr-1',
+                idempotencyKey: 'idem-1'
+              }
+            );
           });
 
           it('triggers saveGridTradeOrder for grid trade last sell order', () => {

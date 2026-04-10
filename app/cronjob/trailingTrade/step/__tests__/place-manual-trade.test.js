@@ -5,6 +5,7 @@ describe('place-manual-trade.js', () => {
   let rawData;
 
   let binanceMock;
+  let financialClientMock;
   let slackMock;
   let loggerMock;
 
@@ -23,14 +24,21 @@ describe('place-manual-trade.js', () => {
       () => () => jest.requireActual('moment')('2020-01-01T00:00:00.000Z')
     );
 
-    const { binance, slack, logger } = require('../../../../helpers');
+    const {
+      binance,
+      financialClient,
+      slack,
+      logger
+    } = require('../../../../helpers');
 
     binanceMock = binance;
+    financialClientMock = financialClient;
     slackMock = slack;
     loggerMock = logger;
 
     slackMock.sendMessage = jest.fn().mockResolvedValue(true);
     binanceMock.client.order = jest.fn().mockResolvedValue(true);
+    jest.spyOn(financialClientMock, 'placeOrder');
 
     mockGetAccountInfoFromAPI = jest.fn().mockResolvedValue({
       account: 'info'
@@ -728,6 +736,12 @@ describe('place-manual-trade.js', () => {
         rawData = {
           symbol: 'BTCUSDT',
           action: 'manual-trade',
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
+          correlationId: 'corr-1',
+          idempotencyKey: 'idem-1',
           symbolConfiguration: {
             system: {
               checkManualOrderPeriod: 10
@@ -751,6 +765,20 @@ describe('place-manual-trade.js', () => {
         );
       });
 
+      it('forwards financial context to financialClient.placeOrder', () => {
+        expect(financialClientMock.placeOrder).toHaveBeenCalledWith(
+          testData.expectedOrderParams,
+          {
+            tenantId: 'tenant-1',
+            userId: 'user-1',
+            botId: 'bot-1',
+            exchangeAccountId: 'acc-1',
+            correlationId: 'corr-1',
+            idempotencyKey: 'idem-1'
+          }
+        );
+      });
+
       it('triggers saveManualOrder', () => {
         expect(mockSaveManualOrder).toHaveBeenCalledWith(
           loggerMock,
@@ -763,7 +791,15 @@ describe('place-manual-trade.js', () => {
       });
 
       it('returns expected result', () => {
-        expect(result).toStrictEqual(testData.expectedData);
+        expect(result).toStrictEqual({
+          ...testData.expectedData,
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
+          correlationId: 'corr-1',
+          idempotencyKey: 'idem-1'
+        });
       });
     });
   });

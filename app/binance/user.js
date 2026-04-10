@@ -122,6 +122,9 @@ const setupUserWebsocket = async logger => {
 
       queue.execute(symbolLogger, symbol, {
         correlationId,
+        requestContext: {
+          correlationId
+        },
         preprocessFn: checkLastOrder,
         processFn: executeTrailingTrade
       });
@@ -157,6 +160,9 @@ const setupUserWebsocket = async logger => {
 
       queue.execute(symbolLogger, symbol, {
         correlationId,
+        requestContext: {
+          correlationId
+        },
         preprocessFn: checkManualOrder,
         processFn: executeTrailingTrade
       });

@@ -7,6 +7,7 @@ describe('remove-last-buy-price.js', () => {
   let PubSubMock;
   let slackMock;
   let binanceMock;
+  let financialClientMock;
   let loggerMock;
 
   let mockGetAPILimit;
@@ -28,16 +29,24 @@ describe('remove-last-buy-price.js', () => {
     });
 
     beforeEach(async () => {
-      const { PubSub, slack, binance, logger } = require('../../../../helpers');
+      const {
+        PubSub,
+        slack,
+        binance,
+        financialClient,
+        logger
+      } = require('../../../../helpers');
 
       PubSubMock = PubSub;
       slackMock = slack;
       loggerMock = logger;
       binanceMock = binance;
+      financialClientMock = financialClient;
 
       PubSubMock.publish = jest.fn().mockResolvedValue(true);
       slackMock.sendMessage = jest.fn().mockResolvedValue(true);
       binanceMock.client.cancelOrder = jest.fn().mockResolvedValue(true);
+      jest.spyOn(financialClientMock, 'cancelOrder');
 
       mockGetAndCacheOpenOrdersForSymbol = jest.fn().mockResolvedValue([]);
       mockGetAPILimit = jest.fn().mockResolvedValue(10);
@@ -390,6 +399,12 @@ describe('remove-last-buy-price.js', () => {
         rawData = {
           action: 'not-determined',
           symbol: 'BTCUPUSDT',
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
+          correlationId: 'corr-1',
+          idempotencyKey: 'idem-1',
           symbolConfiguration: {
             symbols: ['BTCUSDT', 'BNBUSDT', 'BTCUPUSDT'],
             buy: { lastBuyPriceRemoveThreshold: 10 },
@@ -603,6 +618,23 @@ describe('remove-last-buy-price.js', () => {
             symbol: 'BTCUPUSDT',
             orderId: 123456
           });
+        });
+
+        it('forwards financial context to financialClient.cancelOrder', () => {
+          expect(financialClientMock.cancelOrder).toHaveBeenCalledWith(
+            {
+              symbol: 'BTCUPUSDT',
+              orderId: 123456
+            },
+            {
+              tenantId: 'tenant-1',
+              userId: 'user-1',
+              botId: 'bot-1',
+              exchangeAccountId: 'acc-1',
+              correlationId: 'corr-1',
+              idempotencyKey: 'idem-1'
+            }
+          );
         });
 
         it('triggers removeLastBuyPrice', () => {
