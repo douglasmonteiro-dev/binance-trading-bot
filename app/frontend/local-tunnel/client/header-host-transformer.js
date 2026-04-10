@@ -36,7 +36,7 @@ class HeaderHostTransformer extends Transform {
     const transformedHeaders = headerBuffer
       .toString('latin1')
       .replace(
-        /(\r\n[Hh]ost:\s*)[^\r\n]+/,
+        /(\r\nhost:\s*)[^\r\n]+/i,
         (match, hostPrefix) => hostPrefix + this.host
       );
 
