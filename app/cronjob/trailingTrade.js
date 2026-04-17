@@ -24,7 +24,12 @@ const {
 } = require('./trailingTrade/steps');
 const { errorHandlerWrapper } = require('../error-handler');
 
-const execute = async (rawLogger, symbol, correlationId = uuidv4()) => {
+const execute = async (
+  rawLogger,
+  symbol,
+  correlationId = uuidv4(),
+  requestContext = {}
+) => {
   const logger = rawLogger.child({
     jobName: 'trailingTrade',
     correlationId,
@@ -43,6 +48,8 @@ const execute = async (rawLogger, symbol, correlationId = uuidv4()) => {
     // Define skeleton of data structure
     let data = {
       symbol,
+      correlationId,
+      ...requestContext,
       featureToggle,
       lastCandle: {},
       accountInfo,

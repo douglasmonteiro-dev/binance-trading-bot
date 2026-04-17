@@ -109,6 +109,9 @@ describe('symbol-grid-trade-delete.test.js', () => {
       it('triggers queue.execute', () => {
         expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
           correlationId: 'correlationId',
+          requestContext: {
+            correlationId: 'correlationId'
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function)
         });
@@ -187,6 +190,9 @@ describe('symbol-grid-trade-delete.test.js', () => {
       it('triggers queue.execute', () => {
         expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
           correlationId: 'correlationId',
+          requestContext: {
+            correlationId: 'correlationId'
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function)
         });
@@ -254,6 +260,9 @@ describe('symbol-grid-trade-delete.test.js', () => {
       it('triggers queue.execute', () => {
         expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
           correlationId: 'correlationId',
+          requestContext: {
+            correlationId: 'correlationId'
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function)
         });
@@ -318,6 +327,9 @@ describe('symbol-grid-trade-delete.test.js', () => {
       it('triggers queue.execute', () => {
         expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
           correlationId: 'correlationId',
+          requestContext: {
+            correlationId: 'correlationId'
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function)
         });

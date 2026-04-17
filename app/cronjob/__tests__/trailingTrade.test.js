@@ -287,7 +287,7 @@ describe('trailingTrade', () => {
     describe('execute trailing trade for BTCUSDT', () => {
       beforeEach(async () => {
         const { execute: trailingTradeExecute } = require('../trailingTrade');
-        await trailingTradeExecute(logger, 'BTCUSDT');
+        await trailingTradeExecute(logger, 'BTCUSDT', 'correlation-id-1');
       });
 
       it('returns expected result for BTCUSDT finish', () => {
@@ -295,6 +295,7 @@ describe('trailingTrade', () => {
           {
             data: {
               symbol: 'BTCUSDT',
+              correlationId: 'correlation-id-1',
               featureToggle: { feature1Enabled: true },
               lastCandle: { got: 'lowest value' },
               accountInfo: { account: 'info' },
@@ -329,7 +330,7 @@ describe('trailingTrade', () => {
     describe('execute trailing trade for ETHUSDT', () => {
       beforeEach(async () => {
         const { execute: trailingTradeExecute } = require('../trailingTrade');
-        await trailingTradeExecute(logger, 'ETHUSDT');
+        await trailingTradeExecute(logger, 'ETHUSDT', 'correlation-id-2');
       });
 
       it('returns expected result for ETHUSDT', () => {
@@ -337,6 +338,7 @@ describe('trailingTrade', () => {
           {
             data: {
               symbol: 'ETHUSDT',
+              correlationId: 'correlation-id-2',
               featureToggle: { feature1Enabled: true },
               lastCandle: { got: 'lowest value' },
               accountInfo: { account: 'info' },
@@ -371,7 +373,7 @@ describe('trailingTrade', () => {
     describe('execute trailing trade for LTCUSDT', () => {
       beforeEach(async () => {
         const { execute: trailingTradeExecute } = require('../trailingTrade');
-        await trailingTradeExecute(logger, 'LTCUSDT');
+        await trailingTradeExecute(logger, 'LTCUSDT', 'correlation-id-3');
       });
 
       it('returns expected result for LTCUSDT', async () => {
@@ -379,6 +381,7 @@ describe('trailingTrade', () => {
           {
             data: {
               symbol: 'LTCUSDT',
+              correlationId: 'correlation-id-3',
               featureToggle: { feature1Enabled: true },
               lastCandle: { got: 'lowest value' },
               accountInfo: { account: 'info' },

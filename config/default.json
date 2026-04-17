@@ -16,6 +16,16 @@
       "secretKey": ""
     }
   },
+  "financial": {
+    "provider": "local",
+    "core": {
+      "url": "",
+      "apiKey": "",
+      "timeout": 5000,
+      "maxRetries": 2,
+      "retryDelay": 250
+    }
+  },
   "redis": {
     "host": "binance-redis",
     "port": 6379,
@@ -25,7 +35,9 @@
   "mongo": {
     "host": "binance-mongo",
     "port": 27017,
-    "database": "binance-bot"
+    "database": "binance-bot",
+    "username": "",
+    "password": ""
   },
   "tradingview": {
     "host": "tradingview",

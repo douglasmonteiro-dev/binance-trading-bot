@@ -1,11 +1,12 @@
 const moment = require('moment');
-const { binance, slack, PubSub } = require('../../../helpers');
+const { financialClient, slack, PubSub } = require('../../../helpers');
 const {
   getAPILimit,
   getAndCacheOpenOrdersForSymbol,
   getAccountInfoFromAPI
 } = require('../../trailingTradeHelper/common');
 const { deleteManualOrder } = require('../../trailingTradeHelper/order');
+const { getFinancialContext } = require('./financial-context');
 
 /**
  * Cancel order
@@ -15,6 +16,7 @@ const { deleteManualOrder } = require('../../trailingTradeHelper/order');
  */
 const execute = async (logger, rawData) => {
   const data = rawData;
+  const financialContext = getFinancialContext(data);
   const { symbol, action, order } = data;
 
   if (action !== 'cancel-order') {
@@ -42,7 +44,10 @@ const execute = async (logger, rawData) => {
     `The ${side.toLowerCase()} order will be cancelled.`
   );
 
-  const orderResult = await binance.client.cancelOrder(orderParams);
+  const orderResult = await financialClient.cancelOrder(
+    orderParams,
+    financialContext
+  );
 
   logger.info(
     { orderResult, saveLog: true },

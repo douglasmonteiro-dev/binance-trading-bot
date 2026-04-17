@@ -1306,7 +1306,7 @@ describe('get-tradingview.js', () => {
         });
 
         it('does not triggers axios.get', () => {
-          expect(axiosMock.get).not.toBeCalled();
+          expect(axiosMock.get).not.toHaveBeenCalled();
         });
 
         it('triggers cache.hdel to remove unmonitored interval', () => {

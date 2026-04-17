@@ -10,9 +10,12 @@ describe('server-frontend', () => {
   let mockExpressJson;
   let mockExpress;
 
+  let mockHelmet;
   let mockCompression;
   let mockCors;
   let mockFileUpload;
+  let mockExpressGet;
+  let mockHealthzRes;
 
   let mockConfigureWebServer;
   let mockConfigureWebSocket;
@@ -47,9 +50,38 @@ describe('server-frontend', () => {
     jest.mock('ws');
     jest.mock('config');
 
+    mockHelmet = jest.fn().mockReturnValue(() => {});
+    jest.mock(
+      'helmet',
+      () =>
+        (...args) =>
+          mockHelmet(...args)
+    );
+
     mockCompression = jest.fn().mockReturnValue(true);
-    mockCors = jest.fn().mockReturnValue(true);
+    mockCors = jest.fn().mockReturnValue(() => {});
     mockFileUpload = jest.fn().mockReturnValue(true);
+
+    jest.mock(
+      'cors',
+      () =>
+        (...args) =>
+          mockCors(...args)
+    );
+    jest.mock('compression', () => () => {
+      function compression() {}
+      return compression;
+    });
+
+    mockHealthzRes = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn().mockReturnValue(true)
+    };
+    mockExpressGet = jest.fn().mockImplementation((route, handler) => {
+      if (route === '/healthz') {
+        handler({}, mockHealthzRes);
+      }
+    });
 
     mockRateLimiterRedisGet = jest.fn().mockReturnValue({ remainingPoints: 5 });
     mockRateLimiterRedis = jest.fn().mockImplementation(() => ({
@@ -87,10 +119,12 @@ describe('server-frontend', () => {
     mockRateLimiterMiddlewareNext = jest.fn().mockReturnValue(true);
 
     mockExpressUse = jest.fn().mockImplementation(async fn => {
-      if (fn.name === 'compression') {
+      if (fn && fn.name === 'helmetMiddleware') {
+        // helmet middleware registered — no-op in test
+      } else if (fn.name === 'compression') {
         mockCompression();
       } else if (fn.name === 'corsMiddleware') {
-        mockCors();
+        // corsMiddleware registered — tracked via the mockCors jest.mock factory
       } else if (fn.name === 'fileUpload') {
         mockFileUpload();
       } else if (fn.name === 'attachmentMiddleware') {
@@ -119,6 +153,7 @@ describe('server-frontend', () => {
     jest.mock('express', () => {
       mockExpress = () => ({
         use: mockExpressUse,
+        get: mockExpressGet,
         listen: mockExpressListen
       });
 
@@ -191,6 +226,12 @@ describe('server-frontend', () => {
         });
       });
 
+      it('applies helmet middleware', () => {
+        expect(mockHelmet).toHaveBeenCalledWith({
+          contentSecurityPolicy: false
+        });
+      });
+
       it('triggers server.listen', () => {
         expect(mockExpressListen).toHaveBeenCalledWith('value-frontend.port');
       });
@@ -221,6 +262,22 @@ describe('server-frontend', () => {
 
       it('triggers configureLocalTunnel', () => {
         expect(mockConfigureLocalTunnel).toHaveBeenCalled();
+      });
+
+      it('registers GET /healthz route', () => {
+        expect(mockExpressGet).toHaveBeenCalledWith(
+          '/healthz',
+          expect.any(Function)
+        );
+      });
+
+      it('/healthz handler responds with status 200 and { status: ok }', () => {
+        expect(mockHealthzRes.status).toHaveBeenCalledWith(200);
+        expect(mockHealthzRes.json).toHaveBeenCalledWith({ status: 'ok' });
+      });
+
+      it('applies cors with null origin when CORS_ALLOWED_ORIGIN is not set', () => {
+        expect(mockCors).toHaveBeenCalledWith({ origin: null });
       });
     });
 

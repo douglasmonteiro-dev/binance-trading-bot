@@ -126,6 +126,96 @@ describe('webserver/handlers/restore-post', () => {
       archiveMv = jest.fn();
     });
 
+    describe('invalid file type is uploaded', () => {
+      beforeEach(async () => {
+        const { logger } = require('../../../../helpers');
+
+        loggerMock = logger;
+
+        mockVerifyAuthenticated = jest.fn().mockResolvedValue(true);
+
+        jest.mock('../../../../cronjob/trailingTradeHelper/common', () => ({
+          verifyAuthenticated: mockVerifyAuthenticated
+        }));
+
+        postReq = {
+          header: () => 'some token',
+          files: {
+            archive: {
+              name: 'evil.exe',
+              mimetype: 'application/octet-stream',
+              data: Buffer.from([0x4d, 0x5a]), // MZ header (PE executable)
+              mv: archiveMv
+            }
+          }
+        };
+
+        const { handleRestorePost } = require('../restore-post');
+
+        await handleRestorePost(loggerMock, appMock);
+      });
+
+      it('rejects with status 400', () => {
+        expect(rsSend).toHaveBeenCalledWith({
+          success: false,
+          status: 400,
+          message: 'Invalid file type. Only gzip archives are accepted.',
+          data: {}
+        });
+      });
+
+      it('does not move to tmp folder', () => {
+        expect(archiveMv).not.toHaveBeenCalled();
+      });
+    });
+
+    describe('valid file via gzip magic bytes (no mimetype)', () => {
+      beforeEach(async () => {
+        const { logger } = require('../../../../helpers');
+
+        loggerMock = logger;
+
+        mockVerifyAuthenticated = jest.fn().mockResolvedValue(true);
+
+        jest.mock('../../../../cronjob/trailingTradeHelper/common', () => ({
+          verifyAuthenticated: mockVerifyAuthenticated
+        }));
+
+        postReq = {
+          header: () => 'some token',
+          files: {
+            archive: {
+              name: 'backup.tar.gz',
+              mimetype: 'application/octet-stream', // wrong MIME but magic bytes are correct
+              data: Buffer.from([0x1f, 0x8b, 0x00]), // gzip magic bytes
+              mv: archiveMv
+            }
+          }
+        };
+
+        shellMock.execFile = jest
+          .fn()
+          .mockImplementation((_cmd, _args, fn) => fn(null, 'ok', ''));
+
+        const { handleRestorePost } = require('../restore-post');
+
+        await handleRestorePost(loggerMock, appMock);
+      });
+
+      it('accepts the file and returns success', () => {
+        expect(rsSend).toHaveBeenCalledWith({
+          success: true,
+          status: 200,
+          message: 'Restore success',
+          data: { code: 0, stderr: '', stdout: 'ok' }
+        });
+      });
+
+      it('moves to tmp folder', () => {
+        expect(archiveMv).toHaveBeenCalled();
+      });
+    });
+
     describe(`backup failed`, () => {
       beforeEach(async () => {
         const { logger } = require('../../../../helpers');
@@ -143,6 +233,7 @@ describe('webserver/handlers/restore-post', () => {
           files: {
             archive: {
               name: 'my-backup.archive',
+              mimetype: 'application/gzip',
               mv: archiveMv
             }
           }
@@ -202,6 +293,7 @@ describe('webserver/handlers/restore-post', () => {
           files: {
             archive: {
               name: 'my-backup.archive',
+              mimetype: 'application/gzip',
               mv: archiveMv
             }
           }

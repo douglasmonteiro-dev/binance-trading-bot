@@ -27,6 +27,9 @@ services:
       - BINANCE_LOG_LEVEL=DEBUG
       - BINANCE_TRADINGVIEW_HOST=tradingview
       - BINANCE_TRADINGVIEW_PORT=8082
+      # Set to exact origin (e.g. http://localhost:8080) to allow CORS.
+      # Leave empty or unset to block all cross-origin requests (recommended).
+      - CORS_ALLOWED_ORIGIN=
     ports:
       - 8080:80
     logging:
@@ -77,6 +80,11 @@ services:
       - internal
     volumes:
       - mongo_data:/data/db
+    environment:
+      # MongoDB 3.2 uses MONGO_INITDB_ROOT_USERNAME/PASSWORD for auth.
+      # Set these via .env and update BINANCE_MONGO_USERNAME / BINANCE_MONGO_PASSWORD accordingly.
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-}
 
   binance-mongo-express:
     container_name: binance-mongo-express

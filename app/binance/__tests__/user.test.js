@@ -11,6 +11,7 @@ describe('user.js', () => {
   let mockUpdateGridTradeLastOrder;
   let mockGetManualOrder;
   let mockSaveManualOrder;
+  let mockGetConfiguration;
 
   let mockUserClean;
 
@@ -31,6 +32,17 @@ describe('user.js', () => {
 
       jest.mock('../../cronjob/trailingTradeHelper/queue', () => ({
         execute: mockExecute
+      }));
+
+      mockGetConfiguration = jest.fn().mockResolvedValue({
+        tenantId: 'tenant-123',
+        userId: 'user-123',
+        botId: 'bot-123',
+        exchangeAccountId: 'exchange-account-123'
+      });
+
+      jest.mock('../../cronjob/trailingTradeHelper/configuration', () => ({
+        getConfiguration: mockGetConfiguration
       }));
     });
 
@@ -362,6 +374,13 @@ describe('user.js', () => {
           it('triggers queue.execute', () => {
             expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'ETHUSDT', {
               correlationId: expect.any(String),
+              requestContext: {
+                tenantId: 'tenant-123',
+                userId: 'user-123',
+                botId: 'bot-123',
+                exchangeAccountId: 'exchange-account-123',
+                correlationId: expect.any(String)
+              },
               preprocessFn: expect.any(Function),
               processFn: expect.any(Function)
             });
@@ -681,6 +700,13 @@ describe('user.js', () => {
         it('triggers queue.execute', () => {
           expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'ETHUSDT', {
             correlationId: expect.any(String),
+            requestContext: {
+              tenantId: 'tenant-123',
+              userId: 'user-123',
+              botId: 'bot-123',
+              exchangeAccountId: 'exchange-account-123',
+              correlationId: expect.any(String)
+            },
             preprocessFn: expect.any(Function),
             processFn: expect.any(Function)
           });

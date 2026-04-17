@@ -1,5 +1,5 @@
-const localtunnel = require('localtunnel');
 const config = require('config');
+const localtunnel = require('./client');
 const { slack, cache } = require('../../helpers');
 
 let isReconnecting = false;

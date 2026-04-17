@@ -9,9 +9,25 @@ const {
 } = require('../../../cronjob/trailingTradeHelper/common');
 const queue = require('../../../cronjob/trailingTradeHelper/queue');
 const { executeTrailingTrade } = require('../../../cronjob/index');
+const { ensureExchangeAccountId } = require('./ensure-exchange-account-id');
+const { getRequestContext } = require('./request-context');
 
 const handleManualTradeAllSymbols = async (logger, ws, payload) => {
   logger.info({ payload }, 'Start manual trade all symbols');
+
+  if (
+    ensureExchangeAccountId(
+      logger,
+      ws,
+      payload,
+      'manual-trade-all-symbols-result',
+      'exchangeAccountId is required to place manual orders.'
+    ) === false
+  ) {
+    return;
+  }
+
+  const requestContext = getRequestContext(logger, payload);
 
   const {
     data: {
@@ -67,6 +83,7 @@ const handleManualTradeAllSymbols = async (logger, ws, payload) => {
 
           queue.execute(logger, symbol, {
             correlationId: _.get(logger, 'fields.correlationId', ''),
+            requestContext,
             preprocessFn: saveOverrideActionFn,
             processFn: executeTrailingTrade
           });
@@ -114,6 +131,7 @@ const handleManualTradeAllSymbols = async (logger, ws, payload) => {
 
           queue.execute(logger, symbol, {
             correlationId: _.get(logger, 'fields.correlationId', ''),
+            requestContext,
             preprocessFn: saveOverrideActionFn,
             processFn: executeTrailingTrade
           });

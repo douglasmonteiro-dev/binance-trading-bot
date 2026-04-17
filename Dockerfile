@@ -1,5 +1,5 @@
 # development stage
-FROM node:14-alpine AS dev-stage
+FROM node:20-alpine AS dev-stage
 
 RUN apk add --no-cache make gcc g++ py-pip mongodb-tools redis
 
@@ -39,10 +39,10 @@ RUN npm run build:grunt
 
 RUN rm -rf node_modules
 
-RUN npm install --production
+RUN npm install --omit=dev
 
 # production stage
-FROM node:14-alpine AS production-stage
+FROM node:20-alpine AS production-stage
 
 RUN apk add --no-cache mongodb-tools redis
 
@@ -68,6 +68,9 @@ COPY --from=build-stage /srv /srv
 # Copy index production HTML to index.html
 RUN cp /srv/public/index.html /srv/public/index.dev.html && \
   cp /srv/public/index.prod.html /srv/public/index.html
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+  CMD wget -qO- http://localhost:80/healthz || exit 1
 
 ENTRYPOINT [ "docker-entrypoint.sh" ]
 

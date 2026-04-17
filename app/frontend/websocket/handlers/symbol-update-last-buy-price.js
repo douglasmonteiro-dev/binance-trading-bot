@@ -6,6 +6,7 @@ const {
 } = require('../../../cronjob/trailingTradeHelper/common');
 const queue = require('../../../cronjob/trailingTradeHelper/queue');
 const { executeTrailingTrade } = require('../../../cronjob/index');
+const { getRequestContext } = require('./request-context');
 
 /**
  * Delete last buy price
@@ -15,7 +16,9 @@ const { executeTrailingTrade } = require('../../../cronjob/index');
  * @param {*} symbol
  * @returns
  */
-const deleteLastBuyPrice = async (logger, ws, symbol) => {
+const deleteLastBuyPrice = async (logger, ws, payload, symbol) => {
+  const requestContext = getRequestContext(logger, payload);
+
   const deleteOneFn = async () => {
     await mongo.deleteOne(logger, 'trailing-trade-symbols', {
       key: `${symbol}-last-buy-price`
@@ -31,6 +34,7 @@ const deleteLastBuyPrice = async (logger, ws, symbol) => {
 
   queue.execute(logger, symbol, {
     correlationId: _.get(logger, 'fields.correlationId', ''),
+    requestContext,
     preprocessFn: deleteOneFn,
     processFn: executeTrailingTrade,
     postprocessFn: PubSubFn
@@ -56,7 +60,9 @@ const deleteLastBuyPrice = async (logger, ws, symbol) => {
  * @param {*} lastBuyPrice
  * @returns
  */
-const updateLastBuyPrice = async (logger, ws, symbol, lastBuyPrice) => {
+const updateLastBuyPrice = async (logger, ws, payload, symbol, lastBuyPrice) => {
+  const requestContext = getRequestContext(logger, payload);
+
   const updateLastBuyPriceFn = async () => {
     // Retrieve symbol info
     const cachedSymbolInfo =
@@ -120,6 +126,7 @@ const updateLastBuyPrice = async (logger, ws, symbol, lastBuyPrice) => {
 
   queue.execute(logger, symbol, {
     correlationId: _.get(logger, 'fields.correlationId', ''),
+    requestContext,
     preprocessFn: updateLastBuyPriceFn,
     processFn: executeTrailingTrade,
     postprocessFn: PubSubFn
@@ -146,10 +153,10 @@ const handleSymbolUpdateLastBuyPrice = async (logger, ws, payload) => {
   const { lastBuyPrice } = symbolInfo.sell;
 
   if (parseFloat(lastBuyPrice) <= 0) {
-    return deleteLastBuyPrice(logger, ws, symbol);
+    return deleteLastBuyPrice(logger, ws, payload, symbol);
   }
 
-  return updateLastBuyPrice(logger, ws, symbol, lastBuyPrice);
+  return updateLastBuyPrice(logger, ws, payload, symbol, lastBuyPrice);
 };
 
 module.exports = { handleSymbolUpdateLastBuyPrice };

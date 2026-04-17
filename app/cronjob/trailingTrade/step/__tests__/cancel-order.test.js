@@ -4,6 +4,7 @@ describe('cancel-order.js', () => {
   let rawData;
 
   let binanceMock;
+  let financialClientMock;
   let slackMock;
   let loggerMock;
   let PubSubMock;
@@ -18,15 +19,23 @@ describe('cancel-order.js', () => {
     beforeEach(() => {
       jest.clearAllMocks().resetModules();
 
-      const { binance, slack, PubSub, logger } = require('../../../../helpers');
+      const {
+        binance,
+        financialClient,
+        slack,
+        PubSub,
+        logger
+      } = require('../../../../helpers');
 
       binanceMock = binance;
+      financialClientMock = financialClient;
       slackMock = slack;
       PubSubMock = PubSub;
       loggerMock = logger;
 
       slackMock.sendMessage = jest.fn().mockResolvedValue(true);
       binanceMock.client.cancelOrder = jest.fn().mockResolvedValue(true);
+      jest.spyOn(financialClientMock, 'cancelOrder');
       mockGetAPILimit = jest.fn().mockReturnValue(10);
       mockGetAndCacheOpenOrdersForSymbol = jest.fn().mockResolvedValue([]);
       mockGetAccountInfoFromAPI = jest.fn().mockResolvedValue({
@@ -92,6 +101,12 @@ describe('cancel-order.js', () => {
           rawData = {
             symbol: 'BTCUSDT',
             action: 'cancel-order',
+            tenantId: 'tenant-1',
+            userId: 'user-1',
+            botId: 'bot-1',
+            exchangeAccountId: 'acc-1',
+            correlationId: 'corr-1',
+            idempotencyKey: 'idem-1',
             accountInfo: {
               existing: 'data'
             },
@@ -137,6 +152,23 @@ describe('cancel-order.js', () => {
           });
         });
 
+        it('forwards financial context to financialClient.cancelOrder', () => {
+          expect(financialClientMock.cancelOrder).toHaveBeenCalledWith(
+            {
+              symbol: 'BTCUSDT',
+              orderId: 'order-123'
+            },
+            {
+              tenantId: 'tenant-1',
+              userId: 'user-1',
+              botId: 'bot-1',
+              exchangeAccountId: 'acc-1',
+              correlationId: 'corr-1',
+              idempotencyKey: 'idem-1'
+            }
+          );
+        });
+
         it('deleteManualOrder', () => {
           expect(mockDeleteManualOrder).toHaveBeenCalledWith(
             loggerMock,
@@ -149,6 +181,12 @@ describe('cancel-order.js', () => {
           expect(result).toStrictEqual({
             symbol: 'BTCUSDT',
             action: 'cancel-order',
+            tenantId: 'tenant-1',
+            userId: 'user-1',
+            botId: 'bot-1',
+            exchangeAccountId: 'acc-1',
+            correlationId: 'corr-1',
+            idempotencyKey: 'idem-1',
             accountInfo: {
               account: 'info'
             },

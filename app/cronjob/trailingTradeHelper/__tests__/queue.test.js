@@ -51,6 +51,7 @@ describe('queue', () => {
           expect(mockProcessFn).toHaveBeenCalledWith(
             loggerMock,
             'BTCUSDT',
+            undefined,
             undefined
           );
         });
@@ -74,6 +75,7 @@ describe('queue', () => {
           expect(mockProcessFn).toHaveBeenCalledWith(
             loggerMock,
             'BTCUSDT',
+            undefined,
             undefined
           );
         });
@@ -105,6 +107,7 @@ describe('queue', () => {
           expect(mockProcessFn).toHaveBeenCalledWith(
             loggerMock,
             'BTCUSDT',
+            undefined,
             undefined
           );
         });
@@ -158,6 +161,7 @@ describe('queue', () => {
           expect(mockProcessFn).toHaveBeenCalledWith(
             loggerMock,
             'BTCUSDT',
+            undefined,
             undefined
           );
         });

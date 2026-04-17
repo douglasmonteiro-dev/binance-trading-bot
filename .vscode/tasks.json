@@ -96,6 +96,17 @@
 				"app/cronjob/trailingTrade/step/__tests__/place-sell-stop-loss-order.test.js"
 			],
 			"isBackground": false
+		},
+		{
+			"label": "build-webpack-validation",
+			"type": "shell",
+			"command": "npm",
+			"args": [
+				"run",
+				"build:webpack"
+			],
+			"isBackground": false,
+			"group": "build"
 		}
 	]
 }

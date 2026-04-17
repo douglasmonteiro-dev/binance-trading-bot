@@ -5,9 +5,25 @@ const {
 } = require('../../../cronjob/trailingTradeHelper/common');
 const queue = require('../../../cronjob/trailingTradeHelper/queue');
 const { executeTrailingTrade } = require('../../../cronjob/index');
+const { ensureExchangeAccountId } = require('./ensure-exchange-account-id');
+const { getRequestContext } = require('./request-context');
 
 const handleCancelOrder = async (logger, ws, payload) => {
   logger.info({ payload }, 'Start cancel order');
+
+  if (
+    ensureExchangeAccountId(
+      logger,
+      ws,
+      payload,
+      'cancel-order-result',
+      'exchangeAccountId is required to cancel an order.'
+    ) === false
+  ) {
+    return;
+  }
+
+  const requestContext = getRequestContext(logger, payload);
 
   const {
     data: { symbol, order }
@@ -31,6 +47,7 @@ const handleCancelOrder = async (logger, ws, payload) => {
 
   queue.execute(logger, symbol, {
     correlationId: _.get(logger, 'fields.correlationId', ''),
+    requestContext,
     preprocessFn: saveOverrideActionFn,
     processFn: executeTrailingTrade
   });
