@@ -1,14 +1,17 @@
 const _ = require('lodash');
 
+const getContextValue = (data, field) =>
+  _.get(data, field, _.get(data, `symbolConfiguration.${field}`));
+
 const getFinancialContext = data =>
   _.pickBy(
     {
-      tenantId: _.get(data, 'tenantId'),
-      userId: _.get(data, 'userId'),
-      botId: _.get(data, 'botId'),
-      exchangeAccountId: _.get(data, 'exchangeAccountId'),
-      correlationId: _.get(data, 'correlationId'),
-      idempotencyKey: _.get(data, 'idempotencyKey')
+      tenantId: getContextValue(data, 'tenantId'),
+      userId: getContextValue(data, 'userId'),
+      botId: getContextValue(data, 'botId'),
+      exchangeAccountId: getContextValue(data, 'exchangeAccountId'),
+      correlationId: getContextValue(data, 'correlationId'),
+      idempotencyKey: getContextValue(data, 'idempotencyKey')
     },
     value => value !== undefined && value !== null && value !== ''
   );

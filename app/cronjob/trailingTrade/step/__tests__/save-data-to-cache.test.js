@@ -38,6 +38,12 @@ describe('save-data-to-cache.js', () => {
         rawData = {
           symbol: 'BTCUSDT',
           saveToCache: true,
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
+          correlationId: 'corr-1',
+          idempotencyKey: 'idem-1',
           closedTrades: 'something',
           accountInfo: { some: 'thing' },
           symbolConfiguration: {
@@ -65,6 +71,10 @@ describe('save-data-to-cache.js', () => {
             symbol: 'BTCUSDT'
           },
           {
+            botId: 'bot-1',
+            correlationId: 'corr-1',
+            exchangeAccountId: 'acc-1',
+            idempotencyKey: 'idem-1',
             other: 'data',
             saveToCache: true,
             symbol: 'BTCUSDT',
@@ -72,7 +82,9 @@ describe('save-data-to-cache.js', () => {
               candles: {
                 interval: '1m'
               }
-            }
+            },
+            tenantId: 'tenant-1',
+            userId: 'user-1'
           }
         );
       });

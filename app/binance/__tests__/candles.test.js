@@ -149,7 +149,11 @@ describe('candles.js', () => {
       mockGetConfiguration = jest
         .fn()
         .mockImplementation((_logger, _symbol) => ({
-          candles: { interval: '30m', limit: 1 }
+          candles: { interval: '30m', limit: 1 },
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1'
         }));
 
       mongoMock.bulkWrite = jest.fn().mockResolvedValue(true);
@@ -242,6 +246,10 @@ describe('candles.js', () => {
       expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'ETHBTC', {
         correlationId: expect.any(String),
         requestContext: {
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
           correlationId: expect.any(String)
         },
         preprocessFn: expect.any(Function),

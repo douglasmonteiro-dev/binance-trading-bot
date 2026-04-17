@@ -8,6 +8,7 @@ describe('tickers.js', () => {
 
   let mockGetAccountInfo;
   let mockGetCachedExchangeSymbols;
+  let mockGetConfiguration;
 
   let mockWebsocketTickersClean;
   let mockErrorHandlerWrapper;
@@ -55,6 +56,13 @@ describe('tickers.js', () => {
         ETHBTC: { symbol: 'ETHBTC', quoteAsset: 'BTC', minNotional: 0.0001 }
       });
 
+      mockGetConfiguration = jest.fn().mockResolvedValue({
+        tenantId: 'tenant-1',
+        userId: 'user-1',
+        botId: 'bot-1',
+        exchangeAccountId: 'acc-1'
+      });
+
       cacheMock.hset = jest.fn().mockResolvedValue(true);
 
       mockWebsocketTickersClean = jest.fn();
@@ -78,6 +86,10 @@ describe('tickers.js', () => {
       jest.mock('../../cronjob/trailingTradeHelper/common', () => ({
         getAccountInfo: mockGetAccountInfo,
         getCachedExchangeSymbols: mockGetCachedExchangeSymbols
+      }));
+
+      jest.mock('../../cronjob/trailingTradeHelper/configuration', () => ({
+        getConfiguration: mockGetConfiguration
       }));
 
       jest.mock('../../cronjob');
@@ -116,6 +128,10 @@ describe('tickers.js', () => {
       expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
         correlationId: expect.any(String),
         requestContext: {
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
           correlationId: expect.any(String)
         },
         preprocessFn: expect.any(Function),
@@ -127,6 +143,10 @@ describe('tickers.js', () => {
       expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BNBUSDT', {
         correlationId: expect.any(String),
         requestContext: {
+          tenantId: 'tenant-1',
+          userId: 'user-1',
+          botId: 'bot-1',
+          exchangeAccountId: 'acc-1',
           correlationId: expect.any(String)
         },
         preprocessFn: expect.any(Function),
@@ -161,6 +181,10 @@ describe('tickers.js', () => {
         expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
           correlationId: expect.any(String),
           requestContext: {
+            tenantId: 'tenant-1',
+            userId: 'user-1',
+            botId: 'bot-1',
+            exchangeAccountId: 'acc-1',
             correlationId: expect.any(String)
           },
           preprocessFn: expect.any(Function),

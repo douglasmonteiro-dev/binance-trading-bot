@@ -7,7 +7,8 @@ const { executeTrailingTrade } = require('./cronjob/index');
 
 const { maskConfig } = require('./cronjob/trailingTradeHelper/util');
 const {
-  getGlobalConfiguration
+  getGlobalConfiguration,
+  getConfiguration
 } = require('./cronjob/trailingTradeHelper/configuration');
 const {
   getAccountInfoFromAPI,
@@ -29,6 +30,7 @@ const {
   setupTickersWebsocket
 } = require('./binance/tickers');
 const { syncOpenOrders, syncDatabaseOrders } = require('./binance/orders');
+const { getSymbolRequestContext } = require('./binance/symbol-request-context');
 const { setupUserWebsocket } = require('./binance/user');
 
 let exchangeSymbolsInterval;
@@ -177,12 +179,14 @@ const setupBinance = async logger => {
     await Promise.all(
       symbols.map(async symbol => {
         const correlationId = uuidv4();
+        const symbolConfiguration = await getConfiguration(logger, symbol);
 
         return queue.execute(logger, symbol, {
           correlationId,
-          requestContext: {
+          requestContext: getSymbolRequestContext(
+            symbolConfiguration,
             correlationId
-          },
+          ),
           processFn: executeTrailingTrade
         });
       })

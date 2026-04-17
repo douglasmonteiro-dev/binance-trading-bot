@@ -47,7 +47,12 @@ describe('symbol-setting-delete.test.js', () => {
       const { handleSymbolSettingDelete } = require('../symbol-setting-delete');
       await handleSymbolSettingDelete(logger, mockWebSocketServer, {
         data: {
-          symbol: 'BTCUSDT'
+          symbol: 'BTCUSDT',
+          tenantId: 'tenant-123',
+          userId: 'user-123',
+          botId: 'bot-123',
+          exchangeAccountId: 'exchange-account-123',
+          idempotencyKey: 'idem-123'
         }
       });
     });
@@ -62,6 +67,14 @@ describe('symbol-setting-delete.test.js', () => {
     it('triggers queue.execute', () => {
       expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
         correlationId: 'correlationId',
+        requestContext: {
+          tenantId: 'tenant-123',
+          userId: 'user-123',
+          botId: 'bot-123',
+          exchangeAccountId: 'exchange-account-123',
+          correlationId: 'correlationId',
+          idempotencyKey: 'idem-123'
+        },
         preprocessFn: expect.any(Function),
         processFn: expect.any(Function)
       });

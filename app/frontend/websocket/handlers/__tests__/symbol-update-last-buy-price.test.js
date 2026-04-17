@@ -50,6 +50,11 @@ describe('symbol-update-last-buy-price.test.js', () => {
         await handleSymbolUpdateLastBuyPrice(logger, mockWebSocketServer, {
           data: {
             symbol: 'BTCUSDT',
+            tenantId: 'tenant-123',
+            userId: 'user-123',
+            botId: 'bot-123',
+            exchangeAccountId: 'exchange-account-123',
+            idempotencyKey: 'idem-123',
             sell: {
               lastBuyPrice: 0
             }
@@ -68,6 +73,14 @@ describe('symbol-update-last-buy-price.test.js', () => {
       it('triggers queue.execute', () => {
         expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
           correlationId: 'correlationId',
+          requestContext: {
+            tenantId: 'tenant-123',
+            userId: 'user-123',
+            botId: 'bot-123',
+            exchangeAccountId: 'exchange-account-123',
+            correlationId: 'correlationId',
+            idempotencyKey: 'idem-123'
+          },
           preprocessFn: expect.any(Function),
           processFn: expect.any(Function),
           postprocessFn: expect.any(Function)
@@ -121,6 +134,11 @@ describe('symbol-update-last-buy-price.test.js', () => {
           await handleSymbolUpdateLastBuyPrice(logger, mockWebSocketServer, {
             data: {
               symbol: 'BTCUSDT',
+              tenantId: 'tenant-123',
+              userId: 'user-123',
+              botId: 'bot-123',
+              exchangeAccountId: 'exchange-account-123',
+              idempotencyKey: 'idem-123',
               sell: {
                 lastBuyPrice: 100
               }
@@ -202,6 +220,11 @@ describe('symbol-update-last-buy-price.test.js', () => {
               {
                 data: {
                   symbol: 'BTCUSDT',
+                  tenantId: 'tenant-123',
+                  userId: 'user-123',
+                  botId: 'bot-123',
+                  exchangeAccountId: 'exchange-account-123',
+                  idempotencyKey: 'idem-123',
                   sell: {
                     lastBuyPrice: 100
                   }
@@ -224,6 +247,14 @@ describe('symbol-update-last-buy-price.test.js', () => {
           it('triggers queue.execute', () => {
             expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
               correlationId: 'correlationId',
+              requestContext: {
+                tenantId: 'tenant-123',
+                userId: 'user-123',
+                botId: 'bot-123',
+                exchangeAccountId: 'exchange-account-123',
+                correlationId: 'correlationId',
+                idempotencyKey: 'idem-123'
+              },
               preprocessFn: expect.any(Function),
               processFn: expect.any(Function),
               postprocessFn: expect.any(Function)
@@ -299,6 +330,11 @@ describe('symbol-update-last-buy-price.test.js', () => {
               {
                 data: {
                   symbol: 'BTCUSDT',
+                  tenantId: 'tenant-123',
+                  userId: 'user-123',
+                  botId: 'bot-123',
+                  exchangeAccountId: 'exchange-account-123',
+                  idempotencyKey: 'idem-123',
                   sell: {
                     lastBuyPrice: 100
                   }
@@ -321,6 +357,14 @@ describe('symbol-update-last-buy-price.test.js', () => {
           it('triggers queue.execute', () => {
             expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
               correlationId: 'correlationId',
+              requestContext: {
+                tenantId: 'tenant-123',
+                userId: 'user-123',
+                botId: 'bot-123',
+                exchangeAccountId: 'exchange-account-123',
+                correlationId: 'correlationId',
+                idempotencyKey: 'idem-123'
+              },
               preprocessFn: expect.any(Function),
               processFn: expect.any(Function),
               postprocessFn: expect.any(Function)

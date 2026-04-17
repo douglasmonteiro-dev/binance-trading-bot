@@ -44,7 +44,12 @@ describe('symbol-trigger-sell.test.js', () => {
       const { handleSymbolTriggerSell } = require('../symbol-trigger-sell');
       await handleSymbolTriggerSell(mockLogger, mockWebSocketServer, {
         data: {
-          symbol: 'BTCUSDT'
+          symbol: 'BTCUSDT',
+          tenantId: 'tenant-123',
+          userId: 'user-123',
+          botId: 'bot-123',
+          exchangeAccountId: 'exchange-account-123',
+          idempotencyKey: 'idem-123'
         }
       });
     });
@@ -65,6 +70,14 @@ describe('symbol-trigger-sell.test.js', () => {
     it('triggers queue.execute', () => {
       expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
         correlationId: 'correlationId',
+        requestContext: {
+          tenantId: 'tenant-123',
+          userId: 'user-123',
+          botId: 'bot-123',
+          exchangeAccountId: 'exchange-account-123',
+          correlationId: 'correlationId',
+          idempotencyKey: 'idem-123'
+        },
         preprocessFn: expect.any(Function),
         processFn: expect.any(Function)
       });

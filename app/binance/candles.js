@@ -7,6 +7,7 @@ const {
   getConfiguration
 } = require('../cronjob/trailingTradeHelper/configuration');
 const { saveCandle } = require('../cronjob/trailingTradeHelper/common');
+const { getSymbolRequestContext } = require('./symbol-request-context');
 
 let websocketCandlesClean = {};
 
@@ -115,13 +116,16 @@ const syncCandles = async (logger, symbols) => {
         await mongo.bulkWrite(logger, 'trailing-trade-candles', operations);
       };
 
+      const symbolConfiguration = await getConfiguration(logger, symbol);
+
       const correlationId = uuidv4();
 
       queue.execute(logger, symbol, {
         correlationId,
-        requestContext: {
+        requestContext: getSymbolRequestContext(
+          symbolConfiguration,
           correlationId
-        },
+        ),
         preprocessFn: getCandles,
         processFn: executeTrailingTrade
       });

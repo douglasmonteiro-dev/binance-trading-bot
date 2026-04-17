@@ -9,6 +9,7 @@ describe('server-binance', () => {
   let mockQueue;
 
   let mockGetGlobalConfiguration;
+  let mockGetConfiguration;
 
   let mockGetAccountInfoFromAPI;
   let mockCacheExchangeSymbols;
@@ -59,6 +60,7 @@ describe('server-binance', () => {
       execute: jest.fn().mockResolvedValue(true),
       completeJob: jest.fn().mockResolvedValue(true)
     };
+    mockGetConfiguration = jest.fn().mockResolvedValue({});
     mockSlack = {
       sendMessage: jest.fn().mockResolvedValue(true)
     };
@@ -116,6 +118,16 @@ describe('server-binance', () => {
         mockGetGlobalConfiguration = jest.fn().mockResolvedValue({
           symbols: ['BTCUSDT', 'BNBUSDT']
         });
+        mockGetConfiguration = jest
+          .fn()
+          .mockImplementation((_logger, symbol) =>
+            Promise.resolve({
+              tenantId: `tenant-${symbol}`,
+              userId: `user-${symbol}`,
+              botId: `bot-${symbol}`,
+              exchangeAccountId: `exchange-account-${symbol}`
+            })
+          );
 
         mockGetAccountInfoFromAPI = jest.fn().mockResolvedValue({
           account: 'info'
@@ -124,7 +136,8 @@ describe('server-binance', () => {
         mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
         jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-          getGlobalConfiguration: mockGetGlobalConfiguration
+          getGlobalConfiguration: mockGetGlobalConfiguration,
+          getConfiguration: mockGetConfiguration
         }));
 
         jest.mock('../cronjob/trailingTradeHelper/common', () => ({
@@ -279,6 +292,16 @@ describe('server-binance', () => {
         mockGetGlobalConfiguration = jest.fn().mockResolvedValue({
           symbols: ['BTCUSDT', 'BNBUSDT']
         });
+        mockGetConfiguration = jest
+          .fn()
+          .mockImplementation((_logger, symbol) =>
+            Promise.resolve({
+              tenantId: `tenant-${symbol}`,
+              userId: `user-${symbol}`,
+              botId: `bot-${symbol}`,
+              exchangeAccountId: `exchange-account-${symbol}`
+            })
+          );
 
         mockGetAccountInfoFromAPI = jest.fn().mockResolvedValue({
           account: 'info'
@@ -287,7 +310,8 @@ describe('server-binance', () => {
         mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
         jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-          getGlobalConfiguration: mockGetGlobalConfiguration
+          getGlobalConfiguration: mockGetGlobalConfiguration,
+          getConfiguration: mockGetConfiguration
         }));
 
         jest.mock('../cronjob/trailingTradeHelper/common', () => ({
@@ -391,6 +415,16 @@ describe('server-binance', () => {
         mockGetGlobalConfiguration = jest.fn().mockResolvedValue({
           symbols: ['BTCUSDT', 'BNBUSDT']
         });
+        mockGetConfiguration = jest
+          .fn()
+          .mockImplementation((_logger, symbol) =>
+            Promise.resolve({
+              tenantId: `tenant-${symbol}`,
+              userId: `user-${symbol}`,
+              botId: `bot-${symbol}`,
+              exchangeAccountId: `exchange-account-${symbol}`
+            })
+          );
 
         mockGetAccountInfoFromAPI = jest.fn().mockResolvedValue({
           account: 'info'
@@ -399,7 +433,8 @@ describe('server-binance', () => {
         mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
         jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-          getGlobalConfiguration: mockGetGlobalConfiguration
+          getGlobalConfiguration: mockGetGlobalConfiguration,
+          getConfiguration: mockGetConfiguration
         }));
 
         jest.mock('../cronjob/trailingTradeHelper/common', () => ({
@@ -452,6 +487,10 @@ describe('server-binance', () => {
         it('does not trigger queue.execute', () => {
           expect(mockQueue.execute).not.toHaveBeenCalled();
         });
+
+        it('does not trigger getConfiguration', () => {
+          expect(mockGetConfiguration).not.toHaveBeenCalled();
+        });
       });
 
       describe('when open orders not empty', () => {
@@ -469,10 +508,20 @@ describe('server-binance', () => {
           expect(mockQueue.execute).toHaveBeenCalledTimes(2);
         });
 
+        it('triggers getConfiguration twice', () => {
+          expect(mockGetConfiguration).toHaveBeenCalledTimes(2);
+          expect(mockGetConfiguration).toHaveBeenCalledWith(logger, 'BTCUSDT');
+          expect(mockGetConfiguration).toHaveBeenCalledWith(logger, 'LTCUSDT');
+        });
+
         it('triggers queue.execute for BTCUSDT', () => {
           expect(mockQueue.execute).toHaveBeenCalledWith(logger, 'BTCUSDT', {
             correlationId: expect.any(String),
             requestContext: {
+              tenantId: 'tenant-BTCUSDT',
+              userId: 'user-BTCUSDT',
+              botId: 'bot-BTCUSDT',
+              exchangeAccountId: 'exchange-account-BTCUSDT',
               correlationId: expect.any(String)
             },
             processFn: expect.any(Function)
@@ -483,6 +532,10 @@ describe('server-binance', () => {
           expect(mockQueue.execute).toHaveBeenCalledWith(logger, 'LTCUSDT', {
             correlationId: expect.any(String),
             requestContext: {
+              tenantId: 'tenant-LTCUSDT',
+              userId: 'user-LTCUSDT',
+              botId: 'bot-LTCUSDT',
+              exchangeAccountId: 'exchange-account-LTCUSDT',
               correlationId: expect.any(String)
             },
             processFn: expect.any(Function)
@@ -538,7 +591,8 @@ describe('server-binance', () => {
         mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
         jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-          getGlobalConfiguration: mockGetGlobalConfiguration
+          getGlobalConfiguration: mockGetGlobalConfiguration,
+          getConfiguration: mockGetConfiguration
         }));
 
         jest.mock('../cronjob/trailingTradeHelper/common', () => ({
@@ -630,7 +684,8 @@ describe('server-binance', () => {
       mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
       jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-        getGlobalConfiguration: mockGetGlobalConfiguration
+        getGlobalConfiguration: mockGetGlobalConfiguration,
+        getConfiguration: mockGetConfiguration
       }));
 
       jest.mock('../cronjob/trailingTradeHelper/common', () => ({
@@ -788,7 +843,8 @@ describe('server-binance', () => {
       mockCacheExchangeSymbols = jest.fn().mockResolvedValue(true);
 
       jest.mock('../cronjob/trailingTradeHelper/configuration', () => ({
-        getGlobalConfiguration: mockGetGlobalConfiguration
+        getGlobalConfiguration: mockGetGlobalConfiguration,
+        getConfiguration: mockGetConfiguration
       }));
 
       jest.mock('../cronjob/trailingTradeHelper/common', () => ({
