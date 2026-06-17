@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
-const { slack, PubSub, binance } = require('../../../helpers');
+const { slack, PubSub, financialClient } = require('../../../helpers');
 const {
   getAPILimit,
   isActionDisabled,
@@ -15,6 +15,7 @@ const {
   getSymbolGridTrade
 } = require('../../trailingTradeHelper/configuration');
 const { getGridTradeOrder } = require('../../trailingTradeHelper/order');
+const { getFinancialContext } = require('./financial-context');
 
 /**
  * Check if base quantity is less than minimum quantity
@@ -221,6 +222,7 @@ const processRemoveLastBuyPrice = async (
   processMessage,
   extraMessages
 ) => {
+  const financialContext = getFinancialContext(data);
   const refreshedOpenOrders = await getAndCacheOpenOrdersForSymbol(
     logger,
     symbol
@@ -228,10 +230,13 @@ const processRemoveLastBuyPrice = async (
   if (refreshedOpenOrders.length > 0) {
     await Promise.all(
       refreshedOpenOrders.map(order =>
-        binance.client.cancelOrder({
-          symbol,
-          orderId: order.orderId
-        })
+        financialClient.cancelOrder(
+          {
+            symbol,
+            orderId: order.orderId
+          },
+          financialContext
+        )
       )
     );
     logger.info(

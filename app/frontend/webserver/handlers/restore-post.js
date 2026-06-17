@@ -40,6 +40,27 @@ const handleRestorePost = async (funcLogger, app) => {
 
     const { archive } = req.files;
 
+    // Validate MIME type: only gzip archives are accepted (mongodump output).
+    // express-fileupload exposes the client-provided mimetype; we additionally
+    // check the magic bytes to prevent MIME-type spoofing.
+    const allowedMimes = [
+      'application/gzip',
+      'application/x-gzip',
+      'application/x-tar'
+    ];
+    const mimeOk = allowedMimes.includes(archive.mimetype);
+    // Magic bytes: gzip starts with 1f 8b
+    const magicOk =
+      archive.data && archive.data[0] === 0x1f && archive.data[1] === 0x8b;
+    if (!mimeOk && !magicOk) {
+      return res.send({
+        success: false,
+        status: 400,
+        message: 'Invalid file type. Only gzip archives are accepted.',
+        data: {}
+      });
+    }
+
     // Create a random name for the archive file
     const randomName = crypto.randomBytes(16).toString('hex');
     const filepath = path.join('/tmp', `${randomName}`);

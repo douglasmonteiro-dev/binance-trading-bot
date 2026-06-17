@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
-const { binance, slack } = require('../../../helpers');
+const { financialClient, slack } = require('../../../helpers');
 const { roundDown } = require('../../trailingTradeHelper/util');
 const {
   isExceedAPILimit,
@@ -9,6 +9,7 @@ const {
   getAccountInfoFromAPI
 } = require('../../trailingTradeHelper/common');
 const { saveGridTradeOrder } = require('../../trailingTradeHelper/order');
+const { getFinancialContext } = require('./financial-context');
 
 /**
  * Set message and return data
@@ -37,6 +38,7 @@ const roundToEightDecimals = value => Math.round(value * 1e8) / 1e8;
  */
 const execute = async (logger, rawData) => {
   const data = rawData;
+  const financialContext = getFinancialContext(data);
 
   const {
     symbol,
@@ -189,7 +191,10 @@ const execute = async (logger, rawData) => {
     { function: 'order', orderParams, saveLog: true },
     `The grid trade #${humanisedGridTradeIndex} sell order will be placed.`
   );
-  const orderResult = await binance.client.order(orderParams);
+  const orderResult = await financialClient.placeOrder(
+    orderParams,
+    financialContext
+  );
 
   logger.info(
     { orderResult, saveLog: true },

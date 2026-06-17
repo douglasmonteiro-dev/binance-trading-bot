@@ -73,6 +73,11 @@ describe('symbol-setting-update.test.js', () => {
       await handleSymbolSettingUpdate(logger, mockWebSocketServer, {
         data: {
           symbol: 'BTCUSDT',
+          tenantId: 'tenant-id',
+          userId: 'user-id',
+          botId: 'bot-id',
+          exchangeAccountId: 'exchange-account-id',
+          idempotencyKey: 'idem-123',
           configuration: {
             candles: {
               interval: '15m',
@@ -273,6 +278,14 @@ describe('symbol-setting-update.test.js', () => {
     it('triggers queue.execute', () => {
       expect(mockExecute).toHaveBeenCalledWith(mockLogger, 'BTCUSDT', {
         correlationId: 'correlationId',
+        requestContext: {
+          tenantId: 'tenant-id',
+          userId: 'user-id',
+          botId: 'bot-id',
+          exchangeAccountId: 'exchange-account-id',
+          correlationId: 'correlationId',
+          idempotencyKey: 'idem-123'
+        },
         preprocessFn: expect.any(Function),
         processFn: expect.any(Function)
       });

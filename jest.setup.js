@@ -12,7 +12,3 @@ if (typeof util.isDate !== 'function') {
 if (typeof util.isError !== 'function') {
   util.isError = value => value instanceof Error;
 }
-
-const jestSetup = async () => {};
-
-module.exports = jestSetup;

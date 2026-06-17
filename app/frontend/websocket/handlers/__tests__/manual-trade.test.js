@@ -43,6 +43,9 @@ describe('manual-trade.js', () => {
     await handleManualTrade(loggerMock, mockWebSocketServer, {
       data: {
         symbol: 'BTCUSDT',
+        botId: 'bot-1',
+        exchangeAccountId: 'acc-1',
+        idempotencyKey: 'idem-1',
         order: {
           some: 'value'
         }
@@ -69,6 +72,12 @@ describe('manual-trade.js', () => {
   it('triggers queue.execute', () => {
     expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
       correlationId: 'correlationId',
+      requestContext: {
+        botId: 'bot-1',
+        exchangeAccountId: 'acc-1',
+        correlationId: 'correlationId',
+        idempotencyKey: 'idem-1'
+      },
       preprocessFn: expect.any(Function),
       processFn: expect.any(Function)
     });
@@ -82,5 +91,39 @@ describe('manual-trade.js', () => {
         message: 'The order has been received.'
       })
     );
+  });
+
+  describe('when exchangeAccountId is missing', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+
+      const { handleManualTrade } = require('../manual-trade');
+      await handleManualTrade(loggerMock, mockWebSocketServer, {
+        data: {
+          symbol: 'BTCUSDT',
+          order: {
+            some: 'value'
+          }
+        }
+      });
+    });
+
+    it('does not trigger saveOverrideAction', () => {
+      expect(mockSaveOverrideAction).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger queue.execute', () => {
+      expect(mockExecute).not.toHaveBeenCalled();
+    });
+
+    it('returns validation error', () => {
+      expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
+        JSON.stringify({
+          result: false,
+          type: 'manual-trade-result',
+          message: 'exchangeAccountId is required to place a manual order.'
+        })
+      );
+    });
   });
 });

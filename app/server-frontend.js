@@ -1,5 +1,6 @@
 const compression = require('compression');
 const express = require('express');
+const helmet = require('helmet');
 const cors = require('cors');
 const path = require('path');
 const config = require('config');
@@ -34,8 +35,16 @@ const runFrontend = async serverLogger => {
   );
 
   const app = express();
+  app.use(
+    helmet({
+      contentSecurityPolicy: false // disable CSP — frontend still uses inline <script> tags in the static HTML shell
+    })
+  );
   app.use(compression());
-  app.use(cors({ origin: process.env.CORS_ALLOWED_ORIGIN || '*' }));
+  // CORS: allow only the origin configured via env var; default denies cross-origin
+  // requests so no wildcard is used unless explicitly set by the operator.
+  const corsOrigin = process.env.CORS_ALLOWED_ORIGIN || null;
+  app.use(cors({ origin: corsOrigin }));
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(
@@ -52,6 +61,10 @@ const runFrontend = async serverLogger => {
   };
   app.use(attachmentMiddleware);
   app.use(express.static(path.join(global.appRoot, '/../public')));
+
+  // Health-check endpoint — returns 200 quickly; used by Docker HEALTHCHECK
+  // and uptime monitors. Does not require authentication.
+  app.get('/healthz', (_req, res) => res.status(200).json({ status: 'ok' }));
 
   const server = app.listen(config.get('frontend.port'));
 

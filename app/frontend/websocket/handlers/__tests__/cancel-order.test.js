@@ -44,6 +44,8 @@ describe('cancel-order.js', () => {
     await handleCancelOrder(loggerMock, mockWebSocketServer, {
       data: {
         symbol: 'BTCUSDT',
+        botId: 'bot-1',
+        exchangeAccountId: 'acc-1',
         order: {
           some: 'value',
           side: 'buy'
@@ -69,6 +71,11 @@ describe('cancel-order.js', () => {
   it('triggers queue.execute', () => {
     expect(mockExecute).toHaveBeenCalledWith(loggerMock, 'BTCUSDT', {
       correlationId: 'correlationId',
+      requestContext: {
+        botId: 'bot-1',
+        exchangeAccountId: 'acc-1',
+        correlationId: 'correlationId'
+      },
       preprocessFn: expect.any(Function),
       processFn: expect.any(Function)
     });
@@ -82,5 +89,40 @@ describe('cancel-order.js', () => {
         message: 'Cancelling the buy order action has been received.'
       })
     );
+  });
+
+  describe('when exchangeAccountId is missing', () => {
+    beforeEach(async () => {
+      jest.clearAllMocks();
+
+      const { handleCancelOrder } = require('../cancel-order');
+      await handleCancelOrder(loggerMock, mockWebSocketServer, {
+        data: {
+          symbol: 'BTCUSDT',
+          order: {
+            some: 'value',
+            side: 'buy'
+          }
+        }
+      });
+    });
+
+    it('does not trigger saveOverrideAction', () => {
+      expect(mockSaveOverrideAction).not.toHaveBeenCalled();
+    });
+
+    it('does not trigger queue.execute', () => {
+      expect(mockExecute).not.toHaveBeenCalled();
+    });
+
+    it('returns validation error', () => {
+      expect(mockWebSocketServerWebSocketSend).toHaveBeenCalledWith(
+        JSON.stringify({
+          result: false,
+          type: 'cancel-order-result',
+          message: 'exchangeAccountId is required to cancel an order.'
+        })
+      );
+    });
   });
 });

@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const moment = require('moment');
-const { binance, slack } = require('../../../helpers');
+const { financialClient, slack } = require('../../../helpers');
 const {
   isExceedAPILimit,
   disableAction,
@@ -11,6 +11,7 @@ const {
 const {
   saveSymbolGridTrade
 } = require('../../trailingTradeHelper/configuration');
+const { getFinancialContext } = require('./financial-context');
 
 /**
  * Set message and return data
@@ -37,6 +38,7 @@ const setMessage = (logger, rawData, processMessage) => {
  */
 const execute = async (logger, rawData) => {
   const data = rawData;
+  const financialContext = getFinancialContext(data);
 
   const {
     symbol,
@@ -154,7 +156,10 @@ const execute = async (logger, rawData) => {
     { function: 'order', orderParams, saveLog: true },
     'The market sell order will be placed.'
   );
-  const orderResult = await binance.client.order(orderParams);
+  const orderResult = await financialClient.placeOrder(
+    orderParams,
+    financialContext
+  );
 
   logger.info(
     { orderResult, saveLog: true },

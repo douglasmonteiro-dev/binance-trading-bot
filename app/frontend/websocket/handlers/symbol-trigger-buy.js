@@ -5,9 +5,12 @@ const {
 } = require('../../../cronjob/trailingTradeHelper/common');
 const queue = require('../../../cronjob/trailingTradeHelper/queue');
 const { executeTrailingTrade } = require('../../../cronjob/index');
+const { getRequestContext } = require('./request-context');
 
 const handleSymbolTriggerBuy = async (logger, ws, payload) => {
   logger.info({ payload }, 'Start symbol trigger buy');
+
+  const requestContext = getRequestContext(logger, payload);
 
   const { data: symbolInfo } = payload;
 
@@ -31,6 +34,7 @@ const handleSymbolTriggerBuy = async (logger, ws, payload) => {
 
   queue.execute(logger, symbol, {
     correlationId: _.get(logger, 'fields.correlationId', ''),
+    requestContext,
     preprocessFn: saveOverrideActionFn,
     processFn: executeTrailingTrade
   });

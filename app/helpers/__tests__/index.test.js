@@ -7,6 +7,7 @@ describe('index.js', () => {
       logger: expect.any(Object),
       slack: expect.any(Object),
       binance: expect.any(Object),
+      financialClient: expect.any(Object),
       mongo: expect.any(Object),
       PubSub: expect.any(Object)
     });

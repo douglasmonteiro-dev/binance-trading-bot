@@ -2,8 +2,16 @@ const config = require('config');
 const { MongoClient } = require('mongodb');
 
 const clusterUrl = `${config.get('mongo.host')}:${config.get('mongo.port')}`;
+const mongoUsername = config.get('mongo.username');
+const mongoPassword = config.get('mongo.password');
+const mongoAuth =
+  mongoUsername && mongoPassword
+    ? `${encodeURIComponent(mongoUsername)}:${encodeURIComponent(
+        mongoPassword
+      )}@`
+    : '';
 
-const uri = `mongodb://${clusterUrl}/?retryWrites=true&writeConcern=majority`;
+const uri = `mongodb://${mongoAuth}${clusterUrl}/?retryWrites=true&writeConcern=majority`;
 
 const client = new MongoClient(uri, {
   useNewUrlParser: true,

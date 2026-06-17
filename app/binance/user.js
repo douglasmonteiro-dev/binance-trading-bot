@@ -3,6 +3,9 @@ const _ = require('lodash');
 const { binance } = require('../helpers');
 const queue = require('../cronjob/trailingTradeHelper/queue');
 const { executeTrailingTrade } = require('../cronjob/index');
+const {
+  getConfiguration
+} = require('../cronjob/trailingTradeHelper/configuration');
 
 const {
   updateAccountInfo,
@@ -15,6 +18,7 @@ const {
   getManualOrder,
   saveManualOrder
 } = require('../cronjob/trailingTradeHelper/order');
+const { getSymbolRequestContext } = require('./symbol-request-context');
 
 let userClean;
 
@@ -24,7 +28,7 @@ const setupUserWebsocket = async logger => {
     userClean();
   }
 
-  userClean = await binance.client.ws.user(evt => {
+  userClean = await binance.client.ws.user(async evt => {
     const { eventType } = evt;
 
     logger.info({ evt }, 'Received new user activity');
@@ -60,6 +64,12 @@ const setupUserWebsocket = async logger => {
         correlationId,
         symbol
       });
+
+      const symbolConfiguration = await getConfiguration(symbolLogger, symbol);
+      const requestContext = getSymbolRequestContext(
+        symbolConfiguration,
+        correlationId
+      );
 
       symbolLogger.info(
         { evt, saveLog: true },
@@ -122,6 +132,7 @@ const setupUserWebsocket = async logger => {
 
       queue.execute(symbolLogger, symbol, {
         correlationId,
+        requestContext,
         preprocessFn: checkLastOrder,
         processFn: executeTrailingTrade
       });
@@ -157,6 +168,7 @@ const setupUserWebsocket = async logger => {
 
       queue.execute(symbolLogger, symbol, {
         correlationId,
+        requestContext,
         preprocessFn: checkManualOrder,
         processFn: executeTrailingTrade
       });

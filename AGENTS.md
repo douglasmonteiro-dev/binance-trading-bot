@@ -12,11 +12,13 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 ## Main Services
 
 ### 1. Trading Bot Server
+
 - **Arquivo**: `app/server.js`
 - **Tipo**: service (principal)
 - **Responsabilidade**: Orquestrar todos os módulos — WebSocket streams, cron jobs, frontend
 
 ### 2. Binance WebSocket Streams
+
 - **Tipo**: service (real-time)
 - **Responsabilidade**: Conexões WebSocket com Binance para dados de mercado
 - **Arquivos**:
@@ -28,11 +30,13 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 - **Setup**: `app/server-binance.js`
 
 ### 3. Cron Job Scheduler
+
 - **Tipo**: cron
 - **Responsabilidade**: Executar estratégias de trading em intervalos regulares.
 - **Arquivo**: `app/server-cronjob.js`, `app/cronjob/index.js`
 
 ### 4. Trailing Trade Strategy
+
 - **Tipo**: worker/strategy
 - **Responsabilidade**: Executar a lógica principal de trading — análise de indicadores, decisões de compra/venda, gestão de posições.
 - **Diretório**: `app/cronjob/trailingTrade/`
@@ -42,12 +46,14 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
   - (e 34+ outros passos da estratégia)
 
 ### 5. TradingView Indicator Service
+
 - **Tipo**: external service (Python)
 - **Responsabilidade**: Análise técnica com indicadores TradingView.
 - **Diretório**: `app/cronjob/trailingTradeIndicator/`
 - **Docker**: Serviço `tradingview` (Python, porta 8082)
 
 ### 6. Web Frontend
+
 - **Tipo**: service
 - **Responsabilidade**: Interface web de monitoramento e configuração.
 - **Arquivo**: `app/server-frontend.js`
@@ -58,14 +64,14 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 
 ## Infrastructure Helpers
 
-| Helper | Arquivo | Função |
-|--------|---------|--------|
-| Logger | `app/helpers/logger.js` | Bunyan logging |
-| Cache | `app/helpers/cache.js` | Redis wrapper (ioredis) |
-| MongoDB | `app/helpers/mongo.js` | Connection + collections |
-| Binance API | `app/helpers/binance.js` | binance-api-node wrapper |
-| PubSub | `app/helpers/pubsub.js` | PubSubJS events |
-| Slack | `app/helpers/slack.js` | Slack notifications |
+| Helper      | Arquivo                  | Função                         |
+| ----------- | ------------------------ | ------------------------------ |
+| Logger      | `app/helpers/logger.js`  | Bunyan logging                 |
+| Cache       | `app/helpers/cache.js`   | Redis wrapper (ioredis)        |
+| MongoDB     | `app/helpers/mongo.js`   | Connection + collections       |
+| Binance API | `app/helpers/binance.js` | binance-api-node wrapper       |
+| PubSub      | `app/helpers/pubsub.js`  | PubSubJS events                |
+| Slack       | `app/helpers/slack.js`   | Slack notifications            |
 
 ---
 
@@ -74,6 +80,7 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 **DB**: `binance-bot`
 
 ### Collections
+
 - `trailing-trade-migrations` — Estado de migrações
 - `global` — Configurações globais
 - `symbols` — Configuração por símbolo
@@ -86,6 +93,7 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 - `logs` — Logs operacionais
 
 ### Migrations (20 arquivos)
+
 `migrations/` — MongoDB state storage via `mongo-state-storage.js`
 
 ---
@@ -97,6 +105,14 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 - `config/custom-environment-variables.json` — Mapeamento de env vars
 - `.env.dist` — Template de ambiente
 
+## Build
+
+- `webpack.config.prod.js` — Build do servidor Node para `dist/server.js`
+- `scripts/build-frontend-js.js` — Compila os assets JS do frontend com Babel 7
+- `scripts/build-frontend-assets.js` — Gera `public/dist/App.min.js` e `public/dist/App.min.css`
+- `scripts/frontend-build-config.js` — Manifesto compartilhado dos assets do frontend
+- `Gruntfile.js` — Mantido apenas como manifesto testável para `__tests__/Gruntfile.test.js`
+
 ---
 
 ## Testes
@@ -105,6 +121,7 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 **Mock setup**: `jest.setup.js`, `__mocks__/`
 
 ### Arquivos de Teste (20+)
+
 - `__tests__/Gruntfile.test.js`
 - `app/__tests__/server.test.js`, `server-binance.test.js`, `server-cronjob.test.js`, `server-frontend.test.js`, `error-handler.test.js`
 - `app/binance/__tests__/candles.test.js`, `ath-candles.test.js`, `tickers.test.js`, `orders.test.js`, `user.test.js`
@@ -115,13 +132,13 @@ Este arquivo documenta os agentes, workers e serviços autônomos do bot de trad
 
 ## Docker Compose
 
-| Serviço | Porta | Função |
-|---------|-------|--------|
-| binance-bot | 8080 | App principal (Node.js) |
-| tradingview | 8082 | Análise técnica (Python) |
-| binance-redis | 6379 | Cache + PubSub |
-| binance-mongo | — | Banco de dados |
-| binance-mongo-express | 8081 | Admin UI MongoDB |
+| Serviço              | Porta | Função                    |
+| -------------------- | ----- | ------------------------- |
+| binance-bot          | 8080  | App principal (Node.js)   |
+| tradingview          | 8082  | Análise técnica (Python)  |
+| binance-redis        | 6379  | Cache + PubSub            |
+| binance-mongo        | —     | Banco de dados            |
+| binance-mongo-express| 8081  | Admin UI MongoDB          |
 
 ---
 

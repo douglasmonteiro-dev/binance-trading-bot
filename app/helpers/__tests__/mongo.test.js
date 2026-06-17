@@ -97,6 +97,53 @@ describe('mongo.js', () => {
         expect(process.exit).not.toHaveBeenCalled();
       });
     });
+
+    describe('when credentials are provided via config', () => {
+      beforeEach(async () => {
+        jest.mock('config', () => ({
+          get: key => {
+            const map = {
+              'mongo.host': 'binance-mongo',
+              'mongo.port': 27017,
+              'mongo.database': 'binance-bot',
+              'mongo.username': 'botuser',
+              'mongo.password': 'botpass'
+            };
+            return map[key];
+          }
+        }));
+
+        mockDBCommand = jest.fn().mockResolvedValue(true);
+        mockDB = jest.fn(() => ({
+          command: mockDBCommand
+        }));
+
+        mockMongoClient = jest.fn(() => ({
+          connect: jest.fn().mockResolvedValue(true),
+          db: mockDB
+        }));
+
+        jest.mock('mongodb', () => ({
+          MongoClient: mockMongoClient
+        }));
+
+        require('mongodb');
+
+        mongo = require('../mongo');
+
+        await mongo.connect(logger);
+      });
+
+      it('includes credentials in the MongoDB URI', () => {
+        expect(mockMongoClient).toHaveBeenCalledWith(
+          'mongodb://botuser:botpass@binance-mongo:27017/?retryWrites=true&writeConcern=majority',
+          {
+            useNewUrlParser: true,
+            useUnifiedTopology: true
+          }
+        );
+      });
+    });
   });
 
   describe('count', () => {

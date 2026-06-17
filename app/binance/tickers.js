@@ -8,7 +8,11 @@ const {
   getAccountInfo,
   getCachedExchangeSymbols
 } = require('../cronjob/trailingTradeHelper/common');
+const {
+  getConfiguration
+} = require('../cronjob/trailingTradeHelper/configuration');
 const { errorHandlerWrapper } = require('../error-handler');
+const { getSymbolRequestContext } = require('./symbol-request-context');
 
 let websocketTickersClean = {};
 
@@ -77,8 +81,17 @@ const setupTickersWebsocket = async (logger, symbols) => {
           );
 
           if (canExecuteTrailingTrade) {
+            const symbolConfiguration = await getConfiguration(
+              symbolLogger,
+              monitoringSymbol
+            );
+
             queue.execute(symbolLogger, monitoringSymbol, {
               correlationId,
+              requestContext: getSymbolRequestContext(
+                symbolConfiguration,
+                correlationId
+              ),
               preprocessFn: saveCandle,
               processFn: executeTrailingTrade
             });

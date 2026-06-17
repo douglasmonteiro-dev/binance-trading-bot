@@ -69,14 +69,14 @@ describe('local-tunnel/configure.js', () => {
         return '';
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
-          url: 'my-domain.loca.lt',
+          url: 'different-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -98,14 +98,14 @@ describe('local-tunnel/configure.js', () => {
         return '';
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -150,14 +150,14 @@ describe('local-tunnel/configure.js', () => {
         return '';
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'different-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -224,14 +224,14 @@ describe('local-tunnel/configure.js', () => {
 
         mockLocalTunnelOn = jest.fn().mockImplementation((_event, _cb) => {});
 
-        jest.mock('localtunnel', () =>
+        jest.mock('../client', () =>
           jest.fn().mockImplementation(() => ({
             url: 'old-domain.loca.lt',
             on: mockLocalTunnelOn
           }))
         );
 
-        localTunnel = require('localtunnel');
+        localTunnel = require('../client');
 
         const { configureLocalTunnel } = require('../configure');
 
@@ -281,14 +281,14 @@ describe('local-tunnel/configure.js', () => {
 
       mockLocalTunnelOn = jest.fn().mockImplementation((_event, _cb) => {});
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -335,29 +335,24 @@ describe('local-tunnel/configure.js', () => {
         return '';
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
       await configureLocalTunnel(mockLogger);
 
-      mockLocalTunnelOn = jest.fn().mockImplementation((_event, _cb) => {});
+      localTunnel.mockImplementation(() => {
+        throw new Error('something happened');
+      });
 
-      jest.mock('localtunnel', () =>
-        jest.fn().mockImplementation(() => {
-          throw new Error('something happened');
-        })
-      );
-
-      // 120
-      jest.advanceTimersByTime(60 * 60 * 1000);
+      await configureLocalTunnel(mockLogger);
     });
 
     it('initialise with expected', () => {
@@ -367,12 +362,12 @@ describe('local-tunnel/configure.js', () => {
       });
     });
 
-    it('does not trigger cache.hget', () => {
-      expect(mockCache.hget).not.toHaveBeenCalled();
+    it('triggers cache.hget once for the successful connection only', () => {
+      expect(mockCache.hget).toHaveBeenCalledTimes(1);
     });
 
-    it('does not trigger cache.hset', () => {
-      expect(mockCache.hset).not.toHaveBeenCalled();
+    it('triggers cache.hset once for the successful connection only', () => {
+      expect(mockCache.hset).toHaveBeenCalledTimes(1);
     });
 
     it('calls localTunnel two times', () => {
@@ -396,14 +391,14 @@ describe('local-tunnel/configure.js', () => {
         }
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -434,14 +429,14 @@ describe('local-tunnel/configure.js', () => {
         }
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 
@@ -470,14 +465,14 @@ describe('local-tunnel/configure.js', () => {
         cb();
       });
 
-      jest.mock('localtunnel', () =>
+      jest.mock('../client', () =>
         jest.fn().mockImplementation(() => ({
           url: 'my-domain.loca.lt',
           on: mockLocalTunnelOn
         }))
       );
 
-      localTunnel = require('localtunnel');
+      localTunnel = require('../client');
 
       const { configureLocalTunnel } = require('../configure');
 

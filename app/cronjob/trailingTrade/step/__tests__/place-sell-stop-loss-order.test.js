@@ -5,6 +5,7 @@ describe('place-sell-stop-loss-order.js', () => {
   let rawData;
 
   let binanceMock;
+  let financialClientMock;
   let slackMock;
   let loggerMock;
 
@@ -21,14 +22,21 @@ describe('place-sell-stop-loss-order.js', () => {
       jest.clearAllMocks().resetModules();
     });
     beforeEach(async () => {
-      const { binance, slack, logger } = require('../../../../helpers');
+      const {
+        binance,
+        financialClient,
+        slack,
+        logger
+      } = require('../../../../helpers');
 
       binanceMock = binance;
+      financialClientMock = financialClient;
       slackMock = slack;
       loggerMock = logger;
 
       slackMock.sendMessage = jest.fn().mockResolvedValue(true);
       binanceMock.client.order = jest.fn().mockResolvedValue(true);
+      jest.spyOn(financialClientMock, 'placeOrder');
 
       mockIsExceedAPILimit = jest.fn().mockReturnValue(false);
       mockDisableAction = jest.fn().mockResolvedValue(true);
@@ -1050,6 +1058,12 @@ describe('place-sell-stop-loss-order.js', () => {
 
             rawData = {
               symbol: 'BTCUPUSDT',
+              tenantId: 'tenant-1',
+              userId: 'user-1',
+              botId: 'bot-1',
+              exchangeAccountId: 'acc-1',
+              correlationId: 'corr-1',
+              idempotencyKey: 'idem-1',
               symbolInfo: {
                 filterLotSize: {
                   stepSize: '0.01000000',
@@ -1110,6 +1124,25 @@ describe('place-sell-stop-loss-order.js', () => {
               type: 'MARKET',
               quantity: 100
             });
+          });
+
+          it('forwards financial context to financialClient.placeOrder', () => {
+            expect(financialClientMock.placeOrder).toHaveBeenCalledWith(
+              {
+                symbol: 'BTCUPUSDT',
+                side: 'sell',
+                type: 'MARKET',
+                quantity: 100
+              },
+              {
+                tenantId: 'tenant-1',
+                userId: 'user-1',
+                botId: 'bot-1',
+                exchangeAccountId: 'acc-1',
+                correlationId: 'corr-1',
+                idempotencyKey: 'idem-1'
+              }
+            );
           });
 
           it('triggers disableAction', () => {
