@@ -2,6 +2,11 @@
 
 Este arquivo documenta os agentes, workers e serviços autônomos do bot de trading.
 
+## Referência rápida para agentes
+- O bot é experimental e deve permanecer com mudanças pequenas, verificadas e sem risco de alterar o core de ordens sem validação.
+- Qualquer alteração em lógica financeira ou operacional requer testes extensivos e observabilidade.
+- Integrações com notificações e observabilidade devem ser mantidas, mas sem expandir o escopo do projeto.
+
 **Stack**: Node.js | MongoDB + Redis
 **Status**: MANUTENÇÃO — Não adicionar features novas sem aprovação
 **Trading**: Trailing trade strategy com TradingView indicators

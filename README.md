@@ -1,5 +1,35 @@
 # Binance Trading Bot
 
+## Referência rápida para agentes
+- **Bot é experimental e deve permanecer com mudanças pequenas, verificadas e sem risco**.
+- Qualquer alteração em lógica financeira ou operacional requer testes extensivos e observabilidade.
+- Integrações com notificações devem ser mantidas, mas sem expandir o escopo do projeto.
+- Se evoluir para produto, deverá integrar-se com Núcleo e Raiz Platform.
+
+## Estratégia de evolução
+O projeto permanece como utilitário experimental, mas pode evoluir para um serviço de alertas e execução se provar valor operacional.
+
+### Roadmap priorizado
+- Quick Wins (30 dias): instrumentação e alertas.
+- Curto prazo (90 dias): integração com Notifications e observabilidade.
+- Médio prazo (6 meses): separar motor de execução de estratégia.
+
+### Dependências principais
+- Raiz Platform: Notifications e Observability.
+- Núcleo: se evoluir para cobrança/serviço.
+
+## Visão estratégica
+O projeto permanece como utilitário experimental, mas pode evoluir para um serviço de alertas e execução se provar valor operacional.
+
+## Roadmap priorizado
+- Quick Wins (30 dias): instrumentação e alertas.
+- Curto prazo (90 dias): integração com Notifications e observabilidade.
+- Médio prazo (6 meses): separar motor de execução de estratégia.
+
+## Dependências principais
+- Raiz Platform: Notifications e Observability.
+- Núcleo: se evoluir para cobrança/serviço.
+
 [![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://war.ukraine.ua)
 
 
